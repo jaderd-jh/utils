@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noUncheckedIndexedAccess": true,
+    "strictNullChecks": true,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@jhqn/utils-core": [
+        "packages/core/src"
+      ],
+      "@jhqn/utils-crypto": [
+        "packages/crypto/src"
+      ],
+      "@jhqn/utils-faker": [
+        "packages/faker/src"
+      ],
+      "@jhqn/utils-storage": [
+        "packages/storage/src"
+      ],
+      "@jhqn/utils": [
+        "packages/utils/src"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

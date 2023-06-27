@@ -1,0 +1,29 @@
+{
+  "name": "@jhqn/utils",
+  "author": "jade-gjz <jiangang.zhang@jaderd.com>",
+  "version": "0.0.1",
+  "keywords": [
+    "jade",
+    "utils"
+  ],
+  "type": "module",
+  "files": ["dist"],
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest",
+    "build": "tsup"
+  },
+  "dependencies": {
+    "@jhqn/utils-core": "workspace:*",
+    "@jhqn/utils-faker": "workspace:*"
+  }
+}

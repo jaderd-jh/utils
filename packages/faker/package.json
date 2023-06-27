@@ -1,0 +1,39 @@
+{
+  "name": "@jhqn/utils-faker",
+  "author": "jade-gjz <jiangang.zhang@jaderd.com>",
+  "version": "0.0.0",
+  "keywords": [
+    "jade",
+    "utils"
+  ],
+  "type": "module",
+  "files": ["dist"],
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest",
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "@faker-js/faker": "^8.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@faker-js/faker": {
+      "optional": false
+    }
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.0.2"
+  },
+  "dependencies": {
+    "nanoid": "^4.0.2"
+  }
+}
