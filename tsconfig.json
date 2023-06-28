@@ -5,7 +5,7 @@
       "DOM.Iterable",
       "ESNext"
     ],
-    "target": "ESNext",
+    "target": "ES2018",
     "module": "ESNext",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
@@ -24,24 +24,15 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@jhqn/utils-core": [
-        "packages/core/src"
-      ],
-      "@jhqn/utils-crypto": [
-        "packages/crypto/src"
-      ],
-      "@jhqn/utils-faker": [
-        "packages/faker/src"
-      ],
-      "@jhqn/utils-storage": [
-        "packages/storage/src"
-      ],
-      "@jhqn/utils": [
-        "packages/utils/src"
-      ]
+      "@jhqn/utils-core": ["packages/core/src"],
+      "@jhqn/utils-crypto": ["packages/crypto/src"],
+      "@jhqn/utils-faker": ["packages/faker/src"],
+      "@jhqn/utils-storage": ["packages/storage/src"],
+      "@jhqn/utils": ["packages/utils/src"]
     }
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "**/dist/**"
   ]
 }
