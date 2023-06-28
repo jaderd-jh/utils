@@ -8,6 +8,7 @@
     "jade",
     "utils"
   ],
+  "packageManager": "pnpm@8.6.5",
   "type": "module",
   "scripts": {
     "test": "vitest",
