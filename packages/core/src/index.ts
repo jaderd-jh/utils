@@ -1,4 +1,5 @@
 export * from './case'
+export * from './console'
 export * from './desensitize'
 export * from './format'
 export * from './validate'
