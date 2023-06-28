@@ -48,5 +48,6 @@
   "dependencies": {
     "nanoid": "^4.0.2"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "license": "MIT"
 }

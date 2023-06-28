@@ -37,7 +37,7 @@ function hasStringify(data: any): boolean {
  * @param {any} data 需要序列化的数据
  * @returns {string} 返回序列化后的字符串
  */
-function storageStringify(data: any): string {
+export function storageStringify(data: any): string {
   const saveData: StorageObj = {
     expires: new Date().getTime(),
     data,
@@ -50,7 +50,7 @@ function storageStringify(data: any): string {
  * @param {string} data 需要反序列化的字符串
  * @returns {StorageObj} 返回反序列化后的数据
  */
-function storageParse<T>(data: string): StorageObj<T> | null {
+export function storageParse<T>(data: string): StorageObj<T> | null {
   return parseToJSON<StorageObj<T>>(data, reviver)
 }
 
