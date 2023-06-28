@@ -16,7 +16,7 @@ export const jLog = (...args: any[]) =>
     : () => {}
 
 /**
- * jade console.log
+ * jade console.debug
  * @param {...any} args
  */
 export const jDebug = (...args: any[]) =>
