@@ -39,5 +39,6 @@
     "@jhqn/utils-crypto": "workspace:*",
     "@jhqn/utils-faker": "workspace:*",
     "@jhqn/utils-storage": "workspace:*"
-  }
+  },
+  "sideEffects": false
 }
