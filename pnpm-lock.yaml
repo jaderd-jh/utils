@@ -77,9 +77,15 @@ importers:
       '@jhqn/utils-core':
         specifier: workspace:*
         version: link:../core
+      '@jhqn/utils-crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@jhqn/utils-faker':
         specifier: workspace:*
         version: link:../faker
+      '@jhqn/utils-storage':
+        specifier: workspace:*
+        version: link:../storage
 
 packages:
 
