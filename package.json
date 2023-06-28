@@ -3,6 +3,7 @@
   "version": "0.0.1-beta.2",
   "description": "jade's utils monorepo",
   "author": "jade-gjz <jiangang.zhang@jaderd.com>",
+  "private": true,
   "license": "MIT",
   "keywords": [
     "jade",
