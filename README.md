@@ -1,2 +1,1 @@
-# utils
-A collection of tool functions🧷
+./packages/utils/README.md
