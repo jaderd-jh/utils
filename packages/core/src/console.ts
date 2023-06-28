@@ -37,7 +37,7 @@ export const jWarn = console.error.bind(console, '%c[WARN]', `${sharedStyle} bac
 export const jError = console.error.bind(console, '%c[ERROR]', `${sharedStyle} background: crimson;`)
 
 /**
- * jade console.error
+ * jade console.info
  * @param {...any} args
  */
 export const jInfo = (...args: any[]) =>
