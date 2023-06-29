@@ -1,12 +1,11 @@
-import { beforeAll, expect, test } from 'vitest'
+import { expect, test } from 'vitest'
 import { MD5Encrypt, aes, setKey } from '../src'
 
-beforeAll(() => {
-  setKey('28a25213fc68550565e13b6ffc3639af')
-})
-
 test('aes', () => {
-  expect(aes.decrypt(aes.encrypt('1'))).toBe('1')
+  expect(() => aes.encrypt('foo')).toThrowError('请先设置加密key')
+  expect(() => aes.decrypt('foo')).toThrowError('请先设置加密key')
+  setKey('28a25213fc68550565e13b6ffc3639af')
+  expect(aes.decrypt(aes.encrypt('foo'))).toBe('foo')
 })
 
 test('md5', () => {
