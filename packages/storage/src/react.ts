@@ -73,7 +73,3 @@ export function atomWithLocal<Value>(key: string, initialValue: Value, crypto?: 
 export function atomWithSession<Value>(key: string, initialValue: Value, crypto?: boolean) {
   return atomWithStorage(sessionStorage, key, initialValue, crypto)
 }
-
-export const useLocal = atomWithLocal
-
-export const useSession = atomWithSession
