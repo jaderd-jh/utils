@@ -1,11 +1,9 @@
 {
   "name": "@jhqn/utils-crypto",
-  "author": "jade-gjz <jiangang.zhang@jaderd.com>",
+  "type": "module",
   "version": "0.0.1-beta.6",
-  "keywords": [
-    "jade",
-    "utils"
-  ],
+  "author": "jade-gjz <jiangang.zhang@jaderd.com>",
+  "license": "MIT",
   "homepage": "https://github.com/jaderd-jh/utils/tree/main/packages/crypto#readme",
   "repository": {
     "type": "git",
@@ -15,40 +13,43 @@
   "bugs": {
     "url": "https://github.com/jaderd-jh/utils/issues"
   },
-  "type": "module",
-  "files": [
-    "dist"
+  "keywords": [
+    "jade",
+    "utils"
   ],
+  "sideEffects": [
+    "dist/index.mjs",
+    "dist/index.cjs"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
-    }
-  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "vitest",
     "//build": "tsup",
-    "build": "unbuild"
+    "build": "unbuild",
+    "publint": "publint"
+  },
+  "peerDependencies": {
+    "crypto-js": "^4.1.1"
   },
   "peerDependenciesMeta": {
     "crypto-js": {
       "optional": false
     }
   },
-  "peerDependencies": {
-    "crypto-js": "^4.1.1"
-  },
   "devDependencies": {
-    "crypto-js": "^4.1.1",
-    "@types/crypto-js": "^4.1.1"
-  },
-  "sideEffects": [
-    "dist/index.mjs",
-    "dist/index.cjs"
-  ],
-  "license": "MIT"
+    "@types/crypto-js": "^4.1.1",
+    "crypto-js": "^4.1.1"
+  }
 }

@@ -18,6 +18,7 @@
     "release": "bumpp -r",
     "lint": "eslint --cache --quiet --fix **/*.{ts,tsx}",
     "fix:lint": "eslint --cache --quiet --fix **/*.{ts,tsx}",
+    "publint": "pnpm -r publint",
     "check:type": "tsc --noEmit",
     "check:staged": "nano-staged",
     "pre-commit": "run-p check:type check:staged",
