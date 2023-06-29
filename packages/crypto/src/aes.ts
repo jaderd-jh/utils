@@ -1,4 +1,3 @@
-import MD5 from 'crypto-js/md5'
 import AES from 'crypto-js/aes'
 import encUTF8 from 'crypto-js/enc-utf8'
 import modeECB from 'crypto-js/mode-ecb'
@@ -15,18 +14,9 @@ export function setKey(key: string) {
 }
 
 /**
- * MD5加密
- * @param str
- * @class
- */
-export function MD5Encrypt(str: string) {
-  return MD5(str).toString()
-}
-
-/**
  * AES加密
- * @param str
- * @class
+ * @param {string} str 需要加密的字符串
+ * @returns {string} string 加密后的字符串
  */
 export function AESEncrypt(str: string) {
   if (KEY === undefined) {
@@ -40,8 +30,8 @@ export function AESEncrypt(str: string) {
 
 /**
  * AES解密
- * @param str
- * @class
+ * @param {string} str 需要解密的字符串
+ * @returns {string} string 解密后的字符串
  */
 export function AESDecrypt(str: string) {
   if (KEY === undefined) {

@@ -1,11 +1,15 @@
 import { expect, test } from 'vitest'
-import { MD5Encrypt, aes, setKey } from '../src'
+import { MD5Encrypt, aes, base64, setKey } from '../src'
 
 test('aes', () => {
   expect(() => aes.encrypt('foo')).toThrowError('请先设置加密key')
   expect(() => aes.decrypt('foo')).toThrowError('请先设置加密key')
   setKey('28a25213fc68550565e13b6ffc3639af')
   expect(aes.decrypt(aes.encrypt('foo'))).toBe('foo')
+})
+
+test('base64', () => {
+  expect(base64.decrypt(base64.encrypt('foo'))).toBe('foo')
 })
 
 test('md5', () => {
