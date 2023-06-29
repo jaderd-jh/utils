@@ -1,7 +1,7 @@
 {
   "name": "@jhqn/utils-storage",
   "type": "module",
-  "version": "0.0.1-beta.7",
+  "version": "0.0.1-beta.8",
   "author": "jade-gjz <jiangang.zhang@jaderd.com>",
   "license": "MIT",
   "homepage": "https://github.com/jaderd-jh/utils/tree/main/packages/storage#readme",
