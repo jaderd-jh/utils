@@ -10,7 +10,7 @@ let KEY: CryptoJS.lib.WordArray
  * 设置加密key
  * @param key
  */
-export const setKey = (key: string) => {
+export function setKey(key: string) {
   KEY = encUTF8.parse(key)
 }
 
@@ -19,7 +19,7 @@ export const setKey = (key: string) => {
  * @param str
  * @class
  */
-export const MD5Encrypt = (str: string) => {
+export function MD5Encrypt(str: string) {
   return MD5(str).toString()
 }
 
@@ -28,7 +28,10 @@ export const MD5Encrypt = (str: string) => {
  * @param str
  * @class
  */
-export const AESEncrypt = (str: string) => {
+export function AESEncrypt(str: string) {
+  if (KEY === undefined) {
+    throw new Error('请先设置加密key')
+  }
   return AES.encrypt(encUTF8.parse(str), KEY, {
     mode: modeECB,
     padding: padPkcs7,
@@ -40,7 +43,10 @@ export const AESEncrypt = (str: string) => {
  * @param str
  * @class
  */
-export const AESDecrypt = (str: string) => {
+export function AESDecrypt(str: string) {
+  if (KEY === undefined) {
+    throw new Error('请先设置加密key')
+  }
   return encUTF8
     .stringify(
       AES.decrypt(str, KEY, {
