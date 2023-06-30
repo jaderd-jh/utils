@@ -1,5 +1,6 @@
 import Base64 from 'crypto-js/enc-base64url'
 import Utf8 from 'crypto-js/enc-utf8'
+import type { CryptoMap } from '../types'
 
 /**
  * Base64加密
@@ -19,7 +20,7 @@ export function base64Decrypt(str: string) {
   return Utf8.stringify(Base64.parse(str))
 }
 
-export const base64 = {
+export const base64: CryptoMap = {
   encrypt: base64Encrypt,
   decrypt: base64Decrypt,
 }

@@ -1,8 +1,32 @@
 import type { MaybeRef, RemovableRef } from '@vueuse/shared'
 import type { UseStorageOptions } from '@vueuse/core'
 import { defaultWindow, useStorage } from '@vueuse/core'
-import { aes } from '@jhqn/utils-crypto'
-import { storageParse, storageStringify } from './storage'
+import { aes, storageParse, storageStringify } from './storage'
+
+/**
+ * storage存储联动
+ * @param storage
+ * @param key
+ * @param initialValue
+ * @param crypto
+ * @param options
+ */
+function useWindowStorage<T extends string | number | boolean | object | null>(
+  storage: Storage,
+  key: string,
+  initialValue: MaybeRef<T>,
+  crypto = false,
+  options: UseStorageOptions<T> = { window: defaultWindow }
+): RemovableRef<T> {
+  // @ts-expect-error it works
+  return useStorage<T>(key, initialValue, options.window?.[storage], {
+    ...options,
+    serializer: {
+      read: v => storageParse<T>(crypto ? aes.decrypt(v) : v)!.data,
+      write: v => (crypto ? aes.encrypt(storageStringify(v)) : storageStringify(v)),
+    },
+  })
+}
 
 /**
  * localStorage存储联动
@@ -16,14 +40,8 @@ export function useLocal<T extends string | number | boolean | object | null>(
   initialValue: MaybeRef<T>,
   crypto = false,
   options: UseStorageOptions<T> = { window: defaultWindow }
-): RemovableRef<T> {
-  return useStorage<T>(key, initialValue, options.window?.localStorage, {
-    ...options,
-    serializer: {
-      read: v => storageParse<T>(crypto ? aes.decrypt(v) : v)!.data,
-      write: v => (crypto ? aes.encrypt(storageStringify(v)) : storageStringify(v)),
-    },
-  })
+) {
+  return useWindowStorage<T>(localStorage, key, initialValue, crypto, options)
 }
 
 /**
@@ -38,12 +56,6 @@ export function useSession<T extends string | number | boolean | object | null>(
   initialValue: MaybeRef<T>,
   crypto = false,
   options: UseStorageOptions<T> = { window: defaultWindow }
-): RemovableRef<T> {
-  return useStorage<T>(key, initialValue, options.window?.sessionStorage, {
-    ...options,
-    serializer: {
-      read: v => storageParse<T>(crypto ? aes.decrypt(v) : v)!.data,
-      write: v => (crypto ? aes.encrypt(storageStringify(v)) : storageStringify(v)),
-    },
-  })
+) {
+  return useWindowStorage<T>(sessionStorage, key, initialValue, crypto, options)
 }

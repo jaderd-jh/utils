@@ -1,5 +1,8 @@
 import { expect, test } from 'vitest'
-import { MD5Encrypt, aes, base64, setCryptoKey } from '../src'
+import { base64 } from '../src/base64'
+import { aes } from '../src/aes'
+import { md5 } from '../src/md5'
+import { setCryptoKey } from '../src/key'
 
 test('aes', () => {
   expect(() => aes.encrypt('foo')).toThrowError('请先设置加密key')
@@ -13,5 +16,5 @@ test('base64', () => {
 })
 
 test('md5', () => {
-  expect(MD5Encrypt('1')).toBe('c4ca4238a0b923820dcc509a6f75849b')
+  expect(md5.encrypt('1')).toBe('c4ca4238a0b923820dcc509a6f75849b')
 })

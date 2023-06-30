@@ -3,6 +3,7 @@ import encUTF8 from 'crypto-js/enc-utf8'
 import modeECB from 'crypto-js/mode-ecb'
 import padPkcs7 from 'crypto-js/pad-pkcs7'
 import { getCryptoKey } from './key'
+import type { CryptoMap } from '../types'
 
 /**
  * AES加密
@@ -43,7 +44,7 @@ export function AESDecrypt(str: string) {
 /**
  * AES加密解密
  */
-export const aes = {
+export const aes: CryptoMap = {
   encrypt: AESEncrypt,
   decrypt: AESDecrypt,
 }

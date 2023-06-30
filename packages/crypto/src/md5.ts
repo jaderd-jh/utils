@@ -1,4 +1,5 @@
 import MD5 from 'crypto-js/md5'
+import type { CryptoMap } from '../types'
 
 /**
  * MD5加密
@@ -7,4 +8,11 @@ import MD5 from 'crypto-js/md5'
  */
 export function MD5Encrypt(str: string) {
   return MD5(str).toString()
+}
+
+export const md5: CryptoMap = {
+  encrypt: MD5Encrypt,
+  decrypt: () => {
+    throw new Error('MD5 is not a decryptable algorithm')
+  },
 }
