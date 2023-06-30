@@ -10,7 +10,7 @@ import { getStorage, removeStorage, setStorage } from './storage'
  * @param initialValue 初始值
  * @param crypto 是否加解密
  */
-export const atomWithStorage = <T>(
+const atomWithStorage = <T>(
   storage: Storage,
   key: string,
   initialValue: T,
