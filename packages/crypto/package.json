@@ -18,14 +18,24 @@
     "utils"
   ],
   "sideEffects": [
-    "dist/index.mjs",
-    "dist/index.cjs"
+    "dist/key.mjs",
+    "dist/key.cjs"
   ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
+    },
+    "./key": {
+      "types": "./dist/key.d.ts",
+      "import": "./dist/key.mjs",
+      "require": "./dist/key.cjs"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.mjs",
+      "require": "./dist/*.cjs"
     }
   },
   "main": "dist/index.cjs",
