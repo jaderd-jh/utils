@@ -1,4 +1,4 @@
-import type { MaybeRef, RemovableRef } from '@vueuse/shared'
+import type { MaybeRef } from '@vueuse/shared'
 import type { UseStorageOptions } from '@vueuse/core'
 import { defaultWindow, useStorage } from '@vueuse/core'
 import { aes, storageParse, storageStringify } from './storage'
@@ -17,7 +17,7 @@ function useWindowStorage<T extends string | number | boolean | object | null>(
   initialValue: MaybeRef<T>,
   crypto = false,
   options: UseStorageOptions<T> = { window: defaultWindow }
-): RemovableRef<T> {
+) {
   // @ts-expect-error it works
   return useStorage<T>(key, initialValue, options.window?.[storage], {
     ...options,
@@ -40,7 +40,7 @@ export function useLocal<T extends string | number | boolean | object | null>(
   initialValue: MaybeRef<T>,
   crypto = false,
   options: UseStorageOptions<T> = { window: defaultWindow }
-): RemovableRef<T> {
+) {
   return useWindowStorage<T>(localStorage, key, initialValue, crypto, options)
 }
 
@@ -56,6 +56,6 @@ export function useSession<T extends string | number | boolean | object | null>(
   initialValue: MaybeRef<T>,
   crypto = false,
   options: UseStorageOptions<T> = { window: defaultWindow }
-): RemovableRef<T> {
+) {
   return useWindowStorage<T>(sessionStorage, key, initialValue, crypto, options)
 }
