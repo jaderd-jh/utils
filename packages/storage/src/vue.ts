@@ -40,7 +40,7 @@ export function useLocal<T extends string | number | boolean | object | null>(
   initialValue: MaybeRef<T>,
   crypto = false,
   options: UseStorageOptions<T> = { window: defaultWindow }
-) {
+): RemovableRef<T> {
   return useWindowStorage<T>(localStorage, key, initialValue, crypto, options)
 }
 
@@ -56,6 +56,6 @@ export function useSession<T extends string | number | boolean | object | null>(
   initialValue: MaybeRef<T>,
   crypto = false,
   options: UseStorageOptions<T> = { window: defaultWindow }
-) {
+): RemovableRef<T> {
   return useWindowStorage<T>(sessionStorage, key, initialValue, crypto, options)
 }
