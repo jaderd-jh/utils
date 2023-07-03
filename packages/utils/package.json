@@ -40,9 +40,19 @@
       "require": "./dist/faker.cjs"
     },
     "./storage": {
-      "types": "./dist/storage.d.ts",
-      "import": "./dist/storage.mjs",
-      "require": "./dist/storage.cjs"
+      "types": "./dist/storage/index.d.ts",
+      "import": "./dist/storage/index.mjs",
+      "require": "./dist/storage/index.cjs"
+    },
+    "./storage/react": {
+      "types": "./dist/storage/react.d.ts",
+      "import": "./dist/storage/react.mjs",
+      "require": "./dist/storage/react.cjs"
+    },
+    "./storage/vue": {
+      "types": "./dist/storage/vue.d.ts",
+      "import": "./dist/storage/vue.mjs",
+      "require": "./dist/storage/vue.cjs"
     },
     "./*": {
       "types": "./dist/*.d.ts",

@@ -2,4 +2,4 @@
 export * from './core'
 export * from './crypto'
 export * from './faker'
-export * from './storage'
+export * from './storage/index'
