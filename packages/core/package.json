@@ -36,5 +36,8 @@
     "//build": "tsup",
     "build": "unbuild",
     "publint": "publint"
+  },
+  "dependencies": {
+    "detect-browser": "^5.3.0"
   }
 }

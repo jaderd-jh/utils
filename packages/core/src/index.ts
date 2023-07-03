@@ -1,6 +1,7 @@
 export * from './case'
 export * from './console'
 export * from './desensitize'
+export * from './dom'
 export * from './format'
 export * from './validate'
 
