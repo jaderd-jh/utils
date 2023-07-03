@@ -17,15 +17,32 @@
     "jade",
     "utils"
   ],
-  "sideEffects": [
-    "dist/index.mjs",
-    "dist/index.cjs"
-  ],
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
+    },
+    "./aes": {
+      "types": "./dist/aes.d.ts",
+      "import": "./dist/aes.mjs",
+      "require": "./dist/aes.cjs"
+    },
+    "./base64": {
+      "types": "./dist/base64.d.ts",
+      "import": "./dist/base64.mjs",
+      "require": "./dist/base64.cjs"
+    },
+    "./md5": {
+      "types": "./dist/md5.d.ts",
+      "import": "./dist/md5.mjs",
+      "require": "./dist/md5.cjs"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.mjs",
+      "require": "./dist/*.cjs"
     }
   },
   "main": "dist/index.cjs",
@@ -48,8 +65,10 @@
       "optional": false
     }
   },
-  "devDependencies": {
-    "@types/crypto-js": "^4.1.1",
+  "dependencies": {
     "crypto-js": "^4.1.1"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.1.1"
   }
 }

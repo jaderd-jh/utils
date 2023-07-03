@@ -1,6 +1,8 @@
-import { aes } from '@jhqn/utils-crypto'
+import { aes } from '@jhqn/utils-crypto/aes'
 import { parseToJSON, replacer, reviver } from '@jhqn/utils-core'
 import type { StorageObj } from '../types'
+
+export { aes }
 
 /**
  * 判断当前类型是否是Symbol
