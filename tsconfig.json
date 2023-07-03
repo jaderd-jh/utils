@@ -26,13 +26,8 @@
     "paths": {
       "@jhqn/utils-core": ["packages/core/src"],
       "@jhqn/utils-crypto": ["packages/crypto/src"],
-      "@jhqn/utils-crypto/aes": ["packages/crypto/src/aes"],
-      "@jhqn/utils-crypto/base64": ["packages/crypto/src/base64"],
-      "@jhqn/utils-crypto/md5": ["packages/crypto/src/md5"],
       "@jhqn/utils-faker": ["packages/faker/src"],
       "@jhqn/utils-storage": ["packages/storage/src"],
-      "@jhqn/utils-storage/react": ["packages/storage/src/react"],
-      "@jhqn/utils-storage/vue": ["packages/storage/src/vue"],
       "@jhqn/utils": ["packages/utils/src"]
     }
   },

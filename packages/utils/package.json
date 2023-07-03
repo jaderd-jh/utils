@@ -24,15 +24,25 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
-    "./react": {
-      "types": "./dist/react.d.ts",
-      "import": "./dist/react.mjs",
-      "require": "./dist/react.cjs"
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.mjs",
+      "require": "./dist/core.cjs"
     },
-    "./vue": {
-      "types": "./dist/vue.d.ts",
-      "import": "./dist/vue.mjs",
-      "require": "./dist/vue.cjs"
+    "./crypto": {
+      "types": "./dist/crypto.d.ts",
+      "import": "./dist/crypto.mjs",
+      "require": "./dist/crypto.cjs"
+    },
+    "./faker": {
+      "types": "./dist/faker.d.ts",
+      "import": "./dist/faker.mjs",
+      "require": "./dist/faker.cjs"
+    },
+    "./storage": {
+      "types": "./dist/storage.d.ts",
+      "import": "./dist/storage.mjs",
+      "require": "./dist/storage.cjs"
     },
     "./*": {
       "types": "./dist/*.d.ts",
@@ -44,7 +54,8 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "*.d.ts"
   ],
   "scripts": {
     "test": "vitest",
