@@ -28,7 +28,7 @@ export const fixiOSInputAutoZoomIn = () => {
   }
 }
 
-export const { userAgent } = window.navigator
+export const userAgent = typeof window === 'object' ? window.navigator.userAgent : ''
 
 /**
  * 获取宿主环境信息
