@@ -1,7 +1,7 @@
 {
   "name": "@jhqn/utils",
   "type": "module",
-  "version": "0.0.1-beta.11",
+  "version": "0.0.1-beta.12",
   "author": "jade-gjz <jiangang.zhang@jaderd.com>",
   "license": "MIT",
   "homepage": "https://github.com/jaderd-jh/utils/tree/main/packages/utils#readme",
