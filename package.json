@@ -1,6 +1,6 @@
 {
   "name": "utils",
-  "version": "0.0.1-beta.12",
+  "version": "0.0.1-beta.13",
   "description": "jade's utils monorepo",
   "author": "jade-gjz <jiangang.zhang@jaderd.com>",
   "private": true,
