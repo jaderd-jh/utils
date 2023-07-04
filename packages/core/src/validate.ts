@@ -69,6 +69,12 @@ export const isTel = (val: NullOrUndefinable<Numeric>) => {
 }
 
 /**
+ * 包含非ASCII字符
+ * @param text
+ */
+export const nonASCII = (text: string) => /[^\x20-\x7E]/.test(text)
+
+/**
  * 校验接口返回内容
  * @param res
  */
