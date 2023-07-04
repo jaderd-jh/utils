@@ -17,3 +17,18 @@ export declare type Undefinable<T> = T | undefined
  * 可 Null 或 Undefined
  */
 export declare type NullOrUndefinable<T> = Nullable<Undefinable<T>>
+
+/**
+ * 请求结果
+ */
+export declare type Res<T = any> = Service.Response<T>
+
+/**
+ * 分页请求结果数据
+ */
+export declare type PageResData<T = any> = Service.PageResponseData<T>
+
+/**
+ * 分页请求结果
+ */
+export declare type PageRes<T = any> = Service.PageResponse<T>
