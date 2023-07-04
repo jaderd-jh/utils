@@ -1,4 +1,4 @@
-import type { NullOrUndefinable, Numeric } from '../types'
+import type { NullOrUndefinable, Numeric, PageRes, Res } from '../types'
 
 const cnPhoneRE = /^1[3-9]\d{9}$/
 const cnTelRE = /^0\d{9,11}$/
@@ -67,3 +67,22 @@ export const isTel = (val: NullOrUndefinable<Numeric>) => {
   if (!isDef(val)) return false
   return cnTelRE.test(val.toString())
 }
+
+/**
+ * 校验接口返回内容
+ * @param res
+ */
+export const isValidRes = (res: Res) => res.code === 200 && res.data
+
+/**
+ * 校验接口数组返回内容
+ * @param res
+ */
+export const isValidArrRes = (res: Res<any[]>) => res.code === 200 && Array.isArray(res.data)
+
+/**
+ * 校验接口分页返回内容
+ * @param res
+ */
+export const isValidPageRes = (res: PageRes) =>
+  res.code === 200 && res.data && Array.isArray(res.data.list || res.data.records)
