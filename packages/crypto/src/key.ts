@@ -16,3 +16,7 @@ export function setCryptoKey(key: string) {
 export function getCryptoKey() {
   return KEY
 }
+
+if (__CRYPTO_KEY__) {
+  setCryptoKey(__CRYPTO_KEY__)
+}
