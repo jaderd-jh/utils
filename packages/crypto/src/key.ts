@@ -17,6 +17,6 @@ export function getCryptoKey() {
   return KEY
 }
 
-if (__CRYPTO_KEY__) {
-  setCryptoKey(__CRYPTO_KEY__)
+if (import.meta.env.VITE_CRYPTO_KEY) {
+  setCryptoKey(import.meta.env.VITE_CRYPTO_KEY)
 }

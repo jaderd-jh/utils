@@ -22,6 +22,7 @@
     "emitDeclarationOnly": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {
       "@jhqn/utils-core": ["packages/core/src"],
