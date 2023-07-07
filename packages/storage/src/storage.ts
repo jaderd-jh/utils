@@ -1,4 +1,5 @@
 import { aes } from '@jhqn/utils-crypto/aes'
+import type { Nullable } from '@jhqn/utils-core'
 import { parseToJSON, replacer, reviver } from '@jhqn/utils-core'
 import type { StorageObj } from '../types'
 
@@ -52,7 +53,7 @@ export function storageStringify(data: any): string {
  * @param {string} data 需要反序列化的字符串
  * @returns {StorageObj} 返回反序列化后的数据
  */
-export function storageParse<T>(data: string): StorageObj<T> | null {
+export function storageParse<T>(data: string): Nullable<StorageObj<T>> {
   return parseToJSON<StorageObj<T>>(data, reviver)
 }
 
@@ -179,8 +180,8 @@ export function getStorage<T = any>(
   storage: Storage,
   key: string,
   config: { expires?: number; crypto?: boolean } = { crypto: false, expires: undefined }
-): T | null {
-  let content: StorageObj<T> | null
+): Nullable<T> {
+  let content: Nullable<StorageObj<T>>
   if (hasStorage(storage, key)) {
     content = storageParse<T>(config.crypto ? aes.decrypt(<string>storage.getItem(key)) : <string>storage.getItem(key))
     if (config.expires && content && new Date().getTime() - content.expires >= config.expires) {

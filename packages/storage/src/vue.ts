@@ -12,13 +12,12 @@ import { aes, storageParse, storageStringify } from './storage'
  * @param options
  */
 function useWindowStorage<T extends string | number | boolean | object | null>(
-  storage: Storage,
+  storage: 'localStorage' | 'sessionStorage',
   key: string,
   initialValue: MaybeRef<T>,
   crypto = false,
   options: UseStorageOptions<T> = { window: defaultWindow }
 ) {
-  // @ts-expect-error it works
   return useStorage<T>(key, initialValue, options.window?.[storage], {
     ...options,
     serializer: {
@@ -41,7 +40,7 @@ export function useLocal<T extends string | number | boolean | object | null>(
   crypto = false,
   options: UseStorageOptions<T> = { window: defaultWindow }
 ) {
-  return useWindowStorage<T>(localStorage, key, initialValue, crypto, options)
+  return useWindowStorage<T>('localStorage', key, initialValue, crypto, options)
 }
 
 /**
@@ -57,5 +56,5 @@ export function useSession<T extends string | number | boolean | object | null>(
   crypto = false,
   options: UseStorageOptions<T> = { window: defaultWindow }
 ) {
-  return useWindowStorage<T>(sessionStorage, key, initialValue, crypto, options)
+  return useWindowStorage<T>('sessionStorage', key, initialValue, crypto, options)
 }
