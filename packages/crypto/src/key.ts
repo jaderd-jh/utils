@@ -16,3 +16,7 @@ export function setCryptoKey(key: string) {
 export function getCryptoKey() {
   return KEY
 }
+
+if (import.meta.env.VITE_CRYPTO_KEY) {
+  setCryptoKey(import.meta.env.VITE_CRYPTO_KEY)
+}
