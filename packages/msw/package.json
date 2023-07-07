@@ -1,0 +1,53 @@
+{
+  "name": "@jhqn/utils-msw",
+  "type": "module",
+  "version": "0.0.1-beta.14",
+  "author": "jade-gjz <jiangang.zhang@jaderd.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/jaderd-jh/utils/tree/main/packages/msw#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jaderd-jh/utils",
+    "directory": "packages/msw"
+  },
+  "bugs": {
+    "url": "https://github.com/jaderd-jh/utils/issues"
+  },
+  "keywords": [
+    "jade",
+    "utils"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "vitest",
+    "build": "unbuild",
+    "publint": "publint"
+  },
+  "peerDependencies": {
+    "msw": "^1.2.2"
+  },
+  "peerDependenciesMeta": {
+    "msw": {
+      "optional": false
+    }
+  },
+  "dependencies": {
+    "@jhqn/utils-faker": "workspace:*"
+  },
+  "devDependencies": {
+    "msw": "^1.2.2"
+  }
+}
