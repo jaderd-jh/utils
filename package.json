@@ -1,16 +1,16 @@
 {
   "name": "utils",
+  "type": "module",
   "version": "0.0.1-beta.15",
+  "private": true,
+  "packageManager": "pnpm@8.6.5",
   "description": "jade's utils monorepo",
   "author": "jade-gjz <jiangang.zhang@jaderd.com>",
-  "private": true,
   "license": "MIT",
   "keywords": [
     "jade",
     "utils"
   ],
-  "packageManager": "pnpm@8.6.5",
-  "type": "module",
   "scripts": {
     "test": "vitest",
     "coverage": "vitest run --coverage",
