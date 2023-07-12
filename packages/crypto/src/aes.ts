@@ -13,8 +13,7 @@ import type { CryptoMap } from '../types'
 export function AESEncrypt(str: string) {
   const key = getCryptoKey()
   if (key === undefined) {
-    // eslint-disable-next-line prettier/prettier
-    throw new Error('请先设置加密key 或 import\.meta\.env\.VITE_CRYPTO_KEY')
+    throw new Error('请先设置加密key 或 设置环境变量VITE_CRYPTO_KEY')
   }
   return AES.encrypt(encUTF8.parse(str), key, {
     mode: modeECB,
@@ -30,8 +29,7 @@ export function AESEncrypt(str: string) {
 export function AESDecrypt(str: string) {
   const key = getCryptoKey()
   if (key === undefined) {
-    // eslint-disable-next-line prettier/prettier
-    throw new Error('请先设置加密key 或 import\.meta\.env\.VITE_CRYPTO_KEY')
+    throw new Error('请先设置加密key 或 设置环境变量VITE_CRYPTO_KEY')
   }
   return encUTF8
     .stringify(
