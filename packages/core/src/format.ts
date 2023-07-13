@@ -1,11 +1,12 @@
 import { isJSONStr } from './validate'
+import type { Nullable } from '../types'
 
 /**
  * Json字符串转对象
  * @param str
  * @param reviver
  */
-export const parseToJSON = <T = any>(str: string, reviver?: (this: any, key: string, value: any) => any): T | null =>
+export const parseToJSON = <T = any>(str: string, reviver?: (this: any, key: string, value: any) => any): Nullable<T> =>
   isJSONStr(str) ? JSON.parse(str, reviver) : null
 
 /**
