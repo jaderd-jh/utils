@@ -6,8 +6,10 @@ import type { Nullable } from '../types'
  * @param str
  * @param reviver
  */
-export const parseToJSON = <T = any>(str: string, reviver?: (this: any, key: string, value: any) => any): Nullable<T> =>
-  isJSONStr(str) ? JSON.parse(str, reviver) : null
+export const parseToJSON = <T = any>(
+  str: string,
+  reviver?: (this: any, key: string, value: any) => any
+): Nullable<T> => (isJSONStr(str) ? JSON.parse(str, reviver) : null)
 
 /**
  * JSON.stringify() second param
