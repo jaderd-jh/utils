@@ -26,7 +26,7 @@
     "prepare": "run-s init:*"
   },
   "devDependencies": {
-    "@jhqn/eslint-config-ts": "^0.5.0",
+    "@jhqn/eslint-config-ts": "^0.6.0",
     "@types/node": "^20.3.2",
     "@vitest/coverage-v8": "^0.33.0",
     "bumpp": "^9.1.1",
