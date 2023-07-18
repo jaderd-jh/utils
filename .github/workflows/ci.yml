@@ -38,6 +38,8 @@ jobs:
         os: [ubuntu-latest]
         node_version: [16, 18]
         include:
+          - os: macos-latest
+            node_version: 18
           - os: windows-latest
             node_version: 18
       fail-fast: false
