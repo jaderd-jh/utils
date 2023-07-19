@@ -1,4 +1,4 @@
-import Base64 from 'crypto-js/enc-base64'
+import Base64 from 'crypto-js/enc-base64url'
 import Utf8 from 'crypto-js/enc-utf8'
 import type { CryptoMap } from '../types'
 
@@ -7,7 +7,7 @@ import type { CryptoMap } from '../types'
  * @param {string} str 需要加密的字符串
  * @returns {string} string 加密后的字符串
  */
-export function base64Encrypt(str: string) {
+export function base64urlEncrypt(str: string) {
   return Base64.stringify(Utf8.parse(str))
 }
 
@@ -16,11 +16,11 @@ export function base64Encrypt(str: string) {
  * @param {string} str 需要解密的字符串
  * @returns {string} string 解密后的字符串
  */
-export function base64Decrypt(str: string) {
+export function base64urlDecrypt(str: string) {
   return Utf8.stringify(Base64.parse(str))
 }
 
-export const base64: CryptoMap = {
-  encrypt: base64Encrypt,
-  decrypt: base64Decrypt,
+export const base64url: CryptoMap = {
+  encrypt: base64urlEncrypt,
+  decrypt: base64urlDecrypt,
 }

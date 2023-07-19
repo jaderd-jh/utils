@@ -34,6 +34,11 @@
       "import": "./dist/base64.mjs",
       "require": "./dist/base64.cjs"
     },
+    "./base64url": {
+      "types": "./dist/base64url.d.ts",
+      "import": "./dist/base64url.mjs",
+      "require": "./dist/base64url.cjs"
+    },
     "./md5": {
       "types": "./dist/md5.d.ts",
       "import": "./dist/md5.mjs",

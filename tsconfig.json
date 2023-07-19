@@ -29,6 +29,7 @@
       "@jhqn/utils-crypto": ["packages/crypto/src"],
       "@jhqn/utils-crypto/aes": ["packages/crypto/src/aes"],
       "@jhqn/utils-crypto/base64": ["packages/crypto/src/base64"],
+      "@jhqn/utils-crypto/base64url": ["packages/crypto/src/base64url"],
       "@jhqn/utils-crypto/md5": ["packages/crypto/src/md5"],
       "@jhqn/utils-faker": ["packages/faker/src"],
       "@jhqn/utils-msw": ["packages/msw/src"],
