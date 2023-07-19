@@ -99,7 +99,7 @@ export const nonASCII = (text: string) => /[^\x20-\x7E]/.test(text)
  * 校验接口返回内容
  * @param res
  */
-export const isValidRes = (res: Res) => res.code === 200 && res.data
+export const isValidRes = (res: Res) => res.code === 200 && isDef(res.data)
 
 /**
  * 校验接口数组返回内容
