@@ -1,6 +1,11 @@
 import { detect } from 'detect-browser'
 
 /**
+ * 判断是否是浏览器环境
+ */
+export const inBrowser = typeof window !== 'undefined'
+
+/**
  * 等待一段时间
  * @param time
  */
@@ -28,7 +33,7 @@ export const fixiOSInputAutoZoomIn = () => {
   }
 }
 
-export const userAgent = typeof window === 'object' ? window.navigator.userAgent : ''
+export const userAgent = inBrowser ? window.navigator.userAgent : ''
 
 /**
  * 获取宿主环境信息
