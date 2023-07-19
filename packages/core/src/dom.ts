@@ -1,4 +1,5 @@
 import { detect } from 'detect-browser'
+import type { Nullable } from '../types'
 
 /**
  * 判断是否是浏览器环境
@@ -26,13 +27,16 @@ export const fixiOSInputAutoZoomIn = () => {
   if (
     CSS.supports('(font:-apple-system-body) and (-webkit-touch-callout:none) and (-webkit-tap-highlight-color:hotpink)')
   ) {
-    const viewport: HTMLMetaElement | null = document.querySelector('meta[name="viewport"]')
+    const viewport: Nullable<HTMLMetaElement> = document.querySelector('meta[name="viewport"]')
     if (viewport !== null) {
       viewport.content = `${viewport.content}, user-scalable=no`
     }
   }
 }
 
+/**
+ * 用户代理
+ */
 export const userAgent = inBrowser ? window.navigator.userAgent : ''
 
 /**

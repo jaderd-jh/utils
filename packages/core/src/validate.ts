@@ -48,6 +48,18 @@ export const isArrStr = (str: string) => {
   }
 }
 
+/**
+ * 判断是否有效的key
+ * @param {string | number | symbol} key 键名
+ * @param {object} object 对象
+ * @example
+ *
+ * ```ts
+ * const obj = { a: 1, b: 2 }
+ * isValidKey('a', obj) // true
+ * ```
+ * @returns {boolean} boolean
+ */
 export const isValidKey = (key: string | number | symbol, object: object): key is keyof typeof object => key in object
 
 /**
