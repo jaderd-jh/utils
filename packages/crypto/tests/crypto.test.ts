@@ -5,8 +5,8 @@ import { md5 } from '../src/md5'
 import { setCryptoKey } from '../src/key'
 
 test('aes', () => {
-  expect(() => aes.encrypt('foo')).toThrowError('请先设置加密key')
-  expect(() => aes.decrypt('foo')).toThrowError('请先设置加密key')
+  expect(() => aes.encrypt('foo')).toThrowError('请先设置 加密key 或 环境变量VITE_CRYPTO_KEY')
+  expect(() => aes.decrypt('foo')).toThrowError('请先设置 加密key 或 环境变量VITE_CRYPTO_KEY')
   setCryptoKey('28a25213fc68550565e13b6ffc3639af')
   expect(aes.decrypt(aes.encrypt('foo'))).toBe('foo')
 })
