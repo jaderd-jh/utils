@@ -112,4 +112,4 @@ export const isValidArrRes = (res: Res<any[]>) => res.code === 200 && Array.isAr
  * @param res
  */
 export const isValidPageRes = (res: PageRes) =>
-  res.code === 200 && res.data && Array.isArray(res.data.list || res.data.records)
+  res.code === 200 && isDef(res.data) && Array.isArray(res.data.list || res.data.records)
