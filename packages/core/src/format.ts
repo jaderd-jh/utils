@@ -46,5 +46,5 @@ export const reviver = (_: any, value: any) => {
  * @param {string[]} keys 属性
  * @param {boolean} reverse 为true时过滤取反
  */
-export const filterObj = (obj: Record<string, any>, keys: string[], reverse = false) =>
+export const filterObj = (obj: Record<string, any>, keys: string[], reverse: boolean = false) =>
   Object.fromEntries(Object.entries(obj).filter(([key]) => (reverse ? !keys.includes(key) : keys.includes(key))))
