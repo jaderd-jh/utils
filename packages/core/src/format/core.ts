@@ -1,5 +1,5 @@
-import { isJSONStr } from './validate'
-import type { Nullable } from '../types'
+import { isJSONStr } from '../validate'
+import type { Nullable } from '../../types'
 
 /**
  * Json字符串转对象
