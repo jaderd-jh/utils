@@ -1,4 +1,4 @@
-import type { ConfigType } from 'dayjs/esm'
+import type { ConfigType, Dayjs } from 'dayjs/esm'
 import dayjs from 'dayjs/esm'
 import localeData from 'dayjs/esm/plugin/localeData'
 import duration from 'dayjs/esm/plugin/duration'
@@ -6,6 +6,7 @@ import relativeTime from 'dayjs/esm/plugin/relativeTime'
 import customParseFormat from 'dayjs/esm/plugin/customParseFormat'
 import objectSupport from 'dayjs/esm/plugin/objectSupport'
 import zhCN from 'dayjs/esm/locale/zh-cn'
+import { isDef } from '../validate'
 
 dayjs.extend(localeData).locale('zh-cn', zhCN)
 dayjs.extend(duration)
@@ -13,7 +14,7 @@ dayjs.extend(relativeTime)
 dayjs.extend(customParseFormat)
 dayjs.extend(objectSupport)
 
-export { dayjs }
+export { dayjs, Dayjs }
 
 /**
  * 格式化时间
@@ -22,12 +23,13 @@ export { dayjs }
  * @returns {string} 格式化后的时间
  */
 export const dateFmt = (date: ConfigType, format: string | 'date' | 'datetime' = 'YYYY-MM-DD HH:mm:ss'): string => {
+  const dd = dayjs(date)
   let fmt = format
-  if (!date) return ''
+  if (!isDef(date) || !dd.isValid()) return ''
   if (format === 'date') fmt = 'YYYY-MM-DD'
   if (format === 'datetime') fmt = 'YYYY-MM-DD HH:mm:ss'
 
-  return dayjs(date).format(fmt)
+  return dd.format(fmt)
 }
 
 /**
@@ -36,9 +38,20 @@ export const dateFmt = (date: ConfigType, format: string | 'date' | 'datetime' =
  * @param {import('dayjs/esm').ConfigType} end 结束时间
  */
 export const dateDuration = (start: ConfigType, end: ConfigType) => {
-  if (!start || !end) return ''
+  const startDay = dayjs(start)
+  const endDay = dayjs(end)
+  if (!isDef(start) || !startDay.isValid() || !isDef(end) || !endDay.isValid()) return ''
 
-  const dd = dayjs.duration(dayjs(end).diff(dayjs(start)))
+  const dd = dayjs.duration(endDay.diff(startDay))
 
-  return dd.format(`${dd.years() === 0 ? '' : 'Y年'}${dd.months() === 0 ? '' : 'M个月'}${dd.days() === 0 ? '' : 'D天'}`)
+  const year = dd.years()
+  const month = dd.months()
+  const day = dd.days()
+  const format = [
+    year === 0 ? '' : 'Y年',
+    month === 0 ? '' : 'M个月',
+    day === 0 ? '' : `${day < 10 && (year !== 0 || month !== 0) ? '零' : ''}D天`,
+  ].join('')
+
+  return dd.format(format)
 }
