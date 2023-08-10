@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { checkImg, isArrStr, isDef, isJSONStr, isNumeric, isValidKey } from '../src'
+import { checkImg, isArrStr, isDef, isJSONStr, isNumeric, isValidFileType, isValidKey } from '../src'
 
 test('isDef', () => {
   expect(isDef(1)).toBe(true)
@@ -49,4 +49,14 @@ test('isArrStr', () => {
 test('isValidKey', () => {
   expect(isValidKey('a', { a: 1 })).toBe(true)
   expect(isValidKey('b', { a: 1 })).toBe(false)
+})
+
+test('isValidFileType', () => {
+  expect(isValidFileType(new File(['foo'], 'foo'), '')).toBe(false)
+  expect(isValidFileType(new File(['foo'], 'foo.txt'), '*')).toBe(true)
+  expect(isValidFileType(new File(['foo'], 'foo1.txt'), '.txt')).toBe(true)
+  expect(isValidFileType(new File(['foo'], 'foo2.txt'), '.webp')).toBe(false)
+  expect(isValidFileType(new File(['foo'], 'foo3.txt', { type: 'text/plain' }), '.webp')).toBe(false)
+  expect(isValidFileType(new File(['foo'], 'foo4.avif', { type: 'image/avif' }), 'image/*')).toBe(true)
+  expect(isValidFileType(new File(['foo'], 'foo4.jpg', { type: 'image/jpg' }), '.docx,audio/* , image/jpg')).toBe(true)
 })

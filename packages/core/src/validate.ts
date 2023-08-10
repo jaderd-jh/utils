@@ -125,3 +125,39 @@ export const isValidArrRes = (res: Res<any[]>) => res.code === 200 && Array.isAr
  */
 export const isValidPageRes = (res: PageRes) =>
   res.code === 200 && isDef(res.data) && Array.isArray(res.data.list || res.data.records)
+
+/**
+ * 校验文件类型
+ * 1. XXX/YYY 2. .xxx 3. XXX/* 4.*
+ * @param file
+ * @param type
+ */
+export const isValidFileType = (file: File, type: string) => {
+  if (type === '*') return true
+
+  const fileType = file.type
+  const fileName = file.name
+
+  /**
+   * 校验
+   * @param item
+   */
+  function validate(item: string) {
+    if (item.startsWith('.')) {
+      return fileName.endsWith(item)
+    }
+    if (item.endsWith('*')) {
+      return fileType.startsWith(item.slice(0, -2))
+    }
+    if (item.includes('/')) {
+      return fileType === item
+    }
+    return false
+  }
+
+  const typeArrStr = type.split(',').map(item => item.trim())
+  if (typeArrStr.length > 1) {
+    return typeArrStr.some(validate)
+  }
+  return validate(type)
+}
