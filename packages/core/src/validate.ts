@@ -129,8 +129,8 @@ export const isValidPageRes = (res: PageRes) =>
 /**
  * 校验文件类型
  * 1. XXX/YYY 2. .xxx 3. XXX/* 4.*
- * @param file
- * @param type
+ * @param {File} file 需要校验的文件
+ * @param {string} type 文件类型, 与input.accept一致
  */
 export const isValidFileType = (file: File, type: string) => {
   if (type === '*') return true
