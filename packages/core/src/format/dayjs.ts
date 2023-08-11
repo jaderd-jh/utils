@@ -5,7 +5,7 @@ import duration from 'dayjs/esm/plugin/duration/index.js'
 import relativeTime from 'dayjs/esm/plugin/relativeTime/index.js'
 import customParseFormat from 'dayjs/esm/plugin/customParseFormat/index.js'
 import objectSupport from 'dayjs/esm/plugin/objectSupport/index.js'
-import zhCN from 'dayjs/esm/locale/zh-cn'
+import zhCN from 'dayjs/esm/locale/zh-cn.js'
 import { isDef } from '../validate'
 
 dayjs.extend(localeData).locale('zh-cn', zhCN)
