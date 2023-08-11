@@ -1,11 +1,11 @@
 import type { ConfigType, Dayjs } from 'dayjs/esm'
-import dayjs from 'dayjs/esm'
-import localeData from 'dayjs/esm/plugin/localeData'
-import duration from 'dayjs/esm/plugin/duration'
-import relativeTime from 'dayjs/esm/plugin/relativeTime'
-import customParseFormat from 'dayjs/esm/plugin/customParseFormat'
-import objectSupport from 'dayjs/esm/plugin/objectSupport'
-import zhCN from 'dayjs/esm/locale/zh-cn'
+import dayjs from 'dayjs/esm/index'
+import localeData from 'dayjs/esm/plugin/localeData/index'
+import duration from 'dayjs/esm/plugin/duration/index'
+import relativeTime from 'dayjs/esm/plugin/relativeTime/index'
+import customParseFormat from 'dayjs/esm/plugin/customParseFormat/index'
+import objectSupport from 'dayjs/esm/plugin/objectSupport/index'
+import zhCN from 'dayjs/esm/locale/zh-cn/index'
 import { isDef } from '../validate'
 
 dayjs.extend(localeData).locale('zh-cn', zhCN)
