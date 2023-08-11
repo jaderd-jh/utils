@@ -58,5 +58,8 @@ test('isValidFileType', () => {
   expect(isValidFileType(new File(['foo'], 'foo2.txt'), '.webp')).toBe(false)
   expect(isValidFileType(new File(['foo'], 'foo3.txt', { type: 'text/plain' }), '.webp')).toBe(false)
   expect(isValidFileType(new File(['foo'], 'foo4.avif', { type: 'image/avif' }), 'image/*')).toBe(true)
-  expect(isValidFileType(new File(['foo'], 'foo4.jpg', { type: 'image/jpg' }), '.docx,audio/* , image/jpg')).toBe(true)
+  expect(isValidFileType(new File(['foo'], 'foo5.png', { type: 'image/png' }), 'png*')).toBe(false)
+  expect(isValidFileType(new File(['foo'], 'foo6.jpeg', { type: 'image/jpeg' }), '.docx,audio/* , image/jpeg')).toBe(
+    true
+  )
 })

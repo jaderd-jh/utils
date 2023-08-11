@@ -146,8 +146,8 @@ export const isValidFileType = (file: File, type: string) => {
     if (item.startsWith('.')) {
       return fileName.endsWith(item)
     }
-    if (item.endsWith('*')) {
-      return fileType.startsWith(item.slice(0, -2))
+    if (item.endsWith('/*')) {
+      return fileType.startsWith(item.replace('/*', ''))
     }
     if (item.includes('/')) {
       return fileType === item
