@@ -53,6 +53,7 @@ test('hideEmail', () => {
   expect(hideEmail('1')).toBe('')
   expect(hideEmail('12')).toBe('')
   expect(hideEmail('1@')).toBe('*@')
+  expect(hideEmail('@1')).toBe('@1')
   expect(hideEmail('1@1')).toBe('*@1')
   expect(hideEmail('12@email.com')).toBe('1*@email.com')
   expect(hideEmail('123@email.com')).toBe('1**@email.com')

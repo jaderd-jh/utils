@@ -127,13 +127,7 @@ export const hideEmail = (email: NullOrUndefinable<string>) => {
 
     if (!len) return email
 
-    if (len === 1) {
-      return `*@${domain}`
-    }
-    if (len === 2) {
-      return `${name[0]}*@${domain}`
-    }
-    return `${name[0] + '*'.repeat(len - 1)}@${domain}`
+    return `${hideTail(name)}@${domain}`
   }
   return ''
 }
