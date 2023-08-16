@@ -2,6 +2,53 @@ import { isDef, isPhone, isTel } from './validate'
 import type { NullOrUndefinable } from '../types'
 
 /**
+ * 隐藏中间部分
+ * @param {string} str 需要隐藏的字符串
+ */
+export const hideMiddle = (str: NullOrUndefinable<string>) => {
+  if (!isDef(str)) return ''
+  const len = str.length
+  if (len === 1) return '*'
+  if (len === 2) return '**'
+  return str[0] + '*'.repeat(len - 2) + str[len - 1]
+}
+
+/**
+ * 隐藏首尾仅保留中间3分之1
+ * @param {string} str 需要隐藏的字符串
+ */
+export const hideThird = (str: NullOrUndefinable<string>) => {
+  if (!isDef(str)) return ''
+  const len = str.length
+  const partLen = Math.round(len / 3)
+  if (len === 1) return '*'
+  if (len === 2) return '**'
+  return str.slice(0, partLen) + '*'.repeat(len - 2 * partLen) + str.slice(len - partLen)
+}
+
+/**
+ * 隐藏首部
+ * @param {string} str 需要隐藏的字符串
+ */
+export const hideHead = (str: NullOrUndefinable<string>) => {
+  if (!isDef(str)) return ''
+  const len = str.length
+  if (len === 1) return '*'
+  return '*'.repeat(len - 1) + str[len - 1]
+}
+
+/**
+ * 隐藏尾部
+ * @param {string} str 需要隐藏的字符串
+ */
+export const hideTail = (str: NullOrUndefinable<string>) => {
+  if (!isDef(str)) return ''
+  const len = str.length
+  if (len === 1) return '*'
+  return str[0] + '*'.repeat(len - 1)
+}
+
+/**
  * 隐藏手机号
  * @param {string} phone 手机号
  */
@@ -32,6 +79,7 @@ export const hideCardNo = (cardNo: NullOrUndefinable<string>) => {
 /**
  * 隐藏姓名第一个字
  * @param {string} name 姓名
+ * @deprecated 请使用 hideSurname
  */
 export const hideName = (name: NullOrUndefinable<string>) => {
   if (name) {
@@ -46,6 +94,22 @@ export const hideName = (name: NullOrUndefinable<string>) => {
     return res
   }
   return ''
+}
+
+/**
+ * 隐藏姓氏
+ * @param {string} name 姓名
+ */
+export const hideSurname = (name: NullOrUndefinable<string>) => {
+  return hideHead(name)
+}
+
+/**
+ * 隐藏名字
+ * @param {string} name 姓名
+ */
+export const hideFirstName = (name: NullOrUndefinable<string>) => {
+  return hideTail(name)
 }
 
 /**
@@ -72,29 +136,4 @@ export const hideEmail = (email: NullOrUndefinable<string>) => {
     return `${name[0] + '*'.repeat(len - 1)}@${domain}`
   }
   return ''
-}
-
-/**
- * 隐藏中间部分
- * @param {string} str 需要隐藏的字符串
- */
-export const hideMiddle = (str: NullOrUndefinable<string>): string => {
-  if (!isDef(str)) return ''
-  const len = str.length
-  if (len === 1) return '*'
-  if (len === 2) return '**'
-  return str[0] + '*'.repeat(len - 2) + str[len - 1]
-}
-
-/**
- * 隐藏首尾仅保留中间3分之1
- * @param {string} str 需要隐藏的字符串
- */
-export const hideThird = (str: NullOrUndefinable<string>): string => {
-  if (!isDef(str)) return ''
-  const len = str.length
-  const partLen = Math.round(len / 3)
-  if (len === 1) return '*'
-  if (len === 2) return '**'
-  return str.slice(0, partLen) + '*'.repeat(len - 2 * partLen) + str.slice(len - partLen)
 }

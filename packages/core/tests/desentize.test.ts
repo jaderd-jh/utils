@@ -1,5 +1,16 @@
 import { expect, test } from 'vitest'
-import { hideCardNo, hideEmail, hideMiddle, hideName, hidePhone, hideThird } from '../src'
+import {
+  hideCardNo,
+  hideEmail,
+  hideFirstName,
+  hideHead,
+  hideMiddle,
+  hideName,
+  hidePhone,
+  hideSurname,
+  hideTail,
+  hideThird,
+} from '../src'
 
 test('hidePhone', () => {
   expect(hidePhone(null)).toBe('')
@@ -25,6 +36,14 @@ test('hideName', () => {
   expect(hideName('财神爷')).toBe('*神爷')
   expect(hideName('古力娜扎')).toBe('*力娜扎')
   expect(hideName('Tom Holland')).toBe('*om Holland')
+})
+
+test('hideSurname', () => {
+  expect(hideSurname(null)).toBe('')
+})
+
+test('hideFirstName', () => {
+  expect(hideFirstName(null)).toBe('')
 })
 
 test('hideEmail', () => {
@@ -59,4 +78,22 @@ test('hideThird', () => {
   expect(hideThird('完颜阿骨打')).toBe('完颜*骨打')
   expect(hideThird('花和尚鲁智深')).toBe('花和**智深')
   expect(hideThird('Tom Holland')).toBe('Tom ***land')
+})
+
+test('hideHead', () => {
+  expect(hideHead(null)).toBe('')
+  expect(hideHead(undefined)).toBe('')
+  expect(hideHead('鸡')).toBe('*')
+  expect(hideHead('小明')).toBe('*明')
+  expect(hideHead('财神爷')).toBe('**爷')
+  expect(hideHead('古力娜扎')).toBe('***扎')
+})
+
+test('hideTail', () => {
+  expect(hideTail(null)).toBe('')
+  expect(hideTail(undefined)).toBe('')
+  expect(hideTail('鸡')).toBe('*')
+  expect(hideTail('小明')).toBe('小*')
+  expect(hideTail('财神爷')).toBe('财**')
+  expect(hideTail('古力娜扎')).toBe('古***')
 })
