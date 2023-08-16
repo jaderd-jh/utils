@@ -3,24 +3,24 @@ import type { NullOrUndefinable } from '../types'
 
 /**
  * 隐藏手机号
- * @param str
+ * @param {string} phone 手机号
  */
-export const hidePhone = (str: NullOrUndefinable<string>) => {
-  if (str) {
-    if (isPhone(str)) {
-      return str.replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2')
+export const hidePhone = (phone: NullOrUndefinable<string>) => {
+  if (phone) {
+    if (isPhone(phone)) {
+      return phone.replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2')
     }
-    if (isTel(str)) {
-      return str.replace(/^(\d{3,4})-?\d{3,4}(\d{4})$/, '$1****$2')
+    if (isTel(phone)) {
+      return phone.replace(/^(\d{3,4})-?\d{3,4}(\d{4})$/, '$1****$2')
     }
-    return str
+    return phone
   }
   return ''
 }
 
 /**
  * 隐藏身份证号
- * @param cardNo
+ * @param {string} cardNo 身份证号
  */
 export const hideCardNo = (cardNo: NullOrUndefinable<string>) => {
   if (cardNo) {
@@ -30,8 +30,8 @@ export const hideCardNo = (cardNo: NullOrUndefinable<string>) => {
 }
 
 /**
- * 隐藏姓名
- * @param name
+ * 隐藏姓名第一个字
+ * @param {string} name 姓名
  */
 export const hideName = (name: NullOrUndefinable<string>) => {
   if (name) {
@@ -47,9 +47,36 @@ export const hideName = (name: NullOrUndefinable<string>) => {
   }
   return ''
 }
+
+/**
+ * 隐藏邮箱
+ * @param {string} email 邮箱
+ */
+export const hideEmail = (email: NullOrUndefinable<string>) => {
+  if (email) {
+    if (!email.includes('@')) return ''
+
+    const arr = email.split('@')
+    const name = arr[0]
+    const domain = arr[1]
+    const len = name?.length
+
+    if (!len) return email
+
+    if (len === 1) {
+      return `*@${domain}`
+    }
+    if (len === 2) {
+      return `${name[0]}*@${domain}`
+    }
+    return `${name[0] + '*'.repeat(len - 1)}@${domain}`
+  }
+  return ''
+}
+
 /**
  * 隐藏中间部分
- * @param str
+ * @param {string} str 需要隐藏的字符串
  */
 export const hideMiddle = (str: NullOrUndefinable<string>): string => {
   if (!isDef(str)) return ''
@@ -61,7 +88,7 @@ export const hideMiddle = (str: NullOrUndefinable<string>): string => {
 
 /**
  * 隐藏首尾仅保留中间3分之1
- * @param str
+ * @param {string} str 需要隐藏的字符串
  */
 export const hideThird = (str: NullOrUndefinable<string>): string => {
   if (!isDef(str)) return ''

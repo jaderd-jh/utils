@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { hideCardNo, hideMiddle, hideName, hidePhone, hideThird } from '../src'
+import { hideCardNo, hideEmail, hideMiddle, hideName, hidePhone, hideThird } from '../src'
 
 test('hidePhone', () => {
   expect(hidePhone(null)).toBe('')
@@ -25,6 +25,18 @@ test('hideName', () => {
   expect(hideName('财神爷')).toBe('*神爷')
   expect(hideName('古力娜扎')).toBe('*力娜扎')
   expect(hideName('Tom Holland')).toBe('*om Holland')
+})
+
+test('hideEmail', () => {
+  expect(hideEmail(null)).toBe('')
+  expect(hideEmail(undefined)).toBe('')
+  expect(hideEmail('1@email.com')).toBe('*@email.com')
+  expect(hideEmail('1')).toBe('')
+  expect(hideEmail('12')).toBe('')
+  expect(hideEmail('1@')).toBe('*@')
+  expect(hideEmail('1@1')).toBe('*@1')
+  expect(hideEmail('12@email.com')).toBe('1*@email.com')
+  expect(hideEmail('123@email.com')).toBe('1**@email.com')
 })
 
 test('hideMiddle', () => {
