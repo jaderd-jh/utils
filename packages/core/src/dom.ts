@@ -82,4 +82,4 @@ export const getHostEnv = () => {
   }
 }
 
-export type { BrowserInfo, SearchBotDeviceInfo, BotInfo, NodeInfo, ReactNativeInfo } from 'detect-browser'
+export * from 'detect-browser'
