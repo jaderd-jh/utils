@@ -20,49 +20,102 @@
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types" : "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./core": {
       "types": "./dist/core.d.ts",
-      "import": "./dist/core.mjs",
-      "require": "./dist/core.cjs"
+      "import": {
+        "types": "./dist/core.d.mts",
+        "default": "./dist/core.mjs"
+      },
+      "require": {
+        "types" : "./dist/core.d.cts",
+        "default": "./dist/core.cjs"
+      }
     },
     "./crypto": {
       "types": "./dist/crypto.d.ts",
-      "import": "./dist/crypto.mjs",
-      "require": "./dist/crypto.cjs"
+      "import": {
+        "types": "./dist/crypto.d.mts",
+        "default": "./dist/crypto.mjs"
+      },
+      "require": {
+        "types" : "./dist/crypto.d.cts",
+        "default": "./dist/crypto.cjs"
+      }
     },
     "./faker": {
       "types": "./dist/faker.d.ts",
-      "import": "./dist/faker.mjs",
-      "require": "./dist/faker.cjs"
+      "import": {
+        "types": "./dist/faker.d.mts",
+        "default": "./dist/faker.mjs"
+      },
+      "require": {
+        "types" : "./dist/faker.d.cts",
+        "default": "./dist/faker.cjs"
+      }
     },
     "./msw": {
-      "types": "./dist/faker.d.ts",
-      "import": "./dist/faker.mjs",
-      "require": "./dist/faker.cjs"
+      "types": "./dist/msw.d.ts",
+      "import": {
+        "types": "./dist/msw.d.mts",
+        "default": "./dist/msw.mjs"
+      },
+      "require": {
+        "types" : "./dist/msw.d.cts",
+        "default": "./dist/msw.cjs"
+      }
     },
     "./storage": {
       "types": "./dist/storage/index.d.ts",
-      "import": "./dist/storage/index.mjs",
-      "require": "./dist/storage/index.cjs"
+      "import": {
+        "types": "./dist/storage/index.d.mts",
+        "default": "./dist/storage/index.mjs"
+      },
+      "require": {
+        "types" : "./dist/storage/index.d.cts",
+        "default": "./dist/storage/index.cjs"
+      }
     },
     "./storage/react": {
       "types": "./dist/storage/react.d.ts",
-      "import": "./dist/storage/react.mjs",
-      "require": "./dist/storage/react.cjs"
+      "import": {
+        "types": "./dist/storage/react.d.mts",
+        "default": "./dist/storage/react.mjs"
+      },
+      "require": {
+        "types" : "./dist/storage/react.d.cts",
+        "default": "./dist/storage/react.cjs"
+      }
     },
     "./storage/vue": {
       "types": "./dist/storage/vue.d.ts",
-      "import": "./dist/storage/vue.mjs",
-      "require": "./dist/storage/vue.cjs"
+      "import": {
+        "types": "./dist/storage/vue.d.mts",
+        "default": "./dist/storage/vue.mjs"
+      },
+      "require": {
+        "types" : "./dist/storage/vue.d.cts",
+        "default": "./dist/storage/vue.cjs"
+      }
     },
     "./*": {
       "types": "./dist/*.d.ts",
-      "import": "./dist/*.mjs",
-      "require": "./dist/*.cjs"
+      "import": {
+        "types": "./dist/*.d.mts",
+        "default": "./dist/*.mjs"
+      },
+      "require": {
+        "types" : "./dist/*.d.cts",
+        "default": "./dist/*.cjs"
+      }
     }
   },
   "main": "dist/index.cjs",

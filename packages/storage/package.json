@@ -20,24 +20,47 @@
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types" : "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./react": {
       "types": "./dist/react.d.ts",
-      "import": "./dist/react.mjs",
-      "require": "./dist/react.cjs"
+      "import": {
+        "types": "./dist/react.d.mts",
+        "default": "./dist/react.mjs"
+      },
+      "require": {
+        "types" : "./dist/react.d.cts",
+        "default": "./dist/react.cjs"
+      }
     },
     "./vue": {
       "types": "./dist/vue.d.ts",
-      "import": "./dist/vue.mjs",
-      "require": "./dist/vue.cjs"
+      "import": {
+        "types": "./dist/vue.d.mts",
+        "default": "./dist/vue.mjs"
+      },
+      "require": {
+        "types" : "./dist/vue.d.cts",
+        "default": "./dist/vue.cjs"
+      }
     },
     "./*": {
       "types": "./dist/*.d.ts",
-      "import": "./dist/*.mjs",
-      "require": "./dist/*.cjs"
+      "import": {
+        "types": "./dist/*.d.mts",
+        "default": "./dist/*.mjs"
+      },
+      "require": {
+        "types" : "./dist/*.d.cts",
+        "default": "./dist/*.cjs"
+      }
     }
   },
   "main": "dist/index.cjs",
@@ -48,7 +71,6 @@
   ],
   "scripts": {
     "test": "vitest",
-    "//build": "tsup",
     "build": "unbuild",
     "publint": "publint"
   },
