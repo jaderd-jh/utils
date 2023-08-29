@@ -6,6 +6,7 @@ export default defineBuildConfig({
     'src/core',
     'src/crypto',
     'src/faker',
+    // @ts-expect-error ignore
     { input: 'src/storage/', outDir: 'dist/storage/', format: 'cjs', ext: 'cjs' },
     { input: 'src/storage/', outDir: 'dist/storage/', format: 'esm' },
   ],
