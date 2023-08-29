@@ -20,34 +20,69 @@
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types" : "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     },
     "./aes": {
       "types": "./dist/aes.d.ts",
-      "import": "./dist/aes.mjs",
-      "require": "./dist/aes.cjs"
+      "import": {
+        "types": "./dist/aes.d.mts",
+        "default": "./dist/aes.mjs"
+      },
+      "require": {
+        "types" : "./dist/aes.d.cts",
+        "default": "./dist/aes.cjs"
+      }
     },
     "./base64": {
       "types": "./dist/base64.d.ts",
-      "import": "./dist/base64.mjs",
-      "require": "./dist/base64.cjs"
+      "import": {
+        "types": "./dist/base64.d.mts",
+        "default": "./dist/base64.mjs"
+      },
+      "require": {
+        "types" : "./dist/base64.d.cts",
+        "default": "./dist/base64.cjs"
+      }
     },
     "./base64url": {
       "types": "./dist/base64url.d.ts",
-      "import": "./dist/base64url.mjs",
-      "require": "./dist/base64url.cjs"
+      "import": {
+        "types": "./dist/base64url.d.mts",
+        "default": "./dist/base64url.mjs"
+      },
+      "require": {
+        "types" : "./dist/base64url.d.cts",
+        "default": "./dist/base64url.cjs"
+      }
     },
     "./md5": {
       "types": "./dist/md5.d.ts",
-      "import": "./dist/md5.mjs",
-      "require": "./dist/md5.cjs"
+      "import": {
+        "types": "./dist/md5.d.mts",
+        "default": "./dist/md5.mjs"
+      },
+      "require": {
+        "types" : "./dist/md5.d.cts",
+        "default": "./dist/md5.cjs"
+      }
     },
     "./*": {
       "types": "./dist/*.d.ts",
-      "import": "./dist/*.mjs",
-      "require": "./dist/*.cjs"
+      "import": {
+        "types": "./dist/*.d.mts",
+        "default": "./dist/*.mjs"
+      },
+      "require": {
+        "types" : "./dist/*.d.cts",
+        "default": "./dist/*.cjs"
+      }
     }
   },
   "main": "dist/index.cjs",
@@ -58,7 +93,6 @@
   ],
   "scripts": {
     "test": "vitest",
-    "//build": "tsup",
     "build": "unbuild",
     "publint": "publint"
   },
