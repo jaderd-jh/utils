@@ -24,19 +24,19 @@ export const checkImg = (ext?: string) => {
 }
 
 /**
- * 是否是空值
- * @param v
+ * 是否是空值/空数组/空对象 null undefined '' [] {} Set Map
+ * @param val
  */
 export const isEmpty = (
-  v: null | undefined | unknown[] | Record<string | number, unknown> | string | number | boolean
+  val: NullOrUndefinable<Numeric | boolean | Record<any, any> | Array<any> | Set<any> | Map<any, any>>
 ) => {
-  const prototype = Object.prototype.toString.call(v)
   return (
-    v === null ||
-    v === undefined ||
-    v === '' ||
-    (prototype === '[object Object]' && Object.keys(v).length === 0) ||
-    (Array.isArray(v) && v.length === 0)
+    !isDef(val) ||
+    val === '' ||
+    (Array.isArray(val) && val.length === 0) ||
+    (Object.prototype.toString.call(val) === '[object Object]' && Object.keys(val).length === 0) ||
+    (val instanceof Map && val.size === 0) ||
+    (val instanceof Set && val.size === 0)
   )
 }
 
