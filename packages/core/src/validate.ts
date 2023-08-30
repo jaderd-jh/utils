@@ -24,6 +24,23 @@ export const checkImg = (ext?: string) => {
 }
 
 /**
+ * 是否是空值/空数组/空对象 null undefined '' [] {} Set Map
+ * @param val
+ */
+export const isEmpty = (
+  val: NullOrUndefinable<Numeric | boolean | Record<any, any> | Array<any> | Set<any> | Map<any, any>>
+) => {
+  return (
+    !isDef(val) ||
+    val === '' ||
+    (Array.isArray(val) && val.length === 0) ||
+    (Object.prototype.toString.call(val) === '[object Object]' && Object.keys(val).length === 0) ||
+    (val instanceof Map && val.size === 0) ||
+    (val instanceof Set && val.size === 0)
+  )
+}
+
+/**
  * 判断是否合法JSON字符串
  * @param str
  */
