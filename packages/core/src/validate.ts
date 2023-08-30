@@ -24,6 +24,23 @@ export const checkImg = (ext?: string) => {
 }
 
 /**
+ * 是否是空值
+ * @param v
+ */
+export const isEmpty = (
+  v: null | undefined | unknown[] | Record<string | number, unknown> | string | number | boolean
+) => {
+  const prototype = Object.prototype.toString.call(v)
+  return (
+    v === null ||
+    v === undefined ||
+    v === '' ||
+    (prototype === '[object Object]' && Object.keys(v).length === 0) ||
+    (Array.isArray(v) && v.length === 0)
+  )
+}
+
+/**
  * 判断是否合法JSON字符串
  * @param str
  */
