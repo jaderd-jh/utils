@@ -1,5 +1,18 @@
 import { expect, test } from 'vitest'
-import { checkImg, isArrStr, isDef, isEmpty, isJSONStr, isNumeric, isValidFileType, isValidKey } from '../src'
+import {
+  checkImg,
+  isArrStr,
+  isDef,
+  isEmpty,
+  isJSONStr,
+  isNumeric,
+  isValidArrRes,
+  isValidFileType,
+  isValidKey,
+  isValidPageRes,
+  isValidRes,
+  isValidResCode,
+} from '../src'
 
 test('isDef', () => {
   expect(isDef(1)).toBe(true)
@@ -80,4 +93,28 @@ test('isEmpty', () => {
   expect(isEmpty(NaN)).toBe(false)
   expect(isEmpty(false)).toBe(false)
   expect(isEmpty(true)).toBe(false)
+})
+
+test('validateRes', () => {
+  expect(isValidResCode({ code: 200, data: '', message: '' })).toBe(true)
+  expect(isValidResCode({ code: 0, data: '', message: '' })).toBe(false)
+  expect(isValidResCode({ code: 0, data: '', message: '' }, 0)).toBe(true)
+  expect(isValidRes({ code: 200, data: '', message: '' })).toBe(true)
+  expect(isValidRes({ code: 200, data: null, message: '' })).toBe(false)
+  expect(isValidArrRes({ code: 200, data: [], message: '' })).toBe(true)
+  expect(
+    isValidPageRes({
+      code: 200,
+      data: {
+        current: 1,
+        pages: 10,
+        list: [],
+        records: [],
+        searchCount: false,
+        size: 10,
+        total: 100,
+      },
+      message: '',
+    })
+  ).toBe(true)
 })
