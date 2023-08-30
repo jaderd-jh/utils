@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { dateDuration, dateFmt, dayjs, filterObj, parseToJSON, replacer, reviver } from '../src'
+import { dateDuration, dateFmt, dayjs, filterObj, parseToJSON, replacer, reviver, toThousands } from '../src'
 
 test('parseToJSON', () => {
   expect(parseToJSON('')).toStrictEqual(null)
@@ -59,4 +59,10 @@ test('dateDuration', () => {
   expect(dateDuration('2019-12-29', '2020-01-01')).toBe('3天')
   expect(dateDuration('2018-12-29', '2020-01-01')).toBe('1年零3天')
   expect(dateDuration('2018-01-01', '2020-01-01')).toBe('2年')
+})
+
+test('toThousands', () => {
+  expect(toThousands(100)).toBe('100')
+  expect(toThousands(100000)).toBe('100,000')
+  expect(toThousands(1000000.4567)).toBe('1,000,000.4567')
 })
