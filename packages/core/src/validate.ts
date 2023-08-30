@@ -125,29 +125,33 @@ export const isIdCard = (val: NullOrUndefinable<string>) => {
 export const nonASCII = (text: string) => /[^\x20-\x7E]/.test(text)
 
 /**
- * 校验接口返回code是否为200
+ * 校验接口返回code
  * @param res
+ * @param code
  */
-export const isValidResCode = (res: Res) => res.code === 200
+export const isValidResCode = (res: Res, code = 200) => res.code === code
 
 /**
  * 校验接口返回内容
  * @param res
+ * @param code
  */
-export const isValidRes = (res: Res) => isValidResCode(res) && isDef(res.data)
+export const isValidRes = (res: Res, code?: number) => isValidResCode(res, code) && isDef(res.data)
 
 /**
  * 校验接口数组返回内容
  * @param res
+ * @param code
  */
-export const isValidArrRes = (res: Res<any[]>) => isValidResCode(res) && Array.isArray(res.data)
+export const isValidArrRes = (res: Res<any[]>, code?: number) => isValidResCode(res, code) && Array.isArray(res.data)
 
 /**
  * 校验接口分页返回内容
  * @param res
+ * @param code
  */
-export const isValidPageRes = (res: PageRes) =>
-  isValidResCode(res) && isDef(res.data) && Array.isArray(res.data.list || res.data.records)
+export const isValidPageRes = (res: PageRes, code?: number) =>
+  isValidResCode(res, code) && isDef(res.data) && Array.isArray(res.data.list || res.data.records)
 
 /**
  * 校验文件类型
