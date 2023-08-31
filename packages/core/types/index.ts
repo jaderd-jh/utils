@@ -19,6 +19,11 @@ export declare type Undefinable<T> = T | undefined
 export declare type NullOrUndefinable<T> = Nullable<Undefinable<T>>
 
 /**
+ * alias for NullOrUndefinable
+ */
+export declare type UnDef<T> = NullOrUndefinable<T>
+
+/**
  * 请求结果
  */
 export declare type Res<T = any> = Service.Response<T>
