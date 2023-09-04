@@ -32,3 +32,8 @@ export declare type PageResData<T = any> = Service.PageResponseData<T>
  * 分页请求结果
  */
 export declare type PageRes<T = any> = Service.PageResponse<T>
+
+/**
+ * 可能是数组
+ */
+export declare type MaybeArray<T = any> = T | Array<T>
