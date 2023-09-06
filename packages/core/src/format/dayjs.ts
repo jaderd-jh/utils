@@ -1,11 +1,11 @@
-import type { ConfigType, Dayjs } from 'dayjs/esm'
-import dayjs from 'dayjs/esm'
-import localeData from 'dayjs/esm/plugin/localeData'
-import duration from 'dayjs/esm/plugin/duration'
-import relativeTime from 'dayjs/esm/plugin/relativeTime'
-import customParseFormat from 'dayjs/esm/plugin/customParseFormat'
-import objectSupport from 'dayjs/esm/plugin/objectSupport'
-import zhCN from 'dayjs/esm/locale/zh-cn'
+import type { ConfigType, Dayjs } from 'dayjs'
+import dayjs from 'dayjs'
+import localeData from 'dayjs/plugin/localeData'
+import duration from 'dayjs/plugin/duration'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+import objectSupport from 'dayjs/plugin/objectSupport'
+import zhCN from 'dayjs/locale/zh-cn'
 import { isDef } from '../validate'
 
 dayjs.extend(localeData).locale('zh-cn', zhCN)
@@ -18,7 +18,7 @@ export { dayjs, Dayjs }
 
 /**
  * 格式化时间
- * @param {import('dayjs/esm').ConfigType} date 时间
+ * @param {import('dayjs').ConfigType} date 时间
  * @param {string} format 格式
  * @returns {string} 格式化后的时间
  */
@@ -34,8 +34,8 @@ export const dateFmt = (date: ConfigType, format: string | 'date' | 'datetime' =
 
 /**
  * 格式化时间间隔
- * @param {import('dayjs/esm').ConfigType} start 开始时间
- * @param {import('dayjs/esm').ConfigType} end 结束时间
+ * @param {import('dayjs').ConfigType} start 开始时间
+ * @param {import('dayjs').ConfigType} end 结束时间
  */
 export const dateDuration = (start: ConfigType, end: ConfigType) => {
   const startDay = dayjs(start)
