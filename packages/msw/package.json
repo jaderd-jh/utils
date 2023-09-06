@@ -1,7 +1,7 @@
 {
   "name": "@jhqn/utils-msw",
   "type": "module",
-  "version": "0.0.1-beta.23",
+  "version": "0.0.1-beta.24",
   "author": "jade-gjz <jiangang.zhang@jaderd.com>",
   "license": "MIT",
   "homepage": "https://github.com/jaderd-jh/utils/tree/main/packages/msw#readme",
@@ -25,7 +25,7 @@
         "default": "./dist/index.mjs"
       },
       "require": {
-        "types" : "./dist/index.d.cts",
+        "types": "./dist/index.d.cts",
         "default": "./dist/index.cjs"
       }
     }

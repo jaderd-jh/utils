@@ -1,7 +1,7 @@
 {
   "name": "@jhqn/utils-crypto",
   "type": "module",
-  "version": "0.0.1-beta.23",
+  "version": "0.0.1-beta.24",
   "author": "jade-gjz <jiangang.zhang@jaderd.com>",
   "license": "MIT",
   "homepage": "https://github.com/jaderd-jh/utils/tree/main/packages/crypto#readme",
@@ -25,7 +25,7 @@
         "default": "./dist/index.mjs"
       },
       "require": {
-        "types" : "./dist/index.d.cts",
+        "types": "./dist/index.d.cts",
         "default": "./dist/index.cjs"
       }
     },
@@ -36,7 +36,7 @@
         "default": "./dist/aes.mjs"
       },
       "require": {
-        "types" : "./dist/aes.d.cts",
+        "types": "./dist/aes.d.cts",
         "default": "./dist/aes.cjs"
       }
     },
@@ -47,7 +47,7 @@
         "default": "./dist/base64.mjs"
       },
       "require": {
-        "types" : "./dist/base64.d.cts",
+        "types": "./dist/base64.d.cts",
         "default": "./dist/base64.cjs"
       }
     },
@@ -58,7 +58,7 @@
         "default": "./dist/base64url.mjs"
       },
       "require": {
-        "types" : "./dist/base64url.d.cts",
+        "types": "./dist/base64url.d.cts",
         "default": "./dist/base64url.cjs"
       }
     },
@@ -69,7 +69,7 @@
         "default": "./dist/md5.mjs"
       },
       "require": {
-        "types" : "./dist/md5.d.cts",
+        "types": "./dist/md5.d.cts",
         "default": "./dist/md5.cjs"
       }
     },
@@ -80,7 +80,7 @@
         "default": "./dist/*.mjs"
       },
       "require": {
-        "types" : "./dist/*.d.cts",
+        "types": "./dist/*.d.cts",
         "default": "./dist/*.cjs"
       }
     }
