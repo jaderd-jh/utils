@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest'
 import {
+  hideBankCard,
   hideCardNo,
   hideEmail,
   hideFirstName,
@@ -97,4 +98,12 @@ test('hideTail', () => {
   expect(hideTail('小明')).toBe('小*')
   expect(hideTail('财神爷')).toBe('财**')
   expect(hideTail('古力娜扎')).toBe('古***')
+})
+
+test('hideBankCard', () => {
+  expect(hideBankCard(null)).toBe('')
+  expect(hideBankCard(undefined)).toBe('')
+  expect(hideBankCard('')).toBe('')
+  expect(hideBankCard('123')).toBe('123')
+  expect(hideBankCard('1234567890123')).toBe('123456***0123')
 })
