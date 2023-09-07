@@ -5,4 +5,14 @@ export * from './dom'
 export * from './format'
 export * from './validate'
 
-export type { Numeric, Nullable, Undefinable, NullOrUndefinable, Res, PageRes, PageResData } from '../types'
+export type {
+  Numeric,
+  Nullable,
+  Undefinable,
+  NullOrUndefinable,
+  UnDef,
+  Res,
+  PageRes,
+  PageResData,
+  MaybeArray,
+} from '../types'

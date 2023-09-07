@@ -1,6 +1,6 @@
 import { parseToJSON } from './core'
 import { isArrStr, isDef } from '../validate'
-import type { MaybeArray, NullOrUndefinable, Undefinable } from '../../types'
+import type { MaybeArray, UnDef, Undefinable } from '../../types'
 import type { Resource } from '../../types/upload'
 import { getBaseAttachUrl } from './baseAttachUrl'
 
@@ -41,7 +41,7 @@ export const recoverFile = (resource: Resource) => {
  * 附件格式
  * @param data
  */
-export const attachFmt = (data: NullOrUndefinable<MaybeArray<Resource>> | string) => {
+export const attachFmt = (data: UnDef<MaybeArray<Resource>> | string) => {
   let attachList: Resource[] = []
   const prototype = Object.prototype.toString.call(data)
   // null 或 undefined
