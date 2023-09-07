@@ -136,11 +136,11 @@ export const hideEmail = (email: UnDef<string>) => {
 
     const len = name.length
 
-    let newName = ''
+    let newName: string
     if (len <= 3) {
       newName = `${name}***`
     } else {
-      newName = `${name.substring(0, len - 3)}***`
+      newName = hideTail(name, 3)
     }
 
     return `${newName}@${domain}`
