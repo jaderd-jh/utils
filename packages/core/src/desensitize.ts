@@ -131,3 +131,16 @@ export const hideEmail = (email: NullOrUndefinable<string>) => {
   }
   return ''
 }
+
+/**
+ * 隐藏银行卡号
+ * @param {string} bankCard 银行卡号
+ */
+export const hideBankCard = (bankCard: NullOrUndefinable<string>) => {
+  if (bankCard) {
+    const len = bankCard.length
+    if (len <= 10) return bankCard
+    return bankCard.substring(0, 6) + '*'.repeat(len - 10) + bankCard.substring(len - 4, len)
+  }
+  return ''
+}
