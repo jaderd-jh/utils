@@ -25,9 +25,10 @@ test('hidePhone', () => {
 test('hideCardNo', () => {
   expect(hideCardNo(null)).toBe('')
   expect(hideCardNo(undefined)).toBe('')
-  expect(hideCardNo('12345678901')).toBe('1234*******01')
-  expect(hideCardNo('13454678901')).toBe('1345*******01')
-  expect(hideCardNo('134546789017')).toBe('1345*******17')
+  expect(hideCardNo('12345678901')).toBe('12345678901')
+  expect(hideCardNo('134546789017')).toBe('134546789017')
+  expect(hideCardNo('33072319641008384x')).toBe('3****************x')
+  expect(hideCardNo('33072319641008384x', false)).toBe('3***23196410*****x')
 })
 
 test('hideName', () => {
@@ -41,6 +42,11 @@ test('hideName', () => {
 
 test('hideSurname', () => {
   expect(hideSurname(null)).toBe('')
+  expect(hideSurname(undefined)).toBe('')
+  expect(hideSurname('小明')).toBe('*明')
+  expect(hideSurname('财神爷')).toBe('*神爷')
+  expect(hideSurname('古力娜扎')).toBe('*力娜扎')
+  expect(hideSurname('Tom Holland')).toBe('*om Holland')
 })
 
 test('hideFirstName', () => {
@@ -50,14 +56,15 @@ test('hideFirstName', () => {
 test('hideEmail', () => {
   expect(hideEmail(null)).toBe('')
   expect(hideEmail(undefined)).toBe('')
-  expect(hideEmail('1@email.com')).toBe('*@email.com')
-  expect(hideEmail('1')).toBe('')
-  expect(hideEmail('12')).toBe('')
-  expect(hideEmail('1@')).toBe('*@')
+  expect(hideEmail('1@email.com')).toBe('1***@email.com')
+  expect(hideEmail('1')).toBe('1')
+  expect(hideEmail('12')).toBe('12')
+  expect(hideEmail('1@')).toBe('1@')
   expect(hideEmail('@1')).toBe('@1')
-  expect(hideEmail('1@1')).toBe('*@1')
-  expect(hideEmail('12@email.com')).toBe('1*@email.com')
-  expect(hideEmail('123@email.com')).toBe('1**@email.com')
+  expect(hideEmail('1@1')).toBe('1***@1')
+  expect(hideEmail('12@email.com')).toBe('12***@email.com')
+  expect(hideEmail('123@email.com')).toBe('123***@email.com')
+  expect(hideEmail('1234@email.com')).toBe('1***@email.com')
 })
 
 test('hideMiddle', () => {
@@ -89,6 +96,11 @@ test('hideHead', () => {
   expect(hideHead('小明')).toBe('*明')
   expect(hideHead('财神爷')).toBe('**爷')
   expect(hideHead('古力娜扎')).toBe('***扎')
+  expect(hideHead('古力娜扎', -1)).toBe('古力娜扎')
+  expect(hideHead('古力娜扎', 0)).toBe('古力娜扎')
+  expect(hideHead('古力娜扎', 1)).toBe('*力娜扎')
+  expect(hideHead('古力娜扎', 4)).toBe('****')
+  expect(hideHead('古力娜扎', 5)).toBe('****')
 })
 
 test('hideTail', () => {
@@ -98,6 +110,11 @@ test('hideTail', () => {
   expect(hideTail('小明')).toBe('小*')
   expect(hideTail('财神爷')).toBe('财**')
   expect(hideTail('古力娜扎')).toBe('古***')
+  expect(hideTail('古力娜扎', -1)).toBe('古力娜扎')
+  expect(hideTail('古力娜扎', 0)).toBe('古力娜扎')
+  expect(hideTail('古力娜扎', 1)).toBe('古力娜*')
+  expect(hideTail('古力娜扎', 4)).toBe('****')
+  expect(hideTail('古力娜扎', 5)).toBe('****')
 })
 
 test('hideBankCard', () => {

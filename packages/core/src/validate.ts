@@ -109,13 +109,14 @@ export const isEmail = (val: NullOrUndefinable<string>) => {
 
 /**
  * 是否是身份证
- * @param val 身份证号
+ * @param {string|null|undefined} val 身份证号
+ * @param {boolean} compatible 兼容15位
  */
-export const isIdCard = (val: NullOrUndefinable<string>) => {
+export const isIdCard = (val: NullOrUndefinable<string>, compatible = true) => {
   if (!isDef(val)) return false
   const card15 = /^[1-9]\d{7}(?:0[1-9]|10|11|12)(?:[0-2][1-9]|10|20|30|31)\d{2}[\dXx]$/
   const card18 = /^[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|1[0-2])(?:[0-2][1-9]|10|20|30|31)\d{3}[\dXx]$/
-  return card15.test(val) || card18.test(val)
+  return card18.test(val) || (compatible ? card15.test(val) : false)
 }
 
 /**

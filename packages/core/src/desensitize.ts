@@ -1,4 +1,4 @@
-import { isDef, isPhone, isTel } from './validate'
+import { isDef, isIdCard, isPhone, isTel } from './validate'
 import type { NullOrUndefinable } from '../types'
 
 /**
@@ -29,23 +29,27 @@ export const hideThird = (str: NullOrUndefinable<string>) => {
 /**
  * 隐藏首部
  * @param {string} str 需要隐藏的字符串
+ * @param {number} count 隐藏的字符数
  */
-export const hideHead = (str: NullOrUndefinable<string>) => {
+export const hideHead = (str: NullOrUndefinable<string>, count?: number) => {
   if (!isDef(str)) return ''
   const len = str.length
+  const cnt = count !== undefined ? Math.max(Math.min(len, count), 0) : len - 1
   if (len === 1) return '*'
-  return '*'.repeat(len - 1) + str[len - 1]
+  return '*'.repeat(cnt) + str.substring(cnt)
 }
 
 /**
  * 隐藏尾部
  * @param {string} str 需要隐藏的字符串
+ * @param {number} count 隐藏的字符数
  */
-export const hideTail = (str: NullOrUndefinable<string>) => {
+export const hideTail = (str: NullOrUndefinable<string>, count?: number) => {
   if (!isDef(str)) return ''
   const len = str.length
+  const cnt = count !== undefined ? Math.max(Math.min(len, count), 0) : len - 1
   if (len === 1) return '*'
-  return str[0] + '*'.repeat(len - 1)
+  return str.substring(0, len - cnt) + '*'.repeat(cnt)
 }
 
 /**
@@ -68,10 +72,14 @@ export const hidePhone = (phone: NullOrUndefinable<string>) => {
 /**
  * 隐藏身份证号
  * @param {string} cardNo 身份证号
+ * @param {boolean} strong 是否强化隐藏
  */
-export const hideCardNo = (cardNo: NullOrUndefinable<string>) => {
+export const hideCardNo = (cardNo: NullOrUndefinable<string>, strong = true) => {
   if (cardNo) {
-    return cardNo.replace(/^(.{4})\d+(.{2})$/, '$1*******$2')
+    if (isIdCard(cardNo, false)) {
+      return strong ? hideMiddle(cardNo) : cardNo.replace(/^(.)\d{3}(.{8})\d{5}(.)$/, '$1***$2*****$3')
+    }
+    return cardNo
   }
   return ''
 }
@@ -101,7 +109,7 @@ export const hideName = (name: NullOrUndefinable<string>) => {
  * @param {string} name 姓名
  */
 export const hideSurname = (name: NullOrUndefinable<string>) => {
-  return hideHead(name)
+  return hideHead(name, 1)
 }
 
 /**
@@ -118,16 +126,24 @@ export const hideFirstName = (name: NullOrUndefinable<string>) => {
  */
 export const hideEmail = (email: NullOrUndefinable<string>) => {
   if (email) {
-    if (!email.includes('@')) return ''
+    if (!email.includes('@')) return email
 
     const arr = email.split('@')
     const name = arr[0]
     const domain = arr[1]
-    const len = name?.length
 
-    if (!len) return email
+    if (!name || !domain) return email
 
-    return `${hideTail(name)}@${domain}`
+    const len = name.length
+
+    let newName = ''
+    if (len <= 3) {
+      newName = `${name}***`
+    } else {
+      newName = `${name.substring(0, len - 3)}***`
+    }
+
+    return `${newName}@${domain}`
   }
   return ''
 }
