@@ -1,11 +1,11 @@
 import { isDef, isIdCard, isPhone, isTel } from './validate'
-import type { NullOrUndefinable } from '../types'
+import type { UnDef } from '../types'
 
 /**
  * 隐藏中间部分
  * @param {string} str 需要隐藏的字符串
  */
-export const hideMiddle = (str: NullOrUndefinable<string>) => {
+export const hideMiddle = (str: UnDef<string>) => {
   if (!isDef(str)) return ''
   const len = str.length
   if (len === 1) return '*'
@@ -17,7 +17,7 @@ export const hideMiddle = (str: NullOrUndefinable<string>) => {
  * 隐藏首尾仅保留中间3分之1
  * @param {string} str 需要隐藏的字符串
  */
-export const hideThird = (str: NullOrUndefinable<string>) => {
+export const hideThird = (str: UnDef<string>) => {
   if (!isDef(str)) return ''
   const len = str.length
   const partLen = Math.round(len / 3)
@@ -31,7 +31,7 @@ export const hideThird = (str: NullOrUndefinable<string>) => {
  * @param {string} str 需要隐藏的字符串
  * @param {number} count 隐藏的字符数
  */
-export const hideHead = (str: NullOrUndefinable<string>, count?: number) => {
+export const hideHead = (str: UnDef<string>, count?: number) => {
   if (!isDef(str)) return ''
   const len = str.length
   const cnt = count !== undefined ? Math.max(Math.min(len, count), 0) : len - 1
@@ -44,7 +44,7 @@ export const hideHead = (str: NullOrUndefinable<string>, count?: number) => {
  * @param {string} str 需要隐藏的字符串
  * @param {number} count 隐藏的字符数
  */
-export const hideTail = (str: NullOrUndefinable<string>, count?: number) => {
+export const hideTail = (str: UnDef<string>, count?: number) => {
   if (!isDef(str)) return ''
   const len = str.length
   const cnt = count !== undefined ? Math.max(Math.min(len, count), 0) : len - 1
@@ -56,7 +56,7 @@ export const hideTail = (str: NullOrUndefinable<string>, count?: number) => {
  * 隐藏手机号
  * @param {string} phone 手机号
  */
-export const hidePhone = (phone: NullOrUndefinable<string>) => {
+export const hidePhone = (phone: UnDef<string>) => {
   if (phone) {
     if (isPhone(phone)) {
       return phone.replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2')
@@ -74,7 +74,7 @@ export const hidePhone = (phone: NullOrUndefinable<string>) => {
  * @param {string} cardNo 身份证号
  * @param {boolean} strong 是否强化隐藏
  */
-export const hideCardNo = (cardNo: NullOrUndefinable<string>, strong = true) => {
+export const hideCardNo = (cardNo: UnDef<string>, strong = true) => {
   if (cardNo) {
     if (isIdCard(cardNo, false)) {
       return strong ? hideMiddle(cardNo) : cardNo.replace(/^(.)\d{3}(.{8})\d{5}(.)$/, '$1***$2*****$3')
@@ -89,7 +89,7 @@ export const hideCardNo = (cardNo: NullOrUndefinable<string>, strong = true) => 
  * @param {string} name 姓名
  * @deprecated 请使用 hideSurname
  */
-export const hideName = (name: NullOrUndefinable<string>) => {
+export const hideName = (name: UnDef<string>) => {
   if (name) {
     let res = ''
     for (let i = 0; i < name.length; i += 1) {
@@ -108,7 +108,7 @@ export const hideName = (name: NullOrUndefinable<string>) => {
  * 隐藏姓氏
  * @param {string} name 姓名
  */
-export const hideSurname = (name: NullOrUndefinable<string>) => {
+export const hideSurname = (name: UnDef<string>) => {
   return hideHead(name, 1)
 }
 
@@ -116,7 +116,7 @@ export const hideSurname = (name: NullOrUndefinable<string>) => {
  * 隐藏名字
  * @param {string} name 姓名
  */
-export const hideFirstName = (name: NullOrUndefinable<string>) => {
+export const hideFirstName = (name: UnDef<string>) => {
   return hideTail(name)
 }
 
@@ -124,7 +124,7 @@ export const hideFirstName = (name: NullOrUndefinable<string>) => {
  * 隐藏邮箱
  * @param {string} email 邮箱
  */
-export const hideEmail = (email: NullOrUndefinable<string>) => {
+export const hideEmail = (email: UnDef<string>) => {
   if (email) {
     if (!email.includes('@')) return email
 
@@ -152,7 +152,7 @@ export const hideEmail = (email: NullOrUndefinable<string>) => {
  * 隐藏银行卡号
  * @param {string} bankCard 银行卡号
  */
-export const hideBankCard = (bankCard: NullOrUndefinable<string>) => {
+export const hideBankCard = (bankCard: UnDef<string>) => {
   if (bankCard) {
     const len = bankCard.length
     if (len <= 10) return bankCard

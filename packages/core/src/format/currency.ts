@@ -1,5 +1,5 @@
 import { isDef } from '../validate'
-import type { NullOrUndefinable } from '../../types'
+import type { UnDef } from '../../types'
 
 /**
  * 千位分隔符
@@ -17,7 +17,7 @@ export const toThousands = (num: number) => {
  * @param currency
  * @param fraction
  */
-export const currencyFmt = (currency: NullOrUndefinable<number | bigint>, fraction = 0) => {
+export const currencyFmt = (currency: UnDef<number | bigint>, fraction = 0) => {
   if (!isDef(currency)) return ''
   return new Intl.NumberFormat('zh-CN', { style: 'currency', currency: 'CNY', maximumFractionDigits: fraction }).format(
     currency

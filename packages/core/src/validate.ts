@@ -1,4 +1,4 @@
-import type { NullOrUndefinable, Numeric, PageRes, Res } from '../types'
+import type { Numeric, PageRes, Res, UnDef } from '../types'
 
 const cnPhoneRE = /^1[3-9]\d{9}$/
 const cnTelRE = /^0\d{9,11}$/
@@ -27,9 +27,7 @@ export const checkImg = (ext?: string) => {
  * 是否是空值/空数组/空对象 null undefined '' [] {} Set Map
  * @param val
  */
-export const isEmpty = (
-  val: NullOrUndefinable<Numeric | boolean | Record<any, any> | Array<any> | Set<any> | Map<any, any>>
-) => {
+export const isEmpty = (val: UnDef<Numeric | boolean | Record<any, any> | Array<any> | Set<any> | Map<any, any>>) => {
   return (
     !isDef(val) ||
     val === '' ||
@@ -83,7 +81,7 @@ export const isValidKey = (key: string | number | symbol, object: object): key i
  * 是否是中国手机号
  * @param val
  */
-export const isPhone = (val: NullOrUndefinable<Numeric>) => {
+export const isPhone = (val: UnDef<Numeric>) => {
   if (!isDef(val)) return false
   return cnPhoneRE.test(val.toString())
 }
@@ -92,7 +90,7 @@ export const isPhone = (val: NullOrUndefinable<Numeric>) => {
  * 是否是中国座机号
  * @param val
  */
-export const isTel = (val: NullOrUndefinable<Numeric>) => {
+export const isTel = (val: UnDef<Numeric>) => {
   if (!isDef(val)) return false
   return cnTelRE.test(val.toString())
 }
@@ -101,7 +99,7 @@ export const isTel = (val: NullOrUndefinable<Numeric>) => {
  * 是否是邮箱
  * @param val
  */
-export const isEmail = (val: NullOrUndefinable<string>) => {
+export const isEmail = (val: UnDef<string>) => {
   if (!isDef(val)) return false
   const reg = /^[a-zA-Z\d](?:\w|-)+@[a-zA-Z\d]+\.[a-zA-Z]{2,5}$/
   return reg.test(val)
@@ -112,7 +110,7 @@ export const isEmail = (val: NullOrUndefinable<string>) => {
  * @param {string|null|undefined} val 身份证号
  * @param {boolean} compatible 兼容15位
  */
-export const isIdCard = (val: NullOrUndefinable<string>, compatible = true) => {
+export const isIdCard = (val: UnDef<string>, compatible = true) => {
   if (!isDef(val)) return false
   const card15 = /^[1-9]\d{7}(?:0[1-9]|10|11|12)(?:[0-2][1-9]|10|20|30|31)\d{2}[\dXx]$/
   const card18 = /^[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|1[0-2])(?:[0-2][1-9]|10|20|30|31)\d{3}[\dXx]$/
