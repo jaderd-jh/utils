@@ -34,20 +34,22 @@ export const hideThird = (str: NullOrUndefinable<string>) => {
 export const hideHead = (str: NullOrUndefinable<string>, count?: number) => {
   if (!isDef(str)) return ''
   const len = str.length
-  const cnt = count !== undefined ? Math.min(len, count) : len - 1
-  if (str.length === 1) return '*'
+  const cnt = count !== undefined ? Math.max(Math.min(len, count), 0) : len - 1
+  if (len === 1) return '*'
   return '*'.repeat(cnt) + str.substring(cnt)
 }
 
 /**
  * 隐藏尾部
  * @param {string} str 需要隐藏的字符串
+ * @param {number} count 隐藏的字符数
  */
-export const hideTail = (str: NullOrUndefinable<string>) => {
+export const hideTail = (str: NullOrUndefinable<string>, count?: number) => {
   if (!isDef(str)) return ''
   const len = str.length
+  const cnt = count !== undefined ? Math.max(Math.min(len, count), 0) : len - 1
   if (len === 1) return '*'
-  return str[0] + '*'.repeat(len - 1)
+  return str.substring(0, len - cnt) + '*'.repeat(cnt)
 }
 
 /**
@@ -70,7 +72,7 @@ export const hidePhone = (phone: NullOrUndefinable<string>) => {
 /**
  * 隐藏身份证号
  * @param {string} cardNo 身份证号
- * @param strong
+ * @param {boolean} strong 是否强化隐藏
  */
 export const hideCardNo = (cardNo: NullOrUndefinable<string>, strong = true) => {
   if (cardNo) {
