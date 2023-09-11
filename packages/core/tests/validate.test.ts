@@ -34,6 +34,8 @@ test('isNumeric', () => {
   expect(isNumeric(1)).toBe(true)
   expect(isNumeric(1.1)).toBe(true)
   expect(isNumeric(-1)).toBe(true)
+  expect(isNumeric(null)).toBe(false)
+  expect(isNumeric(undefined)).toBe(false)
 })
 
 test('checkImg', () => {
@@ -51,12 +53,16 @@ test('isJSONStr', () => {
   expect(isJSONStr('{"foo":/"bar"}')).toBe(false)
   expect(isJSONStr('/{/"foo":/"bar"}')).toBe(false)
   expect(isJSONStr('')).toBe(false)
+  expect(isJSONStr(null)).toBe(false)
+  expect(isJSONStr(undefined)).toBe(false)
 })
 
 test('isArrStr', () => {
   expect(isArrStr('{"foo":"bar"}')).toBe(false)
   expect(isArrStr('[{"foo":"bar"}]')).toBe(true)
   expect(isArrStr('[/{"foo":"bar"}]')).toBe(false)
+  expect(isArrStr(null)).toBe(false)
+  expect(isArrStr(undefined)).toBe(false)
 })
 
 test('isValidKey', () => {
