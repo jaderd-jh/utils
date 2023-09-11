@@ -13,7 +13,10 @@ export const isDef = <T>(val: T): val is NonNullable<T> => val !== undefined && 
  * 是否是数字或字符
  * @param val
  */
-export const isNumeric = (val: Numeric): val is string => typeof val === 'number' || /^\d+(?:\.\d+)?$/.test(val)
+export const isNumeric = (val: UnDef<Numeric>): val is string => {
+  if (isDef(val)) return typeof val === 'number' || /^\d+(?:\.\d+)?$/.test(val)
+  return false
+}
 
 /**
  * 是否是需要的图片格式
@@ -42,25 +45,29 @@ export const isEmpty = (val: UnDef<Numeric | boolean | Record<any, any> | Array<
  * 判断是否合法JSON字符串
  * @param str
  */
-export const isJSONStr = (str: string) => {
-  try {
-    JSON.parse(str)
-    return true
-  } catch (e) {
-    return false
-  }
+export const isJSONStr = (str: UnDef<string>) => {
+  if (isDef(str))
+    try {
+      JSON.parse(str)
+      return true
+    } catch (e) {
+      return false
+    }
+  return false
 }
 
 /**
  * 判断是否合法JSON数组字符串
  * @param str
  */
-export const isArrStr = (str: string) => {
-  try {
-    return Array.isArray(JSON.parse(str))
-  } catch (e) {
-    return false
-  }
+export const isArrStr = (str: UnDef<string>) => {
+  if (isDef(str))
+    try {
+      return Array.isArray(JSON.parse(str))
+    } catch (e) {
+      return false
+    }
+  return false
 }
 
 /**
