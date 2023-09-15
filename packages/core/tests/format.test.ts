@@ -83,6 +83,8 @@ test('toThousands', () => {
 test('currencyFmt', () => {
   expect(currencyFmt(null)).toBe('')
   expect(currencyFmt(undefined)).toBe('')
+  expect(currencyFmt('100')).toBe('¥100')
+  expect(currencyFmt('foo')).toBe('')
   expect(currencyFmt(100)).toBe('¥100')
   expect(currencyFmt(1000)).toBe('¥1,000')
   expect(currencyFmt(1000, 2)).toBe('¥1,000.00')

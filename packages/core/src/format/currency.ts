@@ -1,5 +1,5 @@
 import { isDef } from '../validate'
-import type { UnDef } from '../../types'
+import type { Numeric, UnDef } from '../../types'
 
 /**
  * 千位分隔符
@@ -17,9 +17,11 @@ export const toThousands = (num: number) => {
  * @param currency
  * @param fraction
  */
-export const currencyFmt = (currency: UnDef<number | bigint>, fraction = 0) => {
+export const currencyFmt = (currency: UnDef<Numeric | bigint>, fraction = 0) => {
   if (!isDef(currency)) return ''
+  const num = Number(currency)
+  if (Number.isNaN(num)) return ''
   return new Intl.NumberFormat('zh-CN', { style: 'currency', currency: 'CNY', maximumFractionDigits: fraction }).format(
-    currency
+    num
   )
 }
