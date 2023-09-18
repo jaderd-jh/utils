@@ -50,7 +50,7 @@
     }
   },
   "dependencies": {
-    "nanoid": "^4.0.2"
+    "nanoid": "^5.0.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2"
