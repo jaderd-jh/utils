@@ -83,14 +83,16 @@ test('toThousands', () => {
 test('currencyFmt', () => {
   expect(currencyFmt(null)).toBe('')
   expect(currencyFmt(undefined)).toBe('')
-  expect(currencyFmt('100')).toBe('¥100')
+  expect(currencyFmt('100')).toBe('¥100.00')
   expect(currencyFmt('foo')).toBe('')
-  expect(currencyFmt(100)).toBe('¥100')
-  expect(currencyFmt(1000)).toBe('¥1,000')
+  expect(currencyFmt(100)).toBe('¥100.00')
+  expect(currencyFmt(1000)).toBe('¥1,000.00')
   expect(currencyFmt(1000, 2)).toBe('¥1,000.00')
+  expect(currencyFmt(1000.098, 1)).toBe('¥1,000.1')
   expect(currencyFmt(1000.098, 2)).toBe('¥1,000.10')
-  expect(currencyFmt(1000000)).toBe('¥1,000,000')
-  expect(currencyFmt(BigInt(1000000))).toBe('¥1,000,000')
+  expect(currencyFmt(1000.098, 3)).toBe('¥1,000.098')
+  expect(currencyFmt(1000000)).toBe('¥1,000,000.00')
+  expect(currencyFmt(BigInt(1000000))).toBe('¥1,000,000.00')
 })
 
 test('resUrl', () => {

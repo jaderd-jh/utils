@@ -14,14 +14,12 @@ export const toThousands = (num: number) => {
 
 /**
  * 货币格式化
- * @param currency
- * @param fraction
+ * @param {number | string | bigint} currency - 金额
+ * @param {number} [maximumFractionDigits] - 小数位数
  */
-export const currencyFmt = (currency: UnDef<Numeric | bigint>, fraction = 0) => {
+export const currencyFmt = (currency: UnDef<Numeric | bigint>, maximumFractionDigits: number = 2) => {
   if (!isDef(currency)) return ''
   const num = Number(currency)
   if (Number.isNaN(num)) return ''
-  return new Intl.NumberFormat('zh-CN', { style: 'currency', currency: 'CNY', maximumFractionDigits: fraction }).format(
-    num
-  )
+  return new Intl.NumberFormat('zh-CN', { style: 'currency', currency: 'CNY', maximumFractionDigits }).format(num)
 }
