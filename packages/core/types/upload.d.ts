@@ -11,19 +11,24 @@ export interface Resource {
   /** extend */
   url?: string
   size?: number
-  uid?: string
-  status?: VantUploadFileStatus | AntdUploadFileStatus | ElementPlusUploadFileStatus
-  /** vant */
-  objectUrl?: string
+}
+
+export interface VantResource extends Resource {
   content?: string
   isImage?: boolean
   message?: string
   deletable?: boolean
   reupload?: boolean
-  /** antd */
-  fileName?: string
+  status?: VantUploadFileStatus
+}
+export interface AntdResource extends Resource {
+  uid?: string
   percent?: number
   thumbUrl?: string
-  /** element-plus */
+  status?: AntdUploadFileStatus
+}
+
+export interface ElResource extends Resource {
   percentage?: number
+  status?: ElementPlusUploadFileStatus
 }

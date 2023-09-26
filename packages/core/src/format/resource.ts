@@ -1,7 +1,7 @@
 import { parseToJSON } from './core'
-import { isArrStr, isDef } from '../validate'
+import { checkImg, isArrStr, isDef } from '../validate'
 import type { MaybeArray, UnDef, Undefinable } from '../../types'
-import type { Resource } from '../../types/upload'
+import type { AntdResource, ElResource, Resource, VantResource } from '../../types/upload'
 import { getBaseAttachUrl } from './baseAttachUrl'
 
 /**
@@ -23,25 +23,40 @@ export const resUrl = (url: Undefinable<string>) => {
 /**
  * 统一文件字段内容
  * @param resource
+ * @param type
  */
-export const recoverFile = (resource: Resource) => {
-  const { uri, url, ...item } = resource
-  const validUrl = uri || url
+export const recoverFile = (resource: Resource, type?: 'vant' | 'antd' | 'el') => {
+  const { uri, ...item } = resource
+  if (type === 'vant')
+    return {
+      ...item,
+      uri,
+      url: resUrl(uri),
+      content: resUrl(uri),
+      isImage: checkImg(resource.name),
+      message: '',
+      deletable: false,
+      reupload: false,
+      status: 'done',
+    } as VantResource
+  if (type === 'el') return { ...item, uri, url: resUrl(uri), percentage: 100, status: 'success' } as ElResource
   return {
     ...item,
-    url: resUrl(validUrl),
-    content: resUrl(validUrl),
-    uri: validUrl || '',
-    status: 'done',
+    uri,
+    url: resUrl(uri),
+    uid: uri,
     percent: 100,
-  }
+    thumbUrl: resUrl(uri),
+    status: 'done',
+  } as AntdResource
 }
 
 /**
  * 附件格式
  * @param data
+ * @param type 格式类型：'vant' | 'antd' | 'el'
  */
-export const attachFmt = (data: UnDef<MaybeArray<Resource>> | string) => {
+export const attachFmt = (data: UnDef<MaybeArray<Resource>> | string, type?: 'vant' | 'antd' | 'el') => {
   let attachList: Resource[] = []
   const prototype = Object.prototype.toString.call(data)
   // null 或 undefined
@@ -64,5 +79,5 @@ export const attachFmt = (data: UnDef<MaybeArray<Resource>> | string) => {
   }
   // Upload.Resource
   else if (prototype === '[object Object]') attachList = [data]
-  return attachList.map(recoverFile)
+  return attachList.map(item => recoverFile(item, type || 'antd'))
 }
