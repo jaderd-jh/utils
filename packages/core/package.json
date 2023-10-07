@@ -42,7 +42,7 @@
     "publint": "publint"
   },
   "dependencies": {
-    "dayjs": "^1.11.9",
+    "dayjs": "^1.11.10",
     "detect-browser": "^5.3.0"
   }
 }
