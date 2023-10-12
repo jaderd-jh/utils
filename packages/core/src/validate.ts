@@ -4,10 +4,140 @@ const cnPhoneRE = /^1[3-9]\d{9}$/
 const cnTelRE = /^0\d{9,11}$/
 
 /**
- * 是否有意义的值
- * @param val
+ * 检测变量类型
+ * @param {any} val 检测的目标
  */
-export const isDef = <T>(val: T): val is NonNullable<T> => val !== undefined && val !== null
+export const getVariableType = (val: any) => {
+  const value = Object.prototype.toString.call(val)
+  const result = value.match(/\[object (\S*)\]/)?.[1]
+  return result?.toLocaleLowerCase()
+}
+
+/**
+ * 是否是数字
+ * @param {any} val 检测的目标
+ */
+export const isNumber = (val: any): val is number => getVariableType(val) === 'number'
+
+/**
+ * 是否是字符串
+ * @param {any} val 检测的目标
+ */
+export const isString = (val: any): val is string => getVariableType(val) === 'string'
+
+/**
+ * 是否是布尔值
+ * @param {any} val 检测的目标
+ */
+export const isBoolean = (val: any): val is boolean => getVariableType(val) === 'boolean'
+
+/**
+ * 是否是null
+ * @param {any} val 检测的目标
+ */
+export const isNull = (val: any): val is null => getVariableType(val) === 'null'
+
+/**
+ * 是否是undefined
+ * @param {any} val 检测的目标
+ */
+export const isUndefined = (val: any): val is undefined => getVariableType(val) === 'undefined'
+
+/**
+ * 是否是symbol
+ * @param {any} val 检测的目标
+ */
+export const isSymbol = (val: any): val is symbol => getVariableType(val) === 'symbol'
+
+/**
+ * 是否是对象
+ * @param {any} val 检测的目标
+ */
+export const isObject = (val: any): val is Record<any, any> => getVariableType(val) === 'object'
+
+/**
+ * 是否是数组
+ * @param {any} val 检测的目标
+ */
+export const isArray = (val: any): val is Array<any> => getVariableType(val) === 'array'
+
+/**
+ * 是否是函数
+ * @param {any} val 检测的目标
+ */
+export const isFunction = (val: any): val is Function => getVariableType(val) === 'function'
+
+/**
+ * 是否是日期
+ * @param {any} val 检测的目标
+ */
+export const isDate = (val: any): val is Date => getVariableType(val) === 'date'
+
+/**
+ * 是否是正则
+ * @param {any} val 检测的目标
+ */
+export const isRegExp = (val: any): val is RegExp => getVariableType(val) === 'regexp'
+
+/**
+ * 是否是期望（Promise）
+ * @param {any} val 检测的目标
+ */
+export const isPromise = (val: any): val is Promise<any> => getVariableType(val) === 'promise'
+
+/**
+ * 是否是集合（Set）
+ * @param {any} val 检测的目标
+ */
+export const isSet = (val: any): val is Set<any> => getVariableType(val) === 'set'
+
+/**
+ * 是否是映射（Map）
+ * @param {any} val 检测的目标
+ */
+export const isMap = (val: any): val is Map<any, any> => getVariableType(val) === 'map'
+
+/**
+ * 是否是弱集合（WeakSet）
+ * @param {any} val 检测的目标
+ */
+export const isWeakSet = (val: any): val is WeakSet<any> => getVariableType(val) === 'weakset'
+
+/**
+ * 是否是弱映射（WeakMap）
+ * @param {any} val 检测的目标
+ */
+export const isWeakMap = (val: any): val is WeakMap<any, any> => getVariableType(val) === 'weakmap'
+
+/**
+ * 是否是File
+ * @param {any} val 检测的目标
+ */
+export const isFile = (val: any): val is File => getVariableType(val) === 'file'
+
+/**
+ * 是否是Blob
+ * @param {any} val 检测的目标
+ */
+export const isBlob = (val: any): val is Blob => getVariableType(val) === 'blob'
+
+/**
+ * 是否是URL
+ * @param {any} val 检测的目标
+ */
+export const isURL = (val: any): val is URL => getVariableType(val) === 'url'
+
+/**
+ * 是否是错误（Error）
+ * @param {any} val 检测的目标
+ */
+export const isError = (val: any): val is Error => getVariableType(val) === 'error'
+
+/**
+ * 是否既不是 null 也不是 undefined
+ * @param {any} val 检测的目标
+ */
+export const isDef = <T>(val: T): val is NonNullable<T> => !isNull(val) && !isUndefined(val)
 
 /**
  * 是否是数字或字符

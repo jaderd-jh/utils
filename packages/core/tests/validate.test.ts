@@ -1,6 +1,7 @@
 import { expect, test } from 'vitest'
 import {
   checkImg,
+  getVariableType,
   isArrStr,
   isDef,
   isEmpty,
@@ -22,6 +23,46 @@ test('isDef', () => {
   expect(isDef(() => {})).toBe(true)
   expect(isDef(null)).toBe(false)
   expect(isDef(undefined)).toBe(false)
+})
+
+test('getType', () => {
+  expect(getVariableType(1)).toBe('number')
+  expect(getVariableType('')).toBe('string')
+  expect(getVariableType(false)).toBe('boolean')
+  expect(getVariableType({})).toBe('object')
+  expect(getVariableType([])).toBe('array')
+  expect(getVariableType(() => {})).toBe('function')
+  expect(getVariableType(new Date())).toBe('date')
+  expect(getVariableType(/a/)).toBe('regexp')
+  expect(getVariableType(new Error('error'))).toBe('error')
+  expect(getVariableType(new Set())).toBe('set')
+  expect(getVariableType(new Map())).toBe('map')
+  expect(getVariableType(Symbol(''))).toBe('symbol')
+  expect(getVariableType(BigInt(1))).toBe('bigint')
+  expect(getVariableType(new Promise(() => {}))).toBe('promise')
+  expect(getVariableType(new WeakSet())).toBe('weakset')
+  expect(getVariableType(new WeakMap())).toBe('weakmap')
+  expect(getVariableType(new Int8Array())).toBe('int8array')
+  expect(getVariableType(new Uint8Array())).toBe('uint8array')
+  expect(getVariableType(new Uint8ClampedArray())).toBe('uint8clampedarray')
+  expect(getVariableType(new Int16Array())).toBe('int16array')
+  expect(getVariableType(new Uint16Array())).toBe('uint16array')
+  expect(getVariableType(new Int32Array())).toBe('int32array')
+  expect(getVariableType(new Uint32Array())).toBe('uint32array')
+  expect(getVariableType(new Float32Array())).toBe('float32array')
+  expect(getVariableType(new Float64Array())).toBe('float64array')
+  expect(getVariableType(new BigInt64Array())).toBe('bigint64array')
+  expect(getVariableType(new BigUint64Array())).toBe('biguint64array')
+  expect(getVariableType(new URL('https://www.baidu.com'))).toBe('url')
+  expect(getVariableType(new URLSearchParams())).toBe('urlsearchparams')
+  expect(getVariableType(new ArrayBuffer(1))).toBe('arraybuffer')
+  expect(getVariableType(new SharedArrayBuffer(1))).toBe('sharedarraybuffer')
+  expect(getVariableType(new DataView(new ArrayBuffer(1)))).toBe('dataview')
+  expect(getVariableType(new Blob())).toBe('blob')
+  expect(getVariableType(new File(['foo'], 'foo.txt'))).toBe('file')
+  // expect(getType(new Proxy({}, {}))).toBe('proxy')
+  expect(getVariableType(null)).toBe('null')
+  expect(getVariableType(undefined)).toBe('undefined')
 })
 
 test('isNumeric', () => {
