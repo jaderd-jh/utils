@@ -14,9 +14,7 @@ export interface Resource {
 }
 
 export interface VantResource extends Resource {
-  content?: string
   isImage?: boolean
-  message?: string
   deletable?: boolean
   reupload?: boolean
   status?: VantUploadFileStatus

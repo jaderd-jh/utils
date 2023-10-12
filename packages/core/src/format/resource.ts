@@ -25,59 +25,58 @@ export const resUrl = (url: Undefinable<string>) => {
  * @param resource
  * @param type
  */
-export const recoverFile = (resource: Resource, type?: 'vant' | 'antd' | 'el') => {
+export const recoverFile = (resource: Partial<Resource>, type?: 'vant' | 'antd' | 'el') => {
   const { uri, ...item } = resource
+  const common = { ...item, uri, url: resUrl(uri) }
   if (type === 'vant')
     return {
-      ...item,
-      uri,
-      url: resUrl(uri),
-      content: resUrl(uri),
-      isImage: checkImg(resource.name),
-      message: '',
-      deletable: false,
+      ...common,
+      isImage: checkImg(resource?.name),
+      deletable: true,
       reupload: false,
       status: 'done',
-    } as VantResource
-  if (type === 'el') return { ...item, uri, url: resUrl(uri), percentage: 100, status: 'success' } as ElResource
-  return {
-    ...item,
-    uri,
-    url: resUrl(uri),
-    uid: uri,
-    percent: 100,
-    thumbUrl: resUrl(uri),
-    status: 'done',
-  } as AntdResource
+    }
+  if (type === 'el') return { ...common, percentage: 100, status: 'success' }
+  return { ...common, uid: uri, percent: 100, thumbUrl: resUrl(uri), status: 'done' }
 }
 
 /**
  * 附件格式
  * @param data
- * @param type 格式类型：'vant' | 'antd' | 'el'
+ * @param type 格式类型：'vant' | 'antd' | 'el' ，默认 antd
  */
-export const attachFmt = (data: UnDef<MaybeArray<Resource>> | string, type?: 'vant' | 'antd' | 'el') => {
-  let attachList: Resource[] = []
+export const attachFmt = (data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'vant' | 'antd' | 'el') => {
+  let attachList: Partial<Resource>[] = []
   const prototype = Object.prototype.toString.call(data)
   // null 或 undefined
   if (!data) attachList = []
   // Upload.Resource[]
-  else if (Array.isArray(data)) attachList = data.filter(Boolean)
+  else if (Array.isArray(data)) attachList = data.filter(item => Object.keys(item).length > 0)
   // 字符串
   else if (typeof data === 'string') {
     // Upload.Resource[] string
     if (isArrStr(data)) {
-      attachList = (parseToJSON<Resource[]>(data) || []).filter(Boolean)
+      attachList = (parseToJSON<Resource[]>(data) || []).filter(item => Object.keys(item).length > 0)
     } else {
       const jsonData = parseToJSON<Resource | string>(data)
       const prototypeJson = Object.prototype.toString.call(jsonData)
       // Upload.Resource string
-      if (prototypeJson === '[object Object]') attachList = [jsonData as Resource].filter(Boolean)
+      if (prototypeJson === '[object Object]')
+        attachList = [jsonData as Resource].filter(item => Object.keys(item).length > 0)
       // 单个uri string
-      else attachList = [{ id: data, name: 'name', uri: data, group: 'default' }]
+      else attachList = [{ id: data, name: data, uri: data, group: 'default' }]
     }
   }
   // Upload.Resource
-  else if (prototype === '[object Object]') attachList = [data]
+  else if (prototype === '[object Object]') attachList = [data].filter(item => Object.keys(item).length > 0)
   return attachList.map(item => recoverFile(item, type || 'antd'))
 }
+
+export const vantAttachFmt = (data: UnDef<MaybeArray<Partial<Resource>>> | string) =>
+  attachFmt(data, 'vant') as VantResource[]
+
+export const antdAttachFmt = (data: UnDef<MaybeArray<Partial<Resource>>> | string) =>
+  attachFmt(data, 'antd') as AntdResource[]
+
+export const elAttachFmt = (data: UnDef<MaybeArray<Partial<Resource>>> | string) =>
+  attachFmt(data, 'el') as ElResource[]

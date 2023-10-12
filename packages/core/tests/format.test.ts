@@ -1,10 +1,11 @@
 import { expect, test } from 'vitest'
 import {
-  attachFmt,
+  antdAttachFmt,
   currencyFmt,
   dateDuration,
   dateFmt,
   dayjs,
+  elAttachFmt,
   filterObj,
   parseToJSON,
   replacer,
@@ -12,6 +13,7 @@ import {
   reviver,
   setBaseAttachUrl,
   toThousands,
+  vantAttachFmt,
 } from '../src'
 
 test('parseToJSON', () => {
@@ -112,87 +114,221 @@ test('resUrl', () => {
 })
 
 test('attachFmt', () => {
-  expect(attachFmt(null)).toStrictEqual([])
-  expect(attachFmt(undefined)).toStrictEqual([])
-  expect(attachFmt('')).toStrictEqual([])
-  expect(attachFmt('[]')).toStrictEqual([])
-  expect(attachFmt('{}')).toStrictEqual([
-    {
-      content: undefined,
-      percent: 100,
-      status: 'done',
-      uri: '',
-      url: undefined,
-    },
-  ])
-  expect(attachFmt('[{}]')).toStrictEqual([
-    {
-      content: undefined,
-      percent: 100,
-      status: 'done',
-      uri: '',
-      url: undefined,
-    },
-  ])
+  expect(vantAttachFmt(null)).toStrictEqual([])
+  expect(vantAttachFmt(undefined)).toStrictEqual([])
+  expect(vantAttachFmt('')).toStrictEqual([])
+  expect(vantAttachFmt('[]')).toStrictEqual([])
+  expect(vantAttachFmt('{}')).toStrictEqual([])
+  expect(vantAttachFmt('[{}]')).toStrictEqual([])
+  expect(vantAttachFmt([])).toStrictEqual([])
+  expect(vantAttachFmt({})).toStrictEqual([])
+  expect(vantAttachFmt([{}])).toStrictEqual([])
   setBaseAttachUrl('http://localhost:3000/')
-  expect(attachFmt('xxxyyyzzz.png')).toStrictEqual([
+  expect(vantAttachFmt('xxxyyyzzz.png')).toStrictEqual([
     {
-      content: 'http://localhost:3000/xxxyyyzzz.png',
       group: 'default',
       id: 'xxxyyyzzz.png',
-      name: 'name',
-      percent: 100,
-      status: 'done',
+      name: 'xxxyyyzzz.png',
       uri: 'xxxyyyzzz.png',
       url: 'http://localhost:3000/xxxyyyzzz.png',
+      isImage: true,
+      deletable: true,
+      reupload: false,
+      status: 'done',
     },
   ])
-  expect(attachFmt('{"id":"123","name":"demo.png","uri":"xxxyyyzzz.png","group":"default"}')).toStrictEqual([
+  expect(vantAttachFmt('{"id":"123","name":"demo.png","uri":"xxxyyyzzz.png","group":"default"}')).toStrictEqual([
     {
-      content: 'http://localhost:3000/xxxyyyzzz.png',
       group: 'default',
       id: '123',
       name: 'demo.png',
-      percent: 100,
-      status: 'done',
       uri: 'xxxyyyzzz.png',
       url: 'http://localhost:3000/xxxyyyzzz.png',
+      isImage: true,
+      deletable: true,
+      reupload: false,
+      status: 'done',
     },
   ])
-  expect(attachFmt('[{"id":"123","name":"demo.png","uri":"xxxyyyzzz.png","group":"default"}]')).toStrictEqual([
+  expect(vantAttachFmt('[{"id":"123","name":"demo.png","uri":"xxxyyyzzz.png","group":"default"}]')).toStrictEqual([
     {
-      content: 'http://localhost:3000/xxxyyyzzz.png',
       group: 'default',
       id: '123',
       name: 'demo.png',
-      percent: 100,
-      status: 'done',
       uri: 'xxxyyyzzz.png',
       url: 'http://localhost:3000/xxxyyyzzz.png',
+      isImage: true,
+      deletable: true,
+      reupload: false,
+      status: 'done',
     },
   ])
-  expect(attachFmt({ id: '123', name: 'demo.png', uri: 'xxxyyyzzz.png', group: 'default' })).toStrictEqual([
+  expect(vantAttachFmt({ id: '123', name: 'demo.png', uri: 'xxxyyyzzz.png', group: 'default' })).toStrictEqual([
     {
-      content: 'http://localhost:3000/xxxyyyzzz.png',
       group: 'default',
       id: '123',
       name: 'demo.png',
-      percent: 100,
-      status: 'done',
       uri: 'xxxyyyzzz.png',
       url: 'http://localhost:3000/xxxyyyzzz.png',
+      isImage: true,
+      deletable: true,
+      reupload: false,
+      status: 'done',
     },
   ])
-  expect(attachFmt([{ id: '123', name: 'demo.png', uri: 'xxxyyyzzz.png', group: 'default' }])).toStrictEqual([
+  expect(vantAttachFmt([{ id: '123', name: 'demo.png', uri: 'xxxyyyzzz.png', group: 'default' }])).toStrictEqual([
     {
-      content: 'http://localhost:3000/xxxyyyzzz.png',
       group: 'default',
       id: '123',
       name: 'demo.png',
-      percent: 100,
-      status: 'done',
       uri: 'xxxyyyzzz.png',
       url: 'http://localhost:3000/xxxyyyzzz.png',
+      isImage: true,
+      deletable: true,
+      reupload: false,
+      status: 'done',
+    },
+  ])
+
+  expect(antdAttachFmt(null)).toStrictEqual([])
+  expect(antdAttachFmt(undefined)).toStrictEqual([])
+  expect(antdAttachFmt('')).toStrictEqual([])
+  expect(antdAttachFmt('[]')).toStrictEqual([])
+  expect(antdAttachFmt('{}')).toStrictEqual([])
+  expect(antdAttachFmt('[{}]')).toStrictEqual([])
+  expect(antdAttachFmt([])).toStrictEqual([])
+  expect(antdAttachFmt({})).toStrictEqual([])
+  expect(antdAttachFmt([{}])).toStrictEqual([])
+  setBaseAttachUrl('http://localhost:3000/')
+  expect(antdAttachFmt('xxxyyyzzz.png')).toStrictEqual([
+    {
+      group: 'default',
+      id: 'xxxyyyzzz.png',
+      name: 'xxxyyyzzz.png',
+      uri: 'xxxyyyzzz.png',
+      url: 'http://localhost:3000/xxxyyyzzz.png',
+      uid: 'xxxyyyzzz.png',
+      percent: 100,
+      thumbUrl: 'http://localhost:3000/xxxyyyzzz.png',
+      status: 'done',
+    },
+  ])
+  expect(antdAttachFmt('{"id":"123","name":"demo.png","uri":"xxxyyyzzz.png","group":"default"}')).toStrictEqual([
+    {
+      group: 'default',
+      id: '123',
+      name: 'demo.png',
+      uri: 'xxxyyyzzz.png',
+      url: 'http://localhost:3000/xxxyyyzzz.png',
+      uid: 'xxxyyyzzz.png',
+      percent: 100,
+      thumbUrl: 'http://localhost:3000/xxxyyyzzz.png',
+      status: 'done',
+    },
+  ])
+  expect(antdAttachFmt('[{"id":"123","name":"demo.png","uri":"xxxyyyzzz.png","group":"default"}]')).toStrictEqual([
+    {
+      group: 'default',
+      id: '123',
+      name: 'demo.png',
+      uri: 'xxxyyyzzz.png',
+      url: 'http://localhost:3000/xxxyyyzzz.png',
+      uid: 'xxxyyyzzz.png',
+      percent: 100,
+      thumbUrl: 'http://localhost:3000/xxxyyyzzz.png',
+      status: 'done',
+    },
+  ])
+  expect(antdAttachFmt({ id: '123', name: 'demo.png', uri: 'xxxyyyzzz.png', group: 'default' })).toStrictEqual([
+    {
+      group: 'default',
+      id: '123',
+      name: 'demo.png',
+      uri: 'xxxyyyzzz.png',
+      url: 'http://localhost:3000/xxxyyyzzz.png',
+      uid: 'xxxyyyzzz.png',
+      percent: 100,
+      thumbUrl: 'http://localhost:3000/xxxyyyzzz.png',
+      status: 'done',
+    },
+  ])
+  expect(antdAttachFmt([{ id: '123', name: 'demo.png', uri: 'xxxyyyzzz.png', group: 'default' }])).toStrictEqual([
+    {
+      group: 'default',
+      id: '123',
+      name: 'demo.png',
+      uri: 'xxxyyyzzz.png',
+      url: 'http://localhost:3000/xxxyyyzzz.png',
+      uid: 'xxxyyyzzz.png',
+      percent: 100,
+      thumbUrl: 'http://localhost:3000/xxxyyyzzz.png',
+      status: 'done',
+    },
+  ])
+
+  expect(elAttachFmt(null)).toStrictEqual([])
+  expect(elAttachFmt(undefined)).toStrictEqual([])
+  expect(elAttachFmt('')).toStrictEqual([])
+  expect(elAttachFmt('[]')).toStrictEqual([])
+  expect(elAttachFmt('{}')).toStrictEqual([])
+  expect(elAttachFmt('[{}]')).toStrictEqual([])
+  expect(elAttachFmt([])).toStrictEqual([])
+  expect(elAttachFmt({})).toStrictEqual([])
+  expect(elAttachFmt([{}])).toStrictEqual([])
+  setBaseAttachUrl('http://localhost:3000/')
+  expect(elAttachFmt('xxxyyyzzz.png')).toStrictEqual([
+    {
+      group: 'default',
+      id: 'xxxyyyzzz.png',
+      name: 'xxxyyyzzz.png',
+      uri: 'xxxyyyzzz.png',
+      url: 'http://localhost:3000/xxxyyyzzz.png',
+      percentage: 100,
+      status: 'success',
+    },
+  ])
+  expect(elAttachFmt('{"id":"123","name":"demo.png","uri":"xxxyyyzzz.png","group":"default"}')).toStrictEqual([
+    {
+      group: 'default',
+      id: '123',
+      name: 'demo.png',
+      uri: 'xxxyyyzzz.png',
+      url: 'http://localhost:3000/xxxyyyzzz.png',
+      percentage: 100,
+      status: 'success',
+    },
+  ])
+  expect(elAttachFmt('[{"id":"123","name":"demo.png","uri":"xxxyyyzzz.png","group":"default"}]')).toStrictEqual([
+    {
+      group: 'default',
+      id: '123',
+      name: 'demo.png',
+      uri: 'xxxyyyzzz.png',
+      url: 'http://localhost:3000/xxxyyyzzz.png',
+      percentage: 100,
+      status: 'success',
+    },
+  ])
+  expect(elAttachFmt({ id: '123', name: 'demo.png', uri: 'xxxyyyzzz.png', group: 'default' })).toStrictEqual([
+    {
+      group: 'default',
+      id: '123',
+      name: 'demo.png',
+      uri: 'xxxyyyzzz.png',
+      url: 'http://localhost:3000/xxxyyyzzz.png',
+      percentage: 100,
+      status: 'success',
+    },
+  ])
+  expect(elAttachFmt([{ id: '123', name: 'demo.png', uri: 'xxxyyyzzz.png', group: 'default' }])).toStrictEqual([
+    {
+      group: 'default',
+      id: '123',
+      name: 'demo.png',
+      uri: 'xxxyyyzzz.png',
+      url: 'http://localhost:3000/xxxyyyzzz.png',
+      percentage: 100,
+      status: 'success',
     },
   ])
 })
