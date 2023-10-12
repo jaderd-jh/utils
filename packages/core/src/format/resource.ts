@@ -1,6 +1,6 @@
 import { parseToJSON } from './core'
 import { checkImg, isArrStr, isDef, isEmpty, isObject } from '../validate'
-import type { MaybeArray, UnDef, Undefinable, UploadUiType } from '../../types'
+import type { MaybeArray, UnDef, Undefinable, UploadUIType } from '../../types'
 import type { AntdResource, ElResource, Resource, VantResource } from '../../types/upload'
 import { getBaseAttachUrl } from './baseAttachUrl'
 
@@ -20,12 +20,20 @@ export const resUrl = (url: Undefinable<string>) => {
   return `${baseUrl}/${url}`.replace(/([^:]\/)\/+/g, '$1')
 }
 
+export function recoverFile(resource: Partial<Resource>): AntdResource
+
+export function recoverFile(resource: Partial<Resource>, type?: 'vant'): VantResource
+
+export function recoverFile(resource: Partial<Resource>, type?: 'antd'): AntdResource
+
+export function recoverFile(resource: Partial<Resource>, type?: 'el'): ElResource
+
 /**
  * 统一文件字段内容
  * @param resource
  * @param type
  */
-export const recoverFile = (resource: Partial<Resource>, type?: UploadUiType) => {
+export function recoverFile(resource: Partial<Resource>, type?: UploadUIType) {
   const { uri, ...item } = resource
   const common = { ...item, uri, url: resUrl(uri) }
   if (type === 'vant')
@@ -44,7 +52,7 @@ export const recoverFile = (resource: Partial<Resource>, type?: UploadUiType) =>
  * 原始附件格式
  * @param data
  */
-export function attachToArray(data: UnDef<MaybeArray<Partial<Resource>>> | string) {
+export const attachToArray = (data: UnDef<MaybeArray<Partial<Resource>>> | string) => {
   let attachList: Partial<Resource>[] = []
   // null 或 undefined
   if (!data) attachList = []
@@ -81,7 +89,8 @@ export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, t
  * @param data
  * @param type 格式类型：'vant' | 'antd' | 'el' ，默认 antd
  */
-export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: UploadUiType) {
+export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: UploadUIType) {
   const attachArr = attachToArray(data)
+  // @ts-expect-error UploadUIType
   return attachArr.map(item => recoverFile(item, type || 'antd'))
 }
