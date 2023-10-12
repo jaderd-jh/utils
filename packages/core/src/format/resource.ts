@@ -1,5 +1,5 @@
 import { parseToJSON } from './core'
-import { checkImg, isArrStr, isDef, isEmpty } from '../validate'
+import { checkImg, isArrStr, isDef, isEmpty, isObject } from '../validate'
 import type { MaybeArray, UnDef, Undefinable } from '../../types'
 import type { AntdResource, ElResource, Resource, VantResource } from '../../types/upload'
 import { getBaseAttachUrl } from './baseAttachUrl'
@@ -51,7 +51,6 @@ export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, t
  */
 export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'vant' | 'antd' | 'el') {
   let attachList: Partial<Resource>[] = []
-  const prototype = Object.prototype.toString.call(data)
   // null 或 undefined
   if (!data) attachList = []
   // Upload.Resource[]
@@ -63,15 +62,14 @@ export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, t
       attachList = parseToJSON<Resource[]>(data) || []
     } else {
       const jsonData = parseToJSON<Resource | string>(data)
-      const prototypeJson = Object.prototype.toString.call(jsonData)
       // Upload.Resource string
-      if (prototypeJson === '[object Object]') attachList = [jsonData as Resource]
+      if (isObject(jsonData)) attachList = [jsonData as Resource]
       // 单个uri string
       else attachList = [{ id: data, name: data, uri: data, group: 'default' }]
     }
   }
   // Upload.Resource
-  else if (prototype === '[object Object]') attachList = [data]
+  else if (isObject(data)) attachList = [data]
   return attachList.filter(item => !isEmpty(item)).map(item => recoverFile(item, type || 'antd'))
 }
 
