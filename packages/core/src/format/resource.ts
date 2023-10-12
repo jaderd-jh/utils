@@ -19,6 +19,7 @@ export const resUrl = (url: Undefinable<string>) => {
   }
   return `${baseUrl}/${url}`.replace(/([^:]\/)\/+/g, '$1')
 }
+
 /**
  * 统一文件字段内容
  * @param resource
@@ -39,17 +40,11 @@ export const recoverFile = (resource: Partial<Resource>, type?: 'vant' | 'antd' 
   return { ...common, uid: uri, percent: 100, thumbUrl: resUrl(uri), status: 'done' } as AntdResource
 }
 
-export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string): AntdResource[]
-export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'vant'): VantResource[]
-export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'antd'): AntdResource[]
-export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'el'): ElResource[]
-
 /**
- * 附件格式
+ * 原始附件格式
  * @param data
- * @param type 格式类型：'vant' | 'antd' | 'el' ，默认 antd
  */
-export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'vant' | 'antd' | 'el') {
+export function attachJson(data: UnDef<MaybeArray<Partial<Resource>>> | string) {
   let attachList: Partial<Resource>[] = []
   // null 或 undefined
   if (!data) attachList = []
@@ -70,7 +65,25 @@ export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, t
   }
   // Upload.Resource
   else if (isObject(data)) attachList = [data]
-  return attachList.filter(item => !isEmpty(item)).map(item => recoverFile(item, type || 'antd'))
+  return attachList.filter(item => !isEmpty(item))
+}
+
+export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string): AntdResource[]
+
+export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'vant'): VantResource[]
+
+export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'antd'): AntdResource[]
+
+export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'el'): ElResource[]
+
+/**
+ * 附件格式
+ * @param data
+ * @param type 格式类型：'vant' | 'antd' | 'el' ，默认 antd
+ */
+export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'vant' | 'antd' | 'el') {
+  const attachArr = attachJson(data)
+  return attachArr.map(item => recoverFile(item, type || 'antd'))
 }
 
 export const vantAttachFmt = (data: UnDef<MaybeArray<Partial<Resource>>> | string) => attachFmt(data, 'vant')
