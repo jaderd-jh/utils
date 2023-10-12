@@ -16,8 +16,7 @@ export const fakeId = () => customAlphabet('0123456789', 16)()
 export const fakeName = () => faker.person.fullName()
 
 /** 随机假手机号码 */
-export const fakePhone = () =>
-  1 + faker.helpers.arrayElements([3, 4, 5, 6, 7, 8, 9], 2).join('') + faker.phone.number('########')
+export const fakePhone = () => 1 + faker.string.fromCharacters('3456789', 2) + faker.string.numeric({ length: 8 })
 
 /**
  * 随机假枚举值
