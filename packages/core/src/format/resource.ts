@@ -25,7 +25,7 @@ export const resUrl = (url: Undefinable<string>) => {
  * @param resource
  * @param type
  */
-export const recoverFile = (resource: Partial<Resource>, type?: 'vant' | 'antd' | 'el') => {
+export const recoverFile = (resource: Partial<Resource>, type?: UploadUiType) => {
   const { uri, ...item } = resource
   const common = { ...item, uri, url: resUrl(uri) }
   if (type === 'vant')
