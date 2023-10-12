@@ -2,6 +2,8 @@ type VantUploadFileStatus = '' | 'uploading' | 'done' | 'failed'
 type AntdUploadFileStatus = 'removed' | 'uploading' | 'done' | 'error'
 type ElementPlusUploadFileStatus = 'ready' | 'uploading' | 'success' | 'fail'
 
+export type UploadUiType = 'vant' | 'antd' | 'el'
+
 export interface Resource {
   /** origin */
   group: string

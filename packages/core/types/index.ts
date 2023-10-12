@@ -42,3 +42,5 @@ export declare type PageRes<T = any> = Service.PageResponse<T>
  * 可能是数组
  */
 export declare type MaybeArray<T = any> = T | Array<T>
+
+export * from './upload'

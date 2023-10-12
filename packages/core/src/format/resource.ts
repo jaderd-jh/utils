@@ -1,6 +1,6 @@
 import { parseToJSON } from './core'
 import { checkImg, isArrStr, isDef, isEmpty, isObject } from '../validate'
-import type { MaybeArray, UnDef, Undefinable } from '../../types'
+import type { MaybeArray, UnDef, Undefinable, UploadUiType } from '../../types'
 import type { AntdResource, ElResource, Resource, VantResource } from '../../types/upload'
 import { getBaseAttachUrl } from './baseAttachUrl'
 
@@ -44,7 +44,7 @@ export const recoverFile = (resource: Partial<Resource>, type?: 'vant' | 'antd' 
  * 原始附件格式
  * @param data
  */
-export function attachJson(data: UnDef<MaybeArray<Partial<Resource>>> | string) {
+export function attachToArray(data: UnDef<MaybeArray<Partial<Resource>>> | string) {
   let attachList: Partial<Resource>[] = []
   // null 或 undefined
   if (!data) attachList = []
@@ -81,13 +81,7 @@ export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, t
  * @param data
  * @param type 格式类型：'vant' | 'antd' | 'el' ，默认 antd
  */
-export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'vant' | 'antd' | 'el') {
-  const attachArr = attachJson(data)
+export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: UploadUiType) {
+  const attachArr = attachToArray(data)
   return attachArr.map(item => recoverFile(item, type || 'antd'))
 }
-
-export const vantAttachFmt = (data: UnDef<MaybeArray<Partial<Resource>>> | string) => attachFmt(data, 'vant')
-
-export const antdAttachFmt = (data: UnDef<MaybeArray<Partial<Resource>>> | string) => attachFmt(data, 'antd')
-
-export const elAttachFmt = (data: UnDef<MaybeArray<Partial<Resource>>> | string) => attachFmt(data, 'el')
