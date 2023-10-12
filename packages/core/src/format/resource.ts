@@ -1,7 +1,7 @@
 import { parseToJSON } from './core'
 import { checkImg, isArrStr, isDef, isEmpty, isObject } from '../validate'
-import type { MaybeArray, UnDef, Undefinable, UploadUIType } from '../../types'
-import type { AntdResource, ElResource, Resource, VantResource } from '../../types/upload'
+import type { MaybeArray, UnDef, Undefinable } from '../../types'
+import type { AntdResource, ElResource, Resource, UploadUIType, VantResource } from '../../types/upload'
 import { getBaseAttachUrl } from './baseAttachUrl'
 
 /**
@@ -27,6 +27,8 @@ export function recoverFile(resource: Partial<Resource>, type?: 'vant'): VantRes
 export function recoverFile(resource: Partial<Resource>, type?: 'antd'): AntdResource
 
 export function recoverFile(resource: Partial<Resource>, type?: 'el'): ElResource
+
+export function recoverFile(resource: Partial<Resource>, type?: UploadUIType): VantResource | AntdResource | ElResource
 
 /**
  * 统一文件字段内容
@@ -84,6 +86,11 @@ export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, t
 
 export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'el'): ElResource[]
 
+export function attachFmt(
+  data: UnDef<MaybeArray<Partial<Resource>>> | string,
+  type?: UploadUIType
+): VantResource[] | AntdResource[] | ElResource[]
+
 /**
  * 附件格式
  * @param data
@@ -91,6 +98,5 @@ export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, t
  */
 export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: UploadUIType) {
   const attachArr = attachToArray(data)
-  // @ts-expect-error UploadUIType
   return attachArr.map(item => recoverFile(item, type || 'antd'))
 }
