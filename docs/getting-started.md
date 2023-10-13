@@ -32,37 +32,35 @@ $ pnpm add @jhqn/utils
 ```sh [yarn]
 $ yarn add @jhqn/utils
 ```
-
-```sh [bun]
-$ bun add @jhqn/utils
-```
-
 :::
 
 ## 步骤三：使用
 ### 1.在工具函数中使用
 ``` ts
-import { getHostEnv } from '@jhqn/utils'
-console.log(getHostEnv())
+import { dateFmt, toThousands } from '@jhqn/utils'
+
+console.log(dateFmt('2021-01-01','YYYY/MM/DD HH:mm:ss')) // 2021/01/01 00:00:00
+
+console.log(toThousands(123456789.88)) // 123,456,789.88
 ```
 ### 2.在vue中使用
 ``` vue
 <script lang="ts" setup>
-import { dayjs } from '@jhqn/utils'
+import { toThousands } from '@jhqn/utils'
 </script>
 
 <template>
 <div>
-  <p>{{ dayjs().format('YYYY-MM-DD HH:mm:ss') }}</p>
+  <p>{{ toThousands(123456789.88) }}</p>
 </template>
 ```
 ### 3.在react中使用
 ``` tsx
- import { dayjs } from '@jhqn/utils'
+ import { toThousands } from '@jhqn/utils'
  const Index = () => {
     return (
         <div>
-          <p>{dayjs().format('YYYY-MM-DD HH:mm:ss')}</p>
+          <p>{ toThousands(123456789.88) }</p>
         </div>
     )
 ```
