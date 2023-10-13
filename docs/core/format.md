@@ -11,7 +11,7 @@
 ```ts
 import { setBaseAttachUrl } from '@jhqn/utils'
 
-setBaseAttachUrl('http://demo')
+setBaseAttachUrl('https://www.example.com')
 ```
 
 ## getBaseAttachUrl
@@ -23,7 +23,7 @@ setBaseAttachUrl('http://demo')
 ```ts
 import { getBaseAttachUrl } from '@jhqn/utils'
 
-console.log(getBaseAttachUrl()) // http://demo
+console.log(getBaseAttachUrl()) // https://www.example.com
 ```
 
 ## parseToJSON
@@ -127,7 +127,7 @@ console.log(dateFmt('2022-01-01 00:00:00', '2023-01-03 00:00:10')) // 1年零2�
 ```ts
 import { resUrl } from '@jhqn/utils'
 
-console.log( resUrl('logo.png')) // http://demo/logo.png
+console.log( resUrl('logo.png')) // https://www.example.com/logo.png
 ```
 
 ## recoverFile
@@ -147,8 +147,8 @@ console.log(recoverFile({ id: '1', name: '图片.png', uri: 'logo.png' }))
 /* {
     id: "1",
     name: "图片.png",
-    url: "http://demo/logo.png",
-    content: "http://demo/logo.png",
+    url: "https://www.example.com/logo.png",
+    content: "https://www.example.com/logo.png",
     uri: "logo.png",
     status: "done",
     percent: 100
@@ -176,8 +176,8 @@ console.log(attachFmt(url))
     "id": "01",
     "name": "图片1.png",
     "group": "default",
-    "url": ""http://demo/01.png",
-    "content": ""http://demo/01.png",
+    "url": ""https://www.example.com/01.png",
+    "content": ""https://www.example.com/01.png",
     "uri": "01.png",
     "status": "done",
     "percent": 100
@@ -185,8 +185,8 @@ console.log(attachFmt(url))
     "id": "02",
     "name": "图片2.png",
     "group": "default",
-    "url": ""http://demo/02.png",
-    "content": ""http://demo/02.png",
+    "url": ""https://www.example.com/02.png",
+    "content": ""https://www.example.com/02.png",
     "uri": "02.png",
     "status": "done",
     "percent": 100
