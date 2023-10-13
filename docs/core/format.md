@@ -80,6 +80,23 @@ import { toThousands } from '@jhqn/utils'
 console.log(toThousands(123456789.88)) // 123,456,789.88
 ```
 
+## currencyFmt
+货币格式化
+
+**返回**：格式化后的字符串
+
+| 参数             | 类型            | 是否必填  | 描述             |
+|:---------------|:--------------|:------|:---------------|
+| currency        | number或string | true  | 金额             |
+| maximumFractionDigits        | number        | false | 小数位数，默认为小数点后两位 |
+
+**用法**
+```ts
+import { currencyFmt } from '@jhqn/utils'
+
+console.log(currencyFmt(123456789.88,1)) // ¥123,456,789.9
+```
+
 ## dateFmt
 格式化时间
 
@@ -100,7 +117,7 @@ console.log(dateFmt('2021-01-01','YYYY/MM/DD HH:mm:ss')) // 2021/01/01 00:00:00
 ## dateDuration
 时间间隔
 
-**返回**：时间间天数
+**返回**：时间间隔天数
 
 | 参数             | 类型     | 是否必填 | 描述     |
 |:---------------|:-------|:-----|:-------|
