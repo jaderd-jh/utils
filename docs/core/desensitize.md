@@ -154,5 +154,5 @@ console.log(hideEmail('1234@email.com')) // 1***@email.com
 ```ts
 import { hideBankCard } from '@jhqn/utils'
 
-console.log(hideBankCard('1234567890123')) // 123456***0123m
+console.log(hideBankCard('1234567890123')) // 123456***0123
 ```
