@@ -23,7 +23,10 @@
     "check:staged": "nano-staged",
     "pre-commit": "run-p check:type check:staged",
     "init:hooks": "npx simple-git-hooks",
-    "prepare": "run-s init:*"
+    "prepare": "run-s init:*",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs"
   },
   "devDependencies": {
     "@jhqn/eslint-config-ts": "^0.6.2",
@@ -39,7 +42,9 @@
     "typescript": "^5.2.2",
     "unbuild": "^2.0.0",
     "vite": "^4.4.11",
-    "vitest": "^0.34.6"
+    "vitepress": "1.0.0-rc.20",
+    "vitest": "^0.34.6",
+    "vue": "^3.3.4"
   },
   "nano-staged": {
     "*.{js,ts}": "eslint --cache --quiet --fix"
