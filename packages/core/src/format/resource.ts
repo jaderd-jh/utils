@@ -1,7 +1,7 @@
 import { parseToJSON } from './core'
-import { isArrStr, isDef } from '../validate'
+import { checkImg, isArrStr, isDef, isEmpty, isObject } from '../validate'
 import type { MaybeArray, UnDef, Undefinable } from '../../types'
-import type { Resource } from '../../types/upload'
+import type { AntdResource, ElResource, Resource, UploadUIType, VantResource } from '../../types/upload'
 import { getBaseAttachUrl } from './baseAttachUrl'
 
 /**
@@ -20,49 +20,83 @@ export const resUrl = (url: Undefinable<string>) => {
   return `${baseUrl}/${url}`.replace(/([^:]\/)\/+/g, '$1')
 }
 
+export function recoverFile(resource: Partial<Resource>): AntdResource
+
+export function recoverFile(resource: Partial<Resource>, type?: 'vant'): VantResource
+
+export function recoverFile(resource: Partial<Resource>, type?: 'antd'): AntdResource
+
+export function recoverFile(resource: Partial<Resource>, type?: 'el'): ElResource
+
+export function recoverFile(resource: Partial<Resource>, type?: UploadUIType): VantResource | AntdResource | ElResource
+
 /**
  * 统一文件字段内容
  * @param resource
+ * @param type
  */
-export const recoverFile = (resource: Resource) => {
-  const { uri, url, ...item } = resource
-  const validUrl = uri || url
-  return {
-    ...item,
-    url: resUrl(validUrl),
-    content: resUrl(validUrl),
-    uri: validUrl || '',
-    status: 'done',
-    percent: 100,
-  }
+export function recoverFile(resource: Partial<Resource>, type?: UploadUIType) {
+  const { uri, ...item } = resource
+  const common = { ...item, uri, url: resUrl(uri) }
+  if (type === 'vant')
+    return {
+      ...common,
+      isImage: checkImg(resource?.name),
+      deletable: true,
+      reupload: false,
+      status: 'done',
+    } as VantResource
+  if (type === 'el') return { ...common, percentage: 100, status: 'success' } as ElResource
+  return { ...common, uid: uri, percent: 100, thumbUrl: resUrl(uri), status: 'done' } as AntdResource
 }
 
 /**
- * 附件格式
+ * 原始附件格式
  * @param data
  */
-export const attachFmt = (data: UnDef<MaybeArray<Resource>> | string) => {
-  let attachList: Resource[] = []
-  const prototype = Object.prototype.toString.call(data)
+export const attachToArray = (data: UnDef<MaybeArray<Partial<Resource>>> | string) => {
+  let attachList: Partial<Resource>[] = []
   // null 或 undefined
   if (!data) attachList = []
   // Upload.Resource[]
-  else if (Array.isArray(data)) attachList = data.filter(Boolean)
+  else if (Array.isArray(data)) attachList = data
   // 字符串
   else if (typeof data === 'string') {
     // Upload.Resource[] string
     if (isArrStr(data)) {
-      attachList = (parseToJSON<Resource[]>(data) || []).filter(Boolean)
+      attachList = parseToJSON<Resource[]>(data) || []
     } else {
       const jsonData = parseToJSON<Resource | string>(data)
-      const prototypeJson = Object.prototype.toString.call(jsonData)
       // Upload.Resource string
-      if (prototypeJson === '[object Object]') attachList = [jsonData as Resource].filter(Boolean)
+      if (isObject(jsonData)) attachList = [jsonData as Resource]
       // 单个uri string
-      else attachList = [{ id: data, name: 'name', uri: data, group: 'default' }]
+      else attachList = [{ id: data, name: data, uri: data, group: 'default' }]
     }
   }
   // Upload.Resource
-  else if (prototype === '[object Object]') attachList = [data]
-  return attachList.map(recoverFile)
+  else if (isObject(data)) attachList = [data]
+  return attachList.filter(item => !isEmpty(item))
+}
+
+export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string): AntdResource[]
+
+export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'vant'): VantResource[]
+
+export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'antd'): AntdResource[]
+
+export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: 'el'): ElResource[]
+
+export function attachFmt(
+  data: UnDef<MaybeArray<Partial<Resource>>> | string,
+  type?: UploadUIType
+): VantResource[] | AntdResource[] | ElResource[]
+
+/**
+ * 附件格式
+ * @param data
+ * @param type 格式类型：'vant' | 'antd' | 'el' ，默认 antd
+ */
+export function attachFmt(data: UnDef<MaybeArray<Partial<Resource>>> | string, type?: UploadUIType) {
+  const attachArr = attachToArray(data)
+  return attachArr.map(item => recoverFile(item, type || 'antd'))
 }

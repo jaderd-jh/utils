@@ -165,7 +165,7 @@ export const isEmpty = (val: UnDef<Numeric | boolean | Record<any, any> | Array<
     !isDef(val) ||
     val === '' ||
     (Array.isArray(val) && val.length === 0) ||
-    (Object.prototype.toString.call(val) === '[object Object]' && Object.keys(val).length === 0) ||
+    (isObject(val) && Object.keys(val).length === 0) ||
     (val instanceof Map && val.size === 0) ||
     (val instanceof Set && val.size === 0)
   )
