@@ -42,7 +42,7 @@
     "publint": "publint"
   },
   "peerDependencies": {
-    "msw": "^1.2.2"
+    "msw": "^2.0.0"
   },
   "peerDependenciesMeta": {
     "msw": {
@@ -53,6 +53,6 @@
     "@jhqn/utils-faker": "workspace:*"
   },
   "devDependencies": {
-    "msw": "^1.3.2"
+    "msw": "^2.0.0"
   }
 }
