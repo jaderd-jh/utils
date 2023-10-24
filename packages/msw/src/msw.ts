@@ -35,8 +35,9 @@ export const commonPageRes: <T>(
 ) => Promise<StrictResponse<PageRes<T>>> = async (fn, resolver) => {
   await randomDelay()
   const total = 45
-  const page = Number(resolver.params.page)
-  const count = Number(resolver.params.count)
+  const url = new URL(resolver.request.url)
+  const page = Number(url.searchParams.get('page'))
+  const count = Number(url.searchParams.get('count'))
   let len = count
   if (page * count > total) {
     len = total - (page - 1) * count
