@@ -31,10 +31,10 @@ export const commonArrRes: <T>(
 
 export const commonPageRes: <T>(
   fn: MaybeFn<T>,
-  resolver: Parameters<Parameters<typeof http.get>[1]>[0]
-) => Promise<StrictResponse<PageRes<T>>> = async (fn, resolver) => {
+  resolver: Parameters<Parameters<typeof http.get>[1]>[0],
+  total?: number
+) => Promise<StrictResponse<PageRes<T>>> = async (fn, resolver, total = 42) => {
   await randomDelay()
-  const total = 45
   const url = new URL(resolver.request.url)
   const page = Number(url.searchParams.get('page'))
   const count = Number(url.searchParams.get('count'))
