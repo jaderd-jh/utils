@@ -50,6 +50,7 @@
     }
   },
   "dependencies": {
+    "@jhqn/utils-core": "workspace:*",
     "@jhqn/utils-faker": "workspace:*"
   },
   "devDependencies": {

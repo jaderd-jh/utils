@@ -96,6 +96,9 @@ importers:
 
   packages/msw:
     dependencies:
+      '@jhqn/utils-core':
+        specifier: workspace:*
+        version: link:../core
       '@jhqn/utils-faker':
         specifier: workspace:*
         version: link:../faker

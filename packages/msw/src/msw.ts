@@ -1,7 +1,8 @@
 import type { StrictResponse, http } from 'msw'
 import { HttpResponse, delay } from 'msw'
-import type { MaybeFn, PageRes, Res } from '@jhqn/utils'
-import { fakeIntRange } from '@jhqn/utils'
+import { fakeIntRange } from '@jhqn/utils-faker'
+import type { PageRes, Res } from '@jhqn/utils-core'
+import type { MaybeFn } from '../types'
 
 export const getMockData = <T>(data: T, code = 200, message = 'success') => {
   return { data, code, message } as Res<T>
