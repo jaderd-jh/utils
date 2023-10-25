@@ -2,6 +2,7 @@ import type { StrictResponse, http } from 'msw'
 import { HttpResponse, delay } from 'msw'
 import { fakeIntRange } from '@jhqn/utils-faker'
 import type { PageRes, Res } from '@jhqn/utils-core'
+import { isNumber } from '@jhqn/utils-core'
 import type { MaybeFn } from '../types'
 
 export const getMockData = <T>(data: T, code = 200, message = 'success') => {
@@ -23,10 +24,12 @@ export const commonRes: <T>(fn: MaybeFn<T>) => Promise<StrictResponse<Res<T>>> =
 
 export const commonArrRes: <T>(
   fn: MaybeFn<T>,
-  range: [min: number, max: number]
+  range: [min: number, max: number] | number
 ) => Promise<StrictResponse<Res<T[]>>> = async (fn, range) => {
   await randomDelay()
-  return HttpResponse.json(getMockData(Array.from({ length: fakeIntRange(range[0], range[1]) }, () => fnRes(fn))))
+  return HttpResponse.json(
+    getMockData(Array.from({ length: isNumber(range) ? range : fakeIntRange(range[0], range[1]) }, () => fnRes(fn)))
+  )
 }
 
 export const commonPageRes: <T>(
