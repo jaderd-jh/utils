@@ -1,16 +1,22 @@
 import type { StrictResponse, http } from 'msw'
 import { HttpResponse, delay } from 'msw'
 import { fakeIntRange } from '@jhqn/utils-faker'
-import type { PageRes, Res } from '@jhqn/utils-core'
+import type { PageRes, PageResData, Res } from '@jhqn/utils-core'
 import { isNumber } from '@jhqn/utils-core'
 import type { MaybeFn } from '../types'
 
-export const getMockData = <T>(data: T, code = 200, message = 'success') => {
-  return { data, code, message } as Res<T>
+export const getMockData = <T>(data: T, code = 200, message = 'success'): Res<T> => {
+  return { data, code, message }
 }
 
-export const getMockDataList = <T>(data: T[], total: number, code = 200, message = 'success') => {
-  return { data: { records: data, total }, code, message } as PageRes<T>
+export const getMockDataList = <T>(
+  data: T[],
+  total: number,
+  code = 200,
+  message = 'success',
+  options: Partial<PageResData<T>> = {}
+): PageRes<T> => {
+  return { data: { records: data, list: data, total, ...options }, code, message } as PageRes<T>
 }
 
 const randomDelay = () => delay(fakeIntRange(100, 1000))
@@ -46,5 +52,8 @@ export const commonPageRes: <T>(
     len = total - (page - 1) * count
   }
   const data = Array.from({ length: len }, () => fnRes(fn))
-  return HttpResponse.json(getMockDataList(data, total))
+  const pages = count === 0 ? 0 : Math.ceil(total / count)
+  return HttpResponse.json(
+    getMockDataList(data, total, 200, 'success', { current: page, pages, size: count, searchCount: false })
+  )
 }
