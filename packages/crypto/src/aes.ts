@@ -31,14 +31,18 @@ export function AESDecrypt(str: string) {
   if (key === undefined) {
     throw new Error('请先设置 加密key 或 环境变量VITE_CRYPTO_KEY')
   }
-  return encUTF8
-    .stringify(
-      AES.decrypt(str, key, {
-        mode: modeECB,
-        padding: padPkcs7,
-      })
-    )
-    .toString()
+  try {
+    return encUTF8
+      .stringify(
+        AES.decrypt(str, key, {
+          mode: modeECB,
+          padding: padPkcs7,
+        })
+      )
+      .toString()
+  } catch (e) {
+    return str
+  }
 }
 
 /**
