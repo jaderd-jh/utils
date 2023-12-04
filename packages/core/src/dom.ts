@@ -1,5 +1,6 @@
-import { detect } from 'detect-browser'
+import { parseUserAgent } from 'detect-browser-es'
 import type { Nullable } from '../types'
+import type { HostEnv } from '../types/dom'
 
 /**
  * 判断是否是浏览器环境
@@ -44,7 +45,7 @@ export const userAgent = inBrowser ? window.navigator.userAgent : ''
  */
 export const getHostEnv = () => {
   const ua = userAgent.toLowerCase()
-  const baseInfo = detect()
+  const baseInfo = parseUserAgent(ua)
 
   const zlb = ua.includes('@zlb') // 浙里办
   const zyd = ua.includes('saas') // 专有钉
@@ -53,31 +54,17 @@ export const getHostEnv = () => {
   const zfb = ua.includes('alipay') // 支付宝
   const mini = ua.includes('miniprogram') // 小程序
 
+  const additionalInfo: HostEnv = {
+    zlb,
+    zyd,
+    zzd,
+    wx,
+    zfb,
+    mini,
+  }
+
   return {
     ...baseInfo,
-    /**
-     * 是否是浙里办
-     */
-    zlb,
-    /**
-     * 是否是专有钉
-     */
-    zyd,
-    /**
-     * 是否是浙政钉
-     */
-    zzd,
-    /**
-     * 是否是微信
-     */
-    wx,
-    /**
-     * 是否是支付宝
-     */
-    zfb,
-    /**
-     * 是否是小程序
-     */
-    mini,
+    ...additionalInfo,
   }
 }
