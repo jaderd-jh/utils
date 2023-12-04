@@ -1,4 +1,3 @@
-import { parseUserAgent } from 'detect-browser-es'
 import type { Nullable } from '../types'
 import type { HostEnv } from '../types/dom'
 
@@ -45,7 +44,6 @@ export const userAgent = inBrowser ? window.navigator.userAgent : ''
  */
 export const getHostEnv = () => {
   const ua = userAgent.toLowerCase()
-  const baseInfo = parseUserAgent(ua)
 
   const zlb = ua.includes('@zlb') // 浙里办
   const zyd = ua.includes('saas') // 专有钉
@@ -54,7 +52,7 @@ export const getHostEnv = () => {
   const zfb = ua.includes('alipay') // 支付宝
   const mini = ua.includes('miniprogram') // 小程序
 
-  const additionalInfo: HostEnv = {
+  const info: HostEnv = {
     zlb,
     zyd,
     zzd,
@@ -63,8 +61,10 @@ export const getHostEnv = () => {
     mini,
   }
 
-  return {
-    ...baseInfo,
-    ...additionalInfo,
-  }
+  return info
 }
+
+/**
+ * 检测浏览器环境
+ */
+export { detect } from 'detect-browser-es'
