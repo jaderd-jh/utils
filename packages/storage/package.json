@@ -95,8 +95,8 @@
     "@jhqn/utils-crypto": "workspace:*"
   },
   "devDependencies": {
-    "@vueuse/core": "^10.6.1",
-    "@vueuse/shared": "^10.6.1",
+    "@vueuse/core": "^10.7.0",
+    "@vueuse/shared": "^10.7.0",
     "jotai": "^2.6.0"
   }
 }

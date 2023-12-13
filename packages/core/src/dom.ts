@@ -1,5 +1,7 @@
 import type { Nullable } from '../types'
 import type { HostEnv } from '../types/dom'
+import { dateFmt } from './format'
+import { dayjs } from './format/dayjs'
 
 /**
  * 判断是否是浏览器环境
@@ -68,3 +70,29 @@ export const getHostEnv = () => {
  * 检测浏览器环境
  */
 export { detect } from 'detect-browser'
+
+/**
+ * 异或值
+ */
+const XOR_VAL = 1111
+
+/**
+ * 获取某个时间戳的异或值的绝对值，在某个时间段内获取的值是唯一的
+ * @param time
+ */
+const getCodeOfTime = (time: string) => Math.abs(new Date(time).getTime() ^ XOR_VAL)
+
+/**
+ * 获取当小时的时间戳的异或值的绝对值, 当小时内获取的值是唯一的
+ */
+export const getCodeOfHour = () => getCodeOfTime(`${dateFmt(new Date(), 'YYYY-MM-DD HH')}:00:00`)
+
+/**
+ * 获取当天的时间戳的异或值的绝对值, 当天内获取的值是唯一的
+ */
+export const getCodeOfDate = () => getCodeOfTime(dateFmt(new Date(), 'date'))
+
+/**
+ * 获取当月的时间戳的异或值的绝对值, 当月内获取的值是唯一的
+ */
+export const getCodeOfMonth = () => getCodeOfTime(dateFmt(dayjs().endOf('month'), 'date'))
