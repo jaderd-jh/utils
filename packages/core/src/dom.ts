@@ -1,7 +1,6 @@
 import type { Nullable } from '../types'
 import type { HostEnv } from '../types/dom'
-import { dateFmt } from './format'
-import { dayjs } from './format/dayjs'
+import { dateFmt, dayjs } from './format'
 
 /**
  * 判断是否是浏览器环境
