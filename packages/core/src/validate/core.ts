@@ -17,6 +17,12 @@ export const getVariableType = (val: any) => {
 export const isNumber = (val: any): val is number => getVariableType(val) === 'number'
 
 /**
+ * 是否是任意精度整数
+ * @param {any} val 检测的目标
+ */
+export const isBigInt = (val: any): val is bigint => getVariableType(val) === 'bigint'
+
+/**
  * 是否是字符串
  * @param {any} val 检测的目标
  */
