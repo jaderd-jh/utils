@@ -59,7 +59,7 @@ export const isObject = (val: any): val is Record<any, any> => getVariableType(v
 export const isArray = (val: any): val is Array<any> => getVariableType(val) === 'array'
 
 /**
- * 是否是函数
+ * 是否是函数，但也有可能是Class
  * @param {any} val 检测的目标
  */
 export const isFunction = (val: any): val is Function => getVariableType(val) === 'function'
