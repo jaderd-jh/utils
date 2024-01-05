@@ -27,19 +27,19 @@
   },
   "devDependencies": {
     "@jhqn/eslint-config-ts": "^0.6.3",
-    "@types/node": "^20.10.4",
-    "@vitest/coverage-v8": "^1.0.4",
+    "@types/node": "^20.10.6",
+    "@vitest/coverage-v8": "^1.1.2",
     "bumpp": "^9.2.1",
-    "eslint": "^8.55.0",
+    "eslint": "^8.56.0",
     "jsdom": "^23.0.1",
     "nano-staged": "^0.8.0",
     "npm-run-all2": "^6.1.1",
-    "publint": "^0.2.6",
+    "publint": "^0.2.7",
     "simple-git-hooks": "^2.9.0",
     "typescript": "^5.3.3",
     "unbuild": "^2.0.0",
-    "vite": "^5.0.8",
-    "vitest": "^1.0.4"
+    "vite": "^5.0.10",
+    "vitest": "^1.1.2"
   },
   "nano-staged": {
     "*.{js,ts}": "eslint --cache --quiet --fix"
@@ -60,7 +60,9 @@
       "object.fromentries": "npm:@nolyfill/object.fromentries@latest",
       "object.values": "npm:@nolyfill/object.values@latest",
       "string.prototype.padend": "npm:@nolyfill/string.prototype.padend@latest",
-      "which-typed-array": "npm:@nolyfill/which-typed-array@latest"
+      "which-typed-array": "npm:@nolyfill/which-typed-array@latest",
+      "es-iterator-helpers": "npm:@nolyfill/es-iterator-helpers@latest",
+      "hasown": "npm:@nolyfill/hasown@latest"
     }
   }
 }

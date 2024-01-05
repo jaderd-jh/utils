@@ -5,6 +5,8 @@ import padPkcs7 from 'crypto-js/pad-pkcs7'
 import { getCryptoKey } from './key'
 import type { CryptoMap } from '../types'
 
+const WARNING_MESSAGE = '请先使用 setCryptoKey 设置加密密钥'
+
 /**
  * AES加密
  * @param {string} str 需要加密的字符串
@@ -13,7 +15,7 @@ import type { CryptoMap } from '../types'
 export function AESEncrypt(str: string) {
   const key = getCryptoKey()
   if (key === undefined) {
-    throw new Error('请先设置 加密key 或 环境变量VITE_CRYPTO_KEY')
+    throw new Error(WARNING_MESSAGE)
   }
   return AES.encrypt(encUTF8.parse(str), key, {
     mode: modeECB,
@@ -29,7 +31,7 @@ export function AESEncrypt(str: string) {
 export function AESDecrypt(str: string) {
   const key = getCryptoKey()
   if (key === undefined) {
-    throw new Error('请先设置 加密key 或 环境变量VITE_CRYPTO_KEY')
+    throw new Error(WARNING_MESSAGE)
   }
   return encUTF8
     .stringify(
