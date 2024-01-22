@@ -1,4 +1,8 @@
-let BASE_ATTACH_URL: string
+/**
+ * 文件基本路径
+ */
+// eslint-disable-next-line no-underscore-dangle
+let __BASE_ATTACH_URL__: string
 
 /**
  * 设置文件基本路径
@@ -6,16 +10,12 @@ let BASE_ATTACH_URL: string
  * @param baseUrl
  */
 export function setBaseAttachUrl(baseUrl: string) {
-  BASE_ATTACH_URL = baseUrl
+  __BASE_ATTACH_URL__ = baseUrl
 }
 
 /**
  * 获取文件基本路径
  */
 export function getBaseAttachUrl() {
-  return BASE_ATTACH_URL
-}
-
-if (import.meta.env?.VITE_BASE_ATTACH_URL) {
-  setBaseAttachUrl(import.meta.env.VITE_BASE_ATTACH_URL)
+  return __BASE_ATTACH_URL__
 }

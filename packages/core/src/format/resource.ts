@@ -15,7 +15,7 @@ export const resUrl = (url: Undefinable<string>) => {
   }
   const baseUrl = getBaseAttachUrl()
   if (!isDef(baseUrl)) {
-    throw new Error('请先设置 import.meta\u200B.env.VITE_BASE_ATTACH_URL')
+    throw new Error('请先使用 setBaseAttachUrl 设置文件基本路径')
   }
   return `${baseUrl}/${url}`.replace(/([^:]\/)\/+/g, '$1')
 }
