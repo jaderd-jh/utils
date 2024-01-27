@@ -48,10 +48,10 @@ export const fakeIntRange = (min: number, max: number) => faker.number.int({ min
  * 随机浮点数范围内数字
  * @param min 最小值
  * @param max 最大值
- * @param precision 精度
+ * @param fractionDigits 小数位数
  */
-export const fakeFloatRange = (min: number, max: number, precision?: number) =>
-  faker.number.float({ min, max, precision })
+export const fakeFloatRange = (min: number, max: number, fractionDigits?: number) =>
+  faker.number.float({ min, max, fractionDigits })
 
 /**
  * 随机假对象key
