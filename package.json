@@ -16,7 +16,7 @@
     "coverage": "vitest run --coverage",
     "build": "pnpm -r build",
     "release": "bumpp -r",
-    "lint": "eslint --cache --quiet --fix **/*.{ts,tsx}",
+    "lint": "eslint --cache --quiet **/*.{ts,tsx}",
     "fix:lint": "eslint --cache --quiet --fix **/*.{ts,tsx}",
     "publint": "pnpm -r publint",
     "check:type": "tsc --noEmit",

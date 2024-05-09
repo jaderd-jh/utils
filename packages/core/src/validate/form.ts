@@ -28,7 +28,7 @@ export const isTel = (val: UnDef<Numeric>) => {
  */
 export const isEmail = (val: UnDef<string>) => {
   if (!isDef(val)) return false
-  const reg = /^[a-zA-Z\d](?:\w|-)+@[a-zA-Z\d]+\.[a-zA-Z]{2,5}$/
+  const reg = /^[a-z\d](?:\w|-)+@[a-z\d]+\.[a-z]{2,5}$/i
   return reg.test(val)
 }
 
@@ -39,8 +39,8 @@ export const isEmail = (val: UnDef<string>) => {
  */
 export const isIdCard = (val: UnDef<string>, compatible = true) => {
   if (!isDef(val)) return false
-  const card15 = /^[1-9]\d{7}(?:0[1-9]|10|11|12)(?:[0-2][1-9]|10|20|30|31)\d{2}[\dXx]$/
-  const card18 = /^[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|1[0-2])(?:[0-2][1-9]|10|20|30|31)\d{3}[\dXx]$/
+  const card15 = /^[1-9]\d{7}(?:0[1-9]|10|11|12)(?:[0-2][1-9]|10|20|30|31)\d{2}[\dX]$/i
+  const card18 = /^[1-9]\d{5}(?:18|19|20)\d{2}(?:0[1-9]|1[0-2])(?:[0-2][1-9]|10|20|30|31)\d{3}[\dX]$/i
   return card18.test(val) || (compatible ? card15.test(val) : false)
 }
 
