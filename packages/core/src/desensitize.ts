@@ -62,6 +62,7 @@ export const hidePhone = (phone: UnDef<string>) => {
       return phone.replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2')
     }
     if (isTel(phone)) {
+      // eslint-disable-next-line regexp/no-misleading-capturing-group
       return phone.replace(/^(\d{3,4})-?\d{3,4}(\d{4})$/, '$1****$2')
     }
     return phone

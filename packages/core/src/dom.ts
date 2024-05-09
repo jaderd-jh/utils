@@ -42,6 +42,15 @@ export const userAgent = inBrowser ? window.navigator.userAgent : ''
 
 /**
  * 获取宿主环境信息
+ * @returns {HostEnv} 宿主环境信息
+ * @example
+ * const hostEnv = getHostEnv()
+ * hostEnv.zlb // 浙里办
+ * hostEnv.zyd // 专有钉
+ * hostEnv.zzd // 浙政钉
+ * hostEnv.wx // 微信
+ * hostEnv.zfb // 支付宝
+ * hostEnv.mini // 小程序
  */
 export const getHostEnv = () => {
   const ua = userAgent.toLowerCase()
