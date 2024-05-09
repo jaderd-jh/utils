@@ -7,5 +7,5 @@ test('fakeChance', () => {
 })
 
 test('fakeFloatRange', () => {
-  expect(fakeFloatRange(0, 10, 3).toString().split('.')[1]).toHaveLength(3)
+  expect(fakeFloatRange(0, 10, 3).toString().split('.')[1]!.length).toEqual(3)
 })
