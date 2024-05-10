@@ -5,6 +5,7 @@ declare namespace Service {
     data: T
     message: string
   }
+
   /**
    * 分页响应数据
    */
@@ -17,10 +18,19 @@ declare namespace Service {
     size: number
     total: number
   }
+
   /** 分页响应 */
   interface PageResponse<T = any> {
     code: number
     data: PageResponseData<T>
     message: string
+  }
+
+  /**
+   * 分页请求参数
+   */
+  interface PageRequestParams<T extends Record<string, any> = {}> extends T {
+    page: number
+    count: number
   }
 }
