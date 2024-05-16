@@ -1,29 +1,10 @@
 {
   "compilerOptions": {
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
     "target": "ES2018",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "baseUrl": ".",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noUncheckedIndexedAccess": true,
-    "strictNullChecks": true,
-    "declaration": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": false,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "types": ["vite/client"],
-    "baseUrl": ".",
     "paths": {
       "@jhqn/utils-core": ["packages/core/src"],
       "@jhqn/utils-crypto": ["packages/crypto/src"],
@@ -37,10 +18,22 @@
       "@jhqn/utils-storage/react": ["packages/storage/src/react"],
       "@jhqn/utils-storage/vue": ["packages/storage/src/vue"],
       "@jhqn/utils": ["packages/utils/src"]
-    }
+    },
+    "types": ["vite/client"],
+    "strict": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
-  "exclude": [
-    "**/node_modules/**",
-    "**/dist/**"
-  ]
+  "exclude": ["**/node_modules/**", "**/dist/**"]
 }

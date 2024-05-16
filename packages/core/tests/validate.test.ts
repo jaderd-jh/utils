@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, it } from 'vitest'
 import {
   checkImg,
   getVariableType,
@@ -15,7 +15,7 @@ import {
   isValidResCode,
 } from '../src'
 
-test('isDef', () => {
+it('isDef', () => {
   expect(isDef(1)).toBe(true)
   expect(isDef('')).toBe(true)
   expect(isDef(false)).toBe(true)
@@ -25,7 +25,7 @@ test('isDef', () => {
   expect(isDef(undefined)).toBe(false)
 })
 
-test('getType', () => {
+it('getType', () => {
   expect(getVariableType(1)).toBe('number')
   expect(getVariableType('')).toBe('string')
   expect(getVariableType(false)).toBe('boolean')
@@ -65,7 +65,7 @@ test('getType', () => {
   expect(getVariableType(undefined)).toBe('undefined')
 })
 
-test('isNumeric', () => {
+it('isNumeric', () => {
   expect(isNumeric('')).toBe(false)
   expect(isNumeric(' ')).toBe(false)
   expect(isNumeric('1')).toBe(true)
@@ -79,7 +79,7 @@ test('isNumeric', () => {
   expect(isNumeric(undefined)).toBe(false)
 })
 
-test('checkImg', () => {
+it('checkImg', () => {
   expect(checkImg()).toBe(false)
   expect(checkImg('.jpg')).toBe(true)
   expect(checkImg('.jpeg')).toBe(true)
@@ -89,7 +89,7 @@ test('checkImg', () => {
   expect(checkImg('.avif')).toBe(false)
 })
 
-test('isJSONStr', () => {
+it('isJSONStr', () => {
   expect(isJSONStr('{"foo":"bar"}')).toBe(true)
   expect(isJSONStr('{"foo":/"bar"}')).toBe(false)
   expect(isJSONStr('/{/"foo":/"bar"}')).toBe(false)
@@ -98,7 +98,7 @@ test('isJSONStr', () => {
   expect(isJSONStr(undefined)).toBe(false)
 })
 
-test('isArrStr', () => {
+it('isArrStr', () => {
   expect(isArrStr('{"foo":"bar"}')).toBe(false)
   expect(isArrStr('[{"foo":"bar"}]')).toBe(true)
   expect(isArrStr('[/{"foo":"bar"}]')).toBe(false)
@@ -106,12 +106,12 @@ test('isArrStr', () => {
   expect(isArrStr(undefined)).toBe(false)
 })
 
-test('isValidKey', () => {
+it('isValidKey', () => {
   expect(isValidKey('a', { a: 1 })).toBe(true)
   expect(isValidKey('b', { a: 1 })).toBe(false)
 })
 
-test('isValidFileType', () => {
+it('isValidFileType', () => {
   expect(isValidFileType(new File(['foo'], 'foo'), '')).toBe(false)
   expect(isValidFileType(new File(['foo'], 'foo.txt'), '*')).toBe(true)
   expect(isValidFileType(new File(['foo'], 'foo1.txt'), '.txt')).toBe(true)
@@ -124,7 +124,7 @@ test('isValidFileType', () => {
   )
 })
 
-test('isEmpty', () => {
+it('isEmpty', () => {
   expect(isEmpty(null)).toBe(true)
   expect(isEmpty(undefined)).toBe(true)
   expect(isEmpty('')).toBe(true)
@@ -142,7 +142,7 @@ test('isEmpty', () => {
   expect(isEmpty(true)).toBe(false)
 })
 
-test('validateRes', () => {
+it('validateRes', () => {
   expect(isValidResCode({ code: 200, data: '', message: '' })).toBe(true)
   expect(isValidResCode({ code: 0, data: '', message: '' })).toBe(false)
   expect(isValidResCode({ code: 0, data: '', message: '' }, 0)).toBe(true)

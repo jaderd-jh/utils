@@ -1,5 +1,5 @@
-import { isDef } from './core'
 import type { PageRes, Res } from '../../types'
+import { isDef } from './core'
 
 /**
  * 校验接口返回code

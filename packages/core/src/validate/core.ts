@@ -147,13 +147,14 @@ export const isDef = <T>(val: T): val is NonNullable<T> => !isNull(val) && !isUn
  * @param str
  */
 export const isJSONStr = (str: UnDef<string>) => {
-  if (isDef(str))
+  if (isDef(str)) {
     try {
       JSON.parse(str)
       return true
     } catch (e) {
       return false
     }
+  }
   return false
 }
 
@@ -162,12 +163,13 @@ export const isJSONStr = (str: UnDef<string>) => {
  * @param str
  */
 export const isArrStr = (str: UnDef<string>) => {
-  if (isDef(str))
+  if (isDef(str)) {
     try {
       return Array.isArray(JSON.parse(str))
     } catch (e) {
       return false
     }
+  }
   return false
 }
 

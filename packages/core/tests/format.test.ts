@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, it } from 'vitest'
 import {
   attachFmt,
   currencyFmt,
@@ -14,12 +14,12 @@ import {
   toThousands,
 } from '../src'
 
-test('parseToJSON', () => {
+it('parseToJSON', () => {
   expect(parseToJSON('')).toStrictEqual(null)
   expect(parseToJSON('{}')).toStrictEqual({})
 })
 
-test('replacer', () => {
+it('replacer', () => {
   expect(JSON.stringify({ foo: 'bar' }, replacer)).toBe('{"foo":"bar"}')
   const map = new Map()
   map.set('foo', 'bar')
@@ -28,7 +28,7 @@ test('replacer', () => {
   )
 })
 
-test('reviver', () => {
+it('reviver', () => {
   expect(parseToJSON('{"foo":"bar"}', reviver)).toStrictEqual({ foo: 'bar' })
   const map = new Map()
   map.set('foo', 'bar')
@@ -38,7 +38,7 @@ test('reviver', () => {
   })
 })
 
-test('filterObj', () => {
+it('filterObj', () => {
   expect(filterObj({ a: 1, b: 2, c: 3 }, ['a', 'b'])).toStrictEqual({ a: 1, b: 2 })
   expect(filterObj({ a: 1, b: 2, c: 3 }, ['a', 'b'], true)).toStrictEqual({ c: 3 })
   expect(filterObj({ a: 1, b: 2, c: 3 }, ['a', 'b', 'd'])).toStrictEqual({ a: 1, b: 2 })
@@ -46,7 +46,7 @@ test('filterObj', () => {
   expect(filterObj({ a: 1, b: 2, c: 3 }, [], true)).toStrictEqual({ a: 1, b: 2, c: 3 })
 })
 
-test('dateFmt', () => {
+it('dateFmt', () => {
   expect(dateFmt(null)).toBe('')
   expect(dateFmt(undefined)).toBe('')
   expect(dateFmt('')).toBe('')
@@ -62,7 +62,7 @@ test('dateFmt', () => {
   expect(dateFmt('2020-01-01', 'datetime')).toBe('2020-01-01 00:00:00')
 })
 
-test('dateDuration', () => {
+it('dateDuration', () => {
   expect(dateDuration(null, null)).toBe('')
   expect(dateDuration(undefined, undefined)).toBe('')
   expect(dateDuration('2020', undefined)).toBe('')
@@ -74,13 +74,13 @@ test('dateDuration', () => {
   expect(dateDuration('2018-01-01', '2020-01-01')).toBe('2年')
 })
 
-test('toThousands', () => {
+it('toThousands', () => {
   expect(toThousands(100)).toBe('100')
   expect(toThousands(100000)).toBe('100,000')
   expect(toThousands(1000000.4567)).toBe('1,000,000.4567')
 })
 
-test('currencyFmt', () => {
+it('currencyFmt', () => {
   expect(currencyFmt(null)).toBe('')
   expect(currencyFmt(undefined)).toBe('')
   expect(currencyFmt('100')).toBe('¥100.00')
@@ -95,7 +95,7 @@ test('currencyFmt', () => {
   expect(currencyFmt(BigInt(1000000))).toBe('¥1,000,000.00')
 })
 
-test('resUrl', () => {
+it('resUrl', () => {
   expect(resUrl(undefined)).toBe(undefined)
   expect(() => resUrl('')).toThrowError('请先使用 setBaseAttachUrl 设置文件基本路径')
   setBaseAttachUrl('http://localhost:3000')
@@ -111,7 +111,7 @@ test('resUrl', () => {
   expect(resUrl('')).toBe('http://localhost:3000/')
 })
 
-test('attachFmt', () => {
+it('attachFmt', () => {
   expect(attachFmt(null)).toStrictEqual([])
   expect(attachFmt(undefined)).toStrictEqual([])
   expect(attachFmt('')).toStrictEqual([])

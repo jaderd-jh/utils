@@ -1,5 +1,5 @@
-import { isDef, isIdCard, isPhone, isTel } from './validate'
 import type { UnDef } from '../types'
+import { isDef, isIdCard, isPhone, isTel } from './validate'
 
 /**
  * 隐藏中间部分

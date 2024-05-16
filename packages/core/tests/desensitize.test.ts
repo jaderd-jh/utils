@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, it } from 'vitest'
 import {
   hideBankCard,
   hideCardNo,
@@ -13,7 +13,7 @@ import {
   hideThird,
 } from '../src'
 
-test('hidePhone', () => {
+it('hidePhone', () => {
   expect(hidePhone(null)).toBe('')
   expect(hidePhone(undefined)).toBe('')
   expect(hidePhone('12345678901')).toBe('12345678901')
@@ -22,7 +22,7 @@ test('hidePhone', () => {
   expect(hidePhone('057988909090')).toBe('0579****9090')
 })
 
-test('hideCardNo', () => {
+it('hideCardNo', () => {
   expect(hideCardNo(null)).toBe('')
   expect(hideCardNo(undefined)).toBe('')
   expect(hideCardNo('12345678901')).toBe('12345678901')
@@ -31,7 +31,7 @@ test('hideCardNo', () => {
   expect(hideCardNo('33072319641008384x', false)).toBe('3***23196410*****x')
 })
 
-test('hideName', () => {
+it('hideName', () => {
   expect(hideName(null)).toBe('')
   expect(hideName(undefined)).toBe('')
   expect(hideName('小明')).toBe('*明')
@@ -40,7 +40,7 @@ test('hideName', () => {
   expect(hideName('Tom Holland')).toBe('*om Holland')
 })
 
-test('hideSurname', () => {
+it('hideSurname', () => {
   expect(hideSurname(null)).toBe('')
   expect(hideSurname(undefined)).toBe('')
   expect(hideSurname('小明')).toBe('*明')
@@ -49,11 +49,11 @@ test('hideSurname', () => {
   expect(hideSurname('Tom Holland')).toBe('*om Holland')
 })
 
-test('hideFirstName', () => {
+it('hideFirstName', () => {
   expect(hideFirstName(null)).toBe('')
 })
 
-test('hideEmail', () => {
+it('hideEmail', () => {
   expect(hideEmail(null)).toBe('')
   expect(hideEmail(undefined)).toBe('')
   expect(hideEmail('1@email.com')).toBe('1***@email.com')
@@ -67,7 +67,7 @@ test('hideEmail', () => {
   expect(hideEmail('1234@email.com')).toBe('1***@email.com')
 })
 
-test('hideMiddle', () => {
+it('hideMiddle', () => {
   expect(hideMiddle(null)).toBe('')
   expect(hideMiddle(undefined)).toBe('')
   expect(hideMiddle('鸡')).toBe('*')
@@ -77,7 +77,7 @@ test('hideMiddle', () => {
   expect(hideMiddle('Tom Holland')).toBe('T*********d')
 })
 
-test('hideThird', () => {
+it('hideThird', () => {
   expect(hideThird(null)).toBe('')
   expect(hideThird(undefined)).toBe('')
   expect(hideThird('鸡')).toBe('*')
@@ -89,7 +89,7 @@ test('hideThird', () => {
   expect(hideThird('Tom Holland')).toBe('Tom ***land')
 })
 
-test('hideHead', () => {
+it('hideHead', () => {
   expect(hideHead(null)).toBe('')
   expect(hideHead(undefined)).toBe('')
   expect(hideHead('鸡')).toBe('*')
@@ -103,7 +103,7 @@ test('hideHead', () => {
   expect(hideHead('古力娜扎', 5)).toBe('****')
 })
 
-test('hideTail', () => {
+it('hideTail', () => {
   expect(hideTail(null)).toBe('')
   expect(hideTail(undefined)).toBe('')
   expect(hideTail('鸡')).toBe('*')
@@ -117,7 +117,7 @@ test('hideTail', () => {
   expect(hideTail('古力娜扎', 5)).toBe('****')
 })
 
-test('hideBankCard', () => {
+it('hideBankCard', () => {
   expect(hideBankCard(null)).toBe('')
   expect(hideBankCard(undefined)).toBe('')
   expect(hideBankCard('')).toBe('')

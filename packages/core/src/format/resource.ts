@@ -1,7 +1,7 @@
-import { parseToJSON } from './core'
 import { isArrStr, isDef } from '../validate'
 import type { MaybeArray, UnDef, Undefinable } from '../../types'
 import type { Resource } from '../../types/upload'
+import { parseToJSON } from './core'
 import { getBaseAttachUrl } from './baseAttachUrl'
 
 /**
@@ -45,11 +45,13 @@ export const attachFmt = (data: UnDef<MaybeArray<Resource>> | string) => {
   let attachList: Resource[] = []
   const prototype = Object.prototype.toString.call(data)
   // null 或 undefined
-  if (!data) attachList = []
-  // Upload.Resource[]
-  else if (Array.isArray(data)) attachList = data.filter(Boolean)
-  // 字符串
-  else if (typeof data === 'string') {
+  if (!data) {
+    attachList = []
+    // Upload.Resource[]
+  } else if (Array.isArray(data)) {
+    attachList = data.filter(Boolean)
+    // 字符串
+  } else if (typeof data === 'string') {
     // Upload.Resource[] string
     if (isArrStr(data)) {
       attachList = (parseToJSON<Resource[]>(data) || []).filter(Boolean)
@@ -61,8 +63,9 @@ export const attachFmt = (data: UnDef<MaybeArray<Resource>> | string) => {
       // 单个uri string
       else attachList = [{ id: data, name: 'name', uri: data, group: 'default' }]
     }
+    // Upload.Resource
+  } else if (prototype === '[object Object]') {
+    attachList = [data]
   }
-  // Upload.Resource
-  else if (prototype === '[object Object]') attachList = [data]
   return attachList.map(recoverFile)
 }

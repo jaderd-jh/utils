@@ -2,8 +2,8 @@ import AES from 'crypto-js/aes'
 import encUTF8 from 'crypto-js/enc-utf8'
 import modeECB from 'crypto-js/mode-ecb'
 import padPkcs7 from 'crypto-js/pad-pkcs7'
-import { getCryptoKey } from './key'
 import type { CryptoMap } from '../types'
+import { getCryptoKey } from './key'
 
 const WARNING_MESSAGE = '请先使用 setCryptoKey 设置加密密钥'
 
