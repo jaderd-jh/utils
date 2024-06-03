@@ -3,7 +3,6 @@ import encUTF8 from 'crypto-js/enc-utf8'
 /**
  * AES加密密钥
  */
-// eslint-disable-next-line no-underscore-dangle
 let __JADE_CRYPTO_KEY__: CryptoJS.lib.WordArray
 
 /**

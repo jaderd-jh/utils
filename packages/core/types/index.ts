@@ -41,7 +41,7 @@ export declare type PageRes<T = any> = Service.PageResponse<T>
 /**
  * 分页请求参数
  */
-export declare type PageReq<T extends Record<string, any> = {}> = Service.PageRequestParams<T>
+export declare type PageReq<T extends Record<string, any> = NonNullable<unknown>> = Service.PageRequestParams<T>
 
 /**
  * 可能是数组

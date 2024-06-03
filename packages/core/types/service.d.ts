@@ -29,7 +29,7 @@ declare namespace Service {
   /**
    * 分页请求参数
    */
-  interface PageRequestParams<T extends Record<string, any> = {}> extends T {
+  interface PageRequestParams<T extends Record<string, any> = NonNullable<unknown>> extends T {
     page: number
     count: number
   }

@@ -59,8 +59,8 @@ export function storageParse<T>(data: string): Nullable<StorageObj<T>> {
 
 /**
  * 判断存储中是否已经存在
- * @param key
  * @param storage
+ * @param key
  */
 export function hasStorage(storage: Storage, key: string): boolean {
   // eslint-disable-next-line no-prototype-builtins
@@ -81,8 +81,8 @@ export const hasSession = (key: string) => hasStorage(sessionStorage, key)
 
 /**
  * 移除数据
- * @param key
  * @param storage
+ * @param key
  */
 export function removeStorage(storage: Storage, key: string) {
   if (hasStorage(storage, key)) storage.removeItem(key)
@@ -90,8 +90,8 @@ export function removeStorage(storage: Storage, key: string) {
 
 /**
  * 移除数据
- * @param regex
  * @param storage
+ * @param regex
  */
 export function removeStorageAll(storage: Storage, regex?: RegExp) {
   if (!regex) {

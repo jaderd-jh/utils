@@ -137,7 +137,7 @@ it('isEmpty', () => {
   expect(isEmpty({ a: 1 })).toBe(false)
   expect(isEmpty(0)).toBe(false)
   expect(isEmpty(1)).toBe(false)
-  expect(isEmpty(NaN)).toBe(false)
+  expect(isEmpty(Number.NaN)).toBe(false)
   expect(isEmpty(false)).toBe(false)
   expect(isEmpty(true)).toBe(false)
 })
