@@ -92,6 +92,6 @@
   "devDependencies": {
     "@vueuse/core": "^10.10.0",
     "@vueuse/shared": "^10.10.0",
-    "jotai": "^2.8.2"
+    "jotai": "^2.8.3"
   }
 }
