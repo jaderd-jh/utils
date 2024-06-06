@@ -12,6 +12,10 @@ export interface HostEnv {
    */
   readonly zzd: boolean
   /**
+   * 是否是钉钉/专有钉/浙政钉
+   */
+  readonly dd: boolean
+  /**
    * 是否是微信
    */
   readonly wx: boolean

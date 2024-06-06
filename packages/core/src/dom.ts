@@ -48,6 +48,7 @@ export const userAgent = inBrowser ? window.navigator.userAgent : ''
  * hostEnv.zlb // 浙里办
  * hostEnv.zyd // 专有钉
  * hostEnv.zzd // 浙政钉
+ * hostEnv.dd // 钉钉/专有钉/浙政钉
  * hostEnv.wx // 微信
  * hostEnv.zfb // 支付宝
  * hostEnv.mini // 小程序
@@ -58,6 +59,7 @@ export const getHostEnv = () => {
   const zlb = ua.includes('@zlb') // 浙里办
   const zyd = ua.includes('saas') // 专有钉
   const zzd = ua.includes('zhejiang') || ua.includes('tauruszjd') || ua.includes('dingtalk-win') // 浙政钉
+  const dd = ua.includes('taurusapp') // 钉钉/专有钉/浙政钉
   const wx = ua.includes('micromessenger') // 微信
   const zfb = ua.includes('alipay') // 支付宝
   const mini = ua.includes('miniprogram') // 小程序
@@ -66,6 +68,7 @@ export const getHostEnv = () => {
     zlb,
     zyd,
     zzd,
+    dd,
     wx,
     zfb,
     mini,
