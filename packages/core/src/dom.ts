@@ -57,7 +57,7 @@ export const getHostEnv = () => {
 
   const zlb = ua.includes('@zlb') // 浙里办
   const zyd = ua.includes('saas') // 专有钉
-  const zzd = ua.includes('zhejiang') || ua.includes('tauruszjd') // 浙政钉
+  const zzd = ua.includes('zhejiang') || ua.includes('tauruszjd') || ua.includes('dingtalk-win') // 浙政钉
   const wx = ua.includes('micromessenger') // 微信
   const zfb = ua.includes('alipay') // 支付宝
   const mini = ua.includes('miniprogram') // 小程序
