@@ -14,5 +14,9 @@ export type {
   Res,
   PageRes,
   PageResData,
+  PageReq,
   MaybeArray,
+  VK,
+  Dict,
+  PartialBy,
 } from '../types'
