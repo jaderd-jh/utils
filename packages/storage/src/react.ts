@@ -1,20 +1,21 @@
 import type { WritableAtom } from 'jotai'
 import { jError } from '@jhqn/utils-core'
 import { atom } from 'jotai'
+import type { StorageConfig } from '../types'
 import { getStorage, removeStorage, setStorage } from './storage'
 
 /**
- * 封装同步Storage的atom
+ * 封装同步 Storage 的 atom
  * @param storage
- * @param key 键
- * @param initialValue 初始值
- * @param crypto 是否加解密
+ * @param {string} key - 存储键值
+ * @param {any} initialValue - 初始值
+ * @param {StorageConfig} config - 存储配置
  */
 const atomWithStorage = <T>(
   storage: Storage,
   key: string,
   initialValue: T,
-  crypto?: boolean
+  config?: StorageConfig
 ): WritableAtom<T, [T | ((prev: T) => T)], void> => {
   const storageUpdate = (event: StorageEvent, setSelf?: any) => {
     if (event && event.storageArea !== storage) return
@@ -27,13 +28,13 @@ const atomWithStorage = <T>(
 
     if (event && event.key === key) {
       try {
-        setSelf(getStorage<T>(storage, key, { crypto }))
+        setSelf(getStorage<T>(storage, key, config))
       } catch (e) {
         jError(`Storage:${key}`, e)
       }
     }
   }
-  const baseAtom = atom(getStorage<T>(storage, key, { crypto }) ?? initialValue)
+  const baseAtom = atom(getStorage<T>(storage, key, config) ?? initialValue)
   baseAtom.onMount = setSelf => {
     window.addEventListener('storage', e => storageUpdate(e, setSelf))
     return () => {
@@ -48,28 +49,28 @@ const atomWithStorage = <T>(
       if (nextValue === null) {
         removeStorage(storage, key)
       } else {
-        setStorage(storage, key, nextValue, { crypto })
+        setStorage(storage, key, nextValue, config)
       }
     }
   )
 }
 
 /**
- * localStorage存储联动atom
- * @param key
- * @param initialValue
- * @param crypto
+ * localStorage 存储联动 atom
+ * @param {string} key - 存储键值
+ * @param {any} initialValue - 初始值
+ * @param {StorageConfig} config - 存储配置项
  */
-export function atomWithLocal<Value>(key: string, initialValue: Value, crypto?: boolean) {
-  return atomWithStorage(localStorage, key, initialValue, crypto)
+export function atomWithLocal<Value>(key: string, initialValue: Value, config?: StorageConfig) {
+  return atomWithStorage(localStorage, key, initialValue, config)
 }
 
 /**
- * sessionStorage存储联动atom
- * @param key
- * @param initialValue
- * @param crypto
+ * sessionStorage 存储联动 atom
+ * @param {string} key - 存储键值
+ * @param {any} initialValue - 初始值
+ * @param {StorageConfig} config - 存储配置项
  */
-export function atomWithSession<Value>(key: string, initialValue: Value, crypto?: boolean) {
-  return atomWithStorage(sessionStorage, key, initialValue, crypto)
+export function atomWithSession<Value>(key: string, initialValue: Value, config?: StorageConfig) {
+  return atomWithStorage(sessionStorage, key, initialValue, config)
 }

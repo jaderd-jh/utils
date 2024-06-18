@@ -1,48 +1,28 @@
-import type { Nullable } from '@jhqn/utils-core'
-import type { StorageObj } from '../types'
-import { parseToJSON, replacer, reviver } from '@jhqn/utils-core'
 import { aes } from '@jhqn/utils-crypto/aes'
+import { type Nullable, isDate, isFunction, isSymbol, isUndefined } from '@jhqn/utils-core'
+import { parseToJSON, replacer, reviver } from '@jhqn/utils-core'
+import type { StorageConfig, StorageObj } from '../types'
 
 export { aes }
 
 /**
- * 判断当前类型是否是Symbol
- * @param val 需要判断的值
- * @returns 当前参数是否是symbol
- */
-function isSymbol(val: any): boolean {
-  return typeof val === 'symbol'
-}
-
-/**
- * 判断当前值是否能够呗JSON.stringify识别
+ * 判断当前值是否能够被 JSON.stringify() 方法序列化
  * @param data 需要判断的值
- * @returns 前参数是否可以string化
+ * @returns 当前参数是否可以序列化
  */
-function hasStringify(data: any): boolean {
-  if (data === undefined) {
-    return false
-  }
-
-  if (data instanceof Function) {
-    return false
-  }
-
-  if (data instanceof Date) {
-    return false
-  }
-
-  return !isSymbol(data)
+function serializable(data: any): boolean {
+  return !(isSymbol(data) || isDate(data) || isFunction(data) || isUndefined(data))
 }
 
 /**
  * 用于存储的带时间戳的序列化方法
  * @param {any} data 需要序列化的数据
+ * @param {number} expires 过期时间 ms
  * @returns {string} 返回序列化后的字符串
  */
-export function storageStringify(data: any): string {
+export function storageStringify(data: any, expires?: number): string {
   const saveData: StorageObj = {
-    expires: new Date().getTime(),
+    expires: new Date().getTime() + +(expires || 0), // 当前时间 + 过期时间间隔 = 过期时间
     data,
   }
   return JSON.stringify(saveData, replacer)
@@ -135,15 +115,19 @@ export const removeSessionAll = (regex?: RegExp) => removeStorageAll(sessionStor
  * @param storage
  * @param {string} key 设置当前存储key
  * @param {any} value 设置当前存储value
- * @param config
- * @param config.crypto 是否使用加密算法
+ * @param {StorageConfig} config - 存储配置
  */
-export function setStorage(storage: Storage, key: string, value: any, config?: { crypto?: boolean }) {
-  if (hasStringify(value)) {
-    const rawData = storageStringify(value)
+export function setStorage<T = any>(
+  storage: Storage,
+  key: string,
+  value: T,
+  config: StorageConfig = { crypto: false }
+) {
+  if (serializable(value)) {
+    const rawData = storageStringify(value, config?.expires)
     storage.setItem(key, config?.crypto ? aes.encrypt(rawData) : rawData)
   } else {
-    throw new Error('需要存储的 data 不支持 JSON.stringify 方法，请检查当前数据')
+    throw new Error('需要存储的 data 不支持 JSON.stringify()，请检查当前数据')
   }
 }
 
@@ -151,35 +135,31 @@ export function setStorage(storage: Storage, key: string, value: any, config?: {
  * 设置数据
  * @param {string} key 设置当前存储key
  * @param {any} value 设置当前存储value
- * @param config
- * @param config.crypto 是否使用加密算法
+ * @param {StorageConfig} config - 存储配置
  */
-export const setLocal = (key: string, value: any, config?: { crypto?: boolean }) =>
+export const setLocal = <T = any>(key: string, value: T, config?: StorageConfig) =>
   setStorage(localStorage, key, value, config)
 
 /**
  * 设置数据
  * @param {string} key 设置当前存储key
  * @param {any} value 设置当前存储value
- * @param config
- * @param config.crypto 是否使用加密算法
+ * @param {StorageConfig} config - 存储配置
  */
-export const setSession = (key: string, value: any, config?: { crypto?: boolean }) =>
+export const setSession = <T = any>(key: string, value: T, config?: StorageConfig) =>
   setStorage(sessionStorage, key, value, config)
 
 /**
  * 获取数据
  * @param storage
  * @param {string} key 获取当前数据key
- * @param config
- * @param config.expires expires 过期时间 ms
- * @param config.crypto crypto 是否使用解密算法
+ * @param {StorageConfig} config - 存储配置
  * @returns 存储数据
  */
 export function getStorage<T = any>(
   storage: Storage,
   key: string,
-  config: { expires?: number; crypto?: boolean } = { crypto: false, expires: undefined }
+  config: StorageConfig = { crypto: false }
 ): Nullable<T> {
   let content: Nullable<StorageObj<T>>
   if (hasStorage(storage, key)) {
@@ -191,31 +171,21 @@ export function getStorage<T = any>(
   } else {
     content = null
   }
-  return content && content?.data !== undefined ? content.data : null
+  return content && !isUndefined(content?.data) ? content.data : null
 }
 
 /**
  * 获取数据
- * @param {string} key 获取当前数据key
- * @param config
- * @param config.expires expires 过期时间 ms
- * @param config.crypto crypto 是否使用解密算法
+ * @param {string} key 当前数据键名
+ * @param {StorageConfig} config - 存储配置
  * @returns 存储数据
  */
-export const getLocal = <T = any>(
-  key: string,
-  config: { expires?: number; crypto?: boolean } = { crypto: false, expires: undefined }
-) => getStorage<T>(localStorage, key, config)
+export const getLocal = <T = any>(key: string, config?: StorageConfig) => getStorage<T>(localStorage, key, config)
 
 /**
  * 获取数据
- * @param {string} key 获取当前数据key
- * @param config
- * @param config.expires expires 过期时间 ms
- * @param config.crypto crypto 是否使用解密算法
+ * @param {string} key - 当前数据键名
+ * @param {StorageConfig} config - 存储配置
  * @returns 存储数据
  */
-export const getSession = <T = any>(
-  key: string,
-  config: { expires?: number; crypto?: boolean } = { crypto: false, expires: undefined }
-) => getStorage<T>(sessionStorage, key, config)
+export const getSession = <T = any>(key: string, config?: StorageConfig) => getStorage<T>(sessionStorage, key, config)
