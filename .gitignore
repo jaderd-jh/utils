@@ -2,3 +2,6 @@
 dist
 .eslintcache
 node_modules
+.idea
+.vscode
+.proj
