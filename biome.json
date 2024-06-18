@@ -35,7 +35,7 @@
       "quoteStyle": "single",
       "quoteProperties": "preserve",
       "semicolons": "asNeeded",
-      "trailingComma": "es5"
+      "trailingCommas": "es5"
     }
   },
   "json": {

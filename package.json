@@ -16,7 +16,7 @@
     "check:lint": "oxlint && eslint --cache .",
     "fix:lint": "oxlint --quiet --fix && eslint --cache --fix .",
     "check:fmt": "biome check .",
-    "fix:fmt": "biome check --apply .",
+    "fix:fmt": "biome check --write",
     "publint": "pnpm -r publint",
     "check:type": "tsc --noEmit",
     "check:staged": "lint-staged",
@@ -71,6 +71,6 @@
     "pre-commit": "pnpm pre-commit"
   },
   "lint-staged": {
-    "*": ["oxlint --quiet --fix", "eslint --cache --fix", "biome check --apply --no-errors-on-unmatched"]
+    "*": ["oxlint --quiet --fix", "eslint --cache --fix", "biome check --write --no-errors-on-unmatched"]
   }
 }
