@@ -1,5 +1,5 @@
 import { aes } from '@jhqn/utils-crypto/aes'
-import { type Nullable, isDate, isFunction, isSymbol, isUndefined } from '@jhqn/utils-core'
+import { type Nullable, isFunction, isSymbol, isUndefined } from '@jhqn/utils-core'
 import { parseToJSON, replacer, reviver } from '@jhqn/utils-core'
 import type { StorageConfig, StorageObj } from '../types'
 
@@ -11,7 +11,7 @@ export { aes }
  * @returns 当前参数是否可以序列化
  */
 function serializable(data: any): boolean {
-  return !(isSymbol(data) || isDate(data) || isFunction(data) || isUndefined(data))
+  return !(isSymbol(data) || isFunction(data) || isUndefined(data))
 }
 
 /**
@@ -164,8 +164,7 @@ export function getStorage<T = any>(
   let content: Nullable<StorageObj<T>>
   if (hasStorage(storage, key)) {
     content = storageParse<T>(config.crypto ? aes.decrypt(<string>storage.getItem(key)) : <string>storage.getItem(key))
-    if (config.expires && content && new Date().getTime() - content.expires >= config.expires) {
-      removeStorage(storage, key)
+    if (config.expires && content && new Date().getTime() - content.expires >= 0) {
       content = null
     }
   } else {
