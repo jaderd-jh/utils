@@ -66,37 +66,6 @@ interface UseStorageOptions extends ConfigurableEventFilter, ConfigurableWindow,
   initOnMounted?: boolean
 }
 
-function useStorage(
-  key: string,
-  defaults: MaybeRefOrGetter<string>,
-  storage?: StorageLike,
-  options?: UseStorageOptions
-): RemovableRef<string>
-function useStorage(
-  key: string,
-  defaults: MaybeRefOrGetter<boolean>,
-  storage?: StorageLike,
-  options?: UseStorageOptions
-): RemovableRef<boolean>
-function useStorage(
-  key: string,
-  defaults: MaybeRefOrGetter<number>,
-  storage?: StorageLike,
-  options?: UseStorageOptions
-): RemovableRef<number>
-function useStorage<T>(
-  key: string,
-  defaults: MaybeRefOrGetter<T>,
-  storage?: StorageLike,
-  options?: UseStorageOptions
-): RemovableRef<T>
-function useStorage<T = unknown>(
-  key: string,
-  defaults: MaybeRefOrGetter<null>,
-  storage?: StorageLike,
-  options?: UseStorageOptions
-): RemovableRef<T>
-
 /**
  * Reactive LocalStorage/SessionStorage.
  *
