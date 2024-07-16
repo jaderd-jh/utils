@@ -8,14 +8,14 @@ import { getStorage, removeStorage, setStorage } from './storage'
  * 封装同步 Storage 的 atom
  * @param storage
  * @param {string} key - 存储键值
- * @param {any} initialValue - 初始值
- * @param {StorageConfig} config - 存储配置
+ * @param {any} defaults - 初始值
+ * @param {StorageConfig} options - 存储配置
  */
 const atomWithStorage = <T>(
   storage: Storage,
   key: string,
-  initialValue: T,
-  config?: StorageConfig
+  defaults: T,
+  options?: StorageConfig
 ): WritableAtom<T, [T | ((prev: T) => T)], void> => {
   const storageUpdate = (event: StorageEvent, setSelf?: any) => {
     if (event && event.storageArea !== storage) return
@@ -28,13 +28,13 @@ const atomWithStorage = <T>(
 
     if (event && event.key === key) {
       try {
-        setSelf(getStorage<T>(storage, key, config))
+        setSelf(getStorage<T>(storage, key, options))
       } catch (e) {
         jError(`Storage:${key}`, e)
       }
     }
   }
-  const baseAtom = atom(getStorage<T>(storage, key, config) ?? initialValue)
+  const baseAtom = atom(getStorage<T>(storage, key, options) ?? defaults)
   baseAtom.onMount = setSelf => {
     window.addEventListener('storage', e => storageUpdate(e, setSelf))
     return () => {
@@ -49,7 +49,7 @@ const atomWithStorage = <T>(
       if (nextValue === null) {
         removeStorage(storage, key)
       } else {
-        setStorage(storage, key, nextValue, config)
+        setStorage(storage, key, nextValue, options)
       }
     }
   )
@@ -58,19 +58,19 @@ const atomWithStorage = <T>(
 /**
  * localStorage 存储联动 atom
  * @param {string} key - 存储键值
- * @param {any} initialValue - 初始值
- * @param {StorageConfig} config - 存储配置项
+ * @param {any} defaults - 初始值
+ * @param {StorageConfig} options - 存储配置项
  */
-export function atomWithLocal<Value>(key: string, initialValue: Value, config?: StorageConfig) {
-  return atomWithStorage(localStorage, key, initialValue, config)
+export function atomWithLocal<Value>(key: string, defaults: Value, options?: StorageConfig) {
+  return atomWithStorage(localStorage, key, defaults, options)
 }
 
 /**
  * sessionStorage 存储联动 atom
  * @param {string} key - 存储键值
- * @param {any} initialValue - 初始值
- * @param {StorageConfig} config - 存储配置项
+ * @param {any} defaults - 初始值
+ * @param {StorageConfig} options - 存储配置项
  */
-export function atomWithSession<Value>(key: string, initialValue: Value, config?: StorageConfig) {
-  return atomWithStorage(sessionStorage, key, initialValue, config)
+export function atomWithSession<Value>(key: string, defaults: Value, options?: StorageConfig) {
+  return atomWithStorage(sessionStorage, key, defaults, options)
 }
