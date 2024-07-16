@@ -11,7 +11,7 @@ import { aes, getStorage, hasStorage, removeStorage, setStorage, storageParse } 
  * @param {StorageConfig} config - 存储配置
  */
 const atomWithStorage = <T>(storage: Storage, key: string, initialValue: T, config?: StorageConfig) => {
-  return _atomWithStorage(
+  const anAtom = _atomWithStorage(
     key,
     initialValue,
     {
@@ -58,6 +58,15 @@ const atomWithStorage = <T>(storage: Storage, key: string, initialValue: T, conf
     },
     { getOnInit: true }
   )
+
+  anAtom.onMount = () => {
+    const serialized = getStorage<T>(storage, key, config)
+    if (serialized === null) {
+      setStorage(storage, key, initialValue, config)
+    }
+  }
+
+  return anAtom
 }
 
 /**
