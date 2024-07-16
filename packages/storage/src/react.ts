@@ -46,7 +46,7 @@ const atomWithStorage = <T>(storage: Storage, key: string, initialValue: T, conf
                 content = null
               }
               const serialized = content && !isUndefined(content?.data) ? content.data : null
-              callback(serialized!)
+              callback(serialized ?? initialValue)
             }
           }
         }
