@@ -3,30 +3,40 @@ import { atomWithStorage as _atomWithStorage } from 'jotai/utils'
 import type { StorageConfig } from '../types'
 import { aes, getStorage, hasStorage, removeStorage, setStorage, storageParse } from './storage'
 
+interface UseStorageConfig extends StorageConfig {
+  /**
+   * Write the default value to the storage when it does not exist
+   *
+   * @default true
+   */
+  writeDefaults?: boolean
+}
+
 /**
  * 封装同步 Storage 的 atom
  * @param storage
  * @param {string} key - 存储键值
- * @param {any} initialValue - 初始值
- * @param {StorageConfig} config - 存储配置
+ * @param {any} defaults - 初始值
+ * @param {StorageConfig} options - 存储配置
  */
-const atomWithStorage = <T>(storage: Storage, key: string, initialValue: T, config?: StorageConfig) => {
+const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options: UseStorageConfig = {}) => {
+  const { crypto, expires, writeDefaults = true } = options
   const anAtom = _atomWithStorage(
     key,
-    initialValue,
+    defaults,
     {
       getItem() {
-        const serialized = getStorage<T>(storage, key, config)
+        const serialized = getStorage<T>(storage, key, { crypto, expires })
         if (serialized === null) {
           if (hasStorage(storage, key)) {
             storage.removeItem(key)
-            return initialValue
+            return defaults
           }
         }
-        return serialized ?? initialValue
+        return serialized ?? defaults
       },
       setItem(_, newValue) {
-        setStorage<T>(storage, key, newValue, config)
+        setStorage<T>(storage, key, newValue, { crypto, expires })
       },
       removeItem() {
         removeStorage(storage, key)
@@ -39,14 +49,14 @@ const atomWithStorage = <T>(storage: Storage, key: string, initialValue: T, conf
           if (e.storageArea === storage && e.key === key) {
             const rawValue = e.newValue
             if (rawValue === null) {
-              setStorage(storage, key, initialValue, config)
+              setStorage(storage, key, defaults, { crypto, expires })
             } else {
-              let content = storageParse<T>(config?.crypto ? aes.decrypt(rawValue) : rawValue)
-              if (config?.expires && content && new Date().getTime() - content.expires >= 0) {
+              let content = storageParse<T>(crypto ? aes.decrypt(rawValue) : rawValue)
+              if (expires && content && new Date().getTime() - content.expires >= 0) {
                 content = null
               }
               const serialized = content && !isUndefined(content?.data) ? content.data : null
-              callback(serialized ?? initialValue)
+              callback(serialized ?? defaults)
             }
           }
         }
@@ -60,9 +70,9 @@ const atomWithStorage = <T>(storage: Storage, key: string, initialValue: T, conf
   )
 
   anAtom.onMount = () => {
-    const serialized = getStorage<T>(storage, key, config)
-    if (serialized === null) {
-      setStorage(storage, key, initialValue, config)
+    const serialized = getStorage<T>(storage, key, { crypto, expires })
+    if (writeDefaults && serialized === null) {
+      setStorage(storage, key, defaults, { crypto, expires })
     }
   }
 
@@ -72,19 +82,19 @@ const atomWithStorage = <T>(storage: Storage, key: string, initialValue: T, conf
 /**
  * localStorage 存储联动 atom
  * @param {string} key - 存储键值
- * @param {any} initialValue - 初始值
- * @param {StorageConfig} config - 存储配置项
+ * @param {any} defaults - 初始值
+ * @param {StorageConfig} options - 存储配置项
  */
-export function atomWithLocal<Value>(key: string, initialValue: Value, config?: StorageConfig) {
-  return atomWithStorage(localStorage, key, initialValue, config)
+export function atomWithLocal<Value>(key: string, defaults: Value, options?: StorageConfig) {
+  return atomWithStorage(localStorage, key, defaults, options)
 }
 
 /**
  * sessionStorage 存储联动 atom
  * @param {string} key - 存储键值
- * @param {any} initialValue - 初始值
- * @param {StorageConfig} config - 存储配置项
+ * @param {any} defaults - 初始值
+ * @param {StorageConfig} options - 存储配置项
  */
-export function atomWithSession<Value>(key: string, initialValue: Value, config?: StorageConfig) {
-  return atomWithStorage(sessionStorage, key, initialValue, config)
+export function atomWithSession<Value>(key: string, defaults: Value, options?: StorageConfig) {
+  return atomWithStorage(sessionStorage, key, defaults, options)
 }
