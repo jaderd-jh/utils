@@ -5,7 +5,7 @@ import type { StorageConfig, StorageObj } from '../types'
 
 export { aes }
 
-const customStorageEventName = 'jade-storage'
+export const customStorageEventName = 'jade-storage'
 
 /**
  * 触发自定义 storage 事件

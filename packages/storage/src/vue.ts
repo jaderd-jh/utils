@@ -11,9 +11,7 @@ import {
 import { type ConfigurableWindow, type StorageLike, defaultWindow, getSSRHandler, useEventListener } from '@vueuse/core'
 import { nextTick, ref, shallowRef } from 'vue'
 import type { StorageConfig } from '../types'
-import { aes, getStorage, setStorage, storageParse, storageStringify } from './storage'
-
-const customStorageEventName = 'jade-storage'
+import { aes, customStorageEventName, getStorage, setStorage, storageParse, storageStringify } from './storage'
 
 interface StorageEventLike {
   storageArea: StorageLike | null
