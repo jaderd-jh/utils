@@ -5,6 +5,18 @@ import type { StorageConfig, StorageObj } from '../types'
 
 export { aes }
 
+const customStorageEventName = 'jade-storage'
+
+/**
+ * 触发自定义 storage 事件
+ * @param {CustomEvent<Partial<StorageEvent>>['detail']} detail - 自定义事件参数
+ */
+export function dispatchCustomStorageEvent(detail: CustomEvent<Partial<StorageEvent>>['detail']) {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent<Partial<StorageEvent>>(customStorageEventName, { detail }))
+  }
+}
+
 /**
  * 判断当前值是否能够被 JSON.stringify() 方法序列化
  * @param data 需要判断的值
@@ -64,7 +76,9 @@ export const hasSession = (key: string) => hasStorage(sessionStorage, key)
  * @param key
  */
 export function removeStorage(storage: Storage, key: string) {
-  if (hasStorage(storage, key)) storage.removeItem(key)
+  const oldValue = storage.getItem(key)
+  storage.removeItem(key)
+  dispatchCustomStorageEvent({ key, storageArea: storage, oldValue, newValue: null })
 }
 
 /**
@@ -73,14 +87,9 @@ export function removeStorage(storage: Storage, key: string) {
  * @param regex
  */
 export function removeStorageAll(storage: Storage, regex?: RegExp) {
-  if (!regex) {
-    storage.clear()
-    return
-  }
-  const keys = Object.keys(storage)
-  keys.forEach(key => {
-    if (regex.test(key)) {
-      storage.removeItem(key)
+  Object.getOwnPropertyNames(storage).forEach(key => {
+    if (regex ? regex.test(key) : true) {
+      removeStorage(storage, key)
     }
   })
 }
@@ -116,15 +125,13 @@ export const removeSessionAll = (regex?: RegExp) => removeStorageAll(sessionStor
  * @param {any} value 设置当前存储value
  * @param {StorageConfig} config - 存储配置
  */
-export function setStorage<T = any>(
-  storage: Storage,
-  key: string,
-  value: T,
-  config: StorageConfig = { crypto: false }
-) {
+export function setStorage<T = any>(storage: Storage, key: string, value: T, config: StorageConfig = {}) {
   if (serializable(value)) {
+    const oldValue = storage.getItem(key)
     const rawData = storageStringify(value, config?.expires)
-    storage.setItem(key, config?.crypto ? aes.encrypt(rawData) : rawData)
+    const serializedData = config?.crypto ? aes.encrypt(rawData) : rawData
+    storage.setItem(key, serializedData)
+    dispatchCustomStorageEvent({ key, storageArea: storage, oldValue, newValue: serializedData })
   } else {
     throw new Error('需要存储的 data 不支持 JSON.stringify()，请检查当前数据')
   }
@@ -160,14 +167,12 @@ export function getStorage<T = any>(
   key: string,
   config: StorageConfig = { crypto: false }
 ): Nullable<T> {
-  let content: Nullable<StorageObj<T>>
+  let content: Nullable<StorageObj<T>> = null
   if (hasStorage(storage, key)) {
     content = storageParse<T>(config.crypto ? aes.decrypt(<string>storage.getItem(key)) : <string>storage.getItem(key))
     if (config.expires && content && new Date().getTime() - content.expires >= 0) {
       content = null
     }
-  } else {
-    content = null
   }
   return content && !isUndefined(content?.data) ? content.data : null
 }
