@@ -12,4 +12,8 @@ export enum STORAGE_EXPIRES {
   WEEK = 604_800_000,
   MONTH = 2_592_000_000,
   YEAR = 31_536_000_000,
+  /**
+   * 2 ** 31 - 1 [ref](https://developer.mozilla.org/en-US/docs/Web/API/setTimeout#maximum_delay_value)
+   */
+  MAX_DELAY = 2_147_483_647,
 }
