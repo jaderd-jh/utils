@@ -34,7 +34,7 @@ function serializable(data: any): boolean {
  */
 export function storageStringify(data: any, expires?: number): string {
   const saveData: StorageObj = {
-    expires: new Date().getTime() + +(expires || 0), // 当前时间 + 过期时间间隔 = 过期时间
+    expires: Date.now() + +(expires || 0), // 当前时间 + 过期时间间隔 = 过期时间
     data,
   }
   return JSON.stringify(saveData, replacer)
@@ -133,7 +133,7 @@ export function setStorage<T = any>(storage: Storage, key: string, value: T, con
     storage.setItem(key, serializedData)
     dispatchCustomStorageEvent({ key, storageArea: storage, oldValue, newValue: serializedData })
   } else {
-    throw new Error('需要存储的 data 不支持 JSON.stringify()，请检查当前数据')
+    throw new TypeError('待写入数据不支持 JSON.stringify()', { cause: value })
   }
 }
 
@@ -170,7 +170,7 @@ export function getStorage<T = any>(
   let content: Nullable<StorageObj<T>> = null
   if (hasStorage(storage, key)) {
     content = storageParse<T>(config.crypto ? aes.decrypt(<string>storage.getItem(key)) : <string>storage.getItem(key))
-    if (config.expires && content && new Date().getTime() - content.expires >= 0) {
+    if (config.expires && content && Date.now() - content.expires >= 0) {
       content = null
     }
   }
