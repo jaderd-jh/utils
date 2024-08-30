@@ -2,10 +2,9 @@ import { aes } from '@jhqn/utils-crypto/aes'
 import { type Nullable, isFunction, isSymbol, isUndefined } from '@jhqn/utils-core'
 import { parseToJSON, replacer, reviver } from '@jhqn/utils-core'
 import type { StorageConfig, StorageObj } from '../types'
+import { STORAGE_EVENT_NAME, STORAGE_VERSION } from './const'
 
 export { aes }
-
-export const customStorageEventName = 'jade-storage'
 
 /**
  * 触发自定义 storage 事件
@@ -13,7 +12,7 @@ export const customStorageEventName = 'jade-storage'
  */
 export function dispatchCustomStorageEvent(detail: CustomEvent<Partial<StorageEvent>>['detail']) {
   if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent<Partial<StorageEvent>>(customStorageEventName, { detail }))
+    window.dispatchEvent(new CustomEvent<Partial<StorageEvent>>(STORAGE_EVENT_NAME, { detail }))
   }
 }
 
@@ -34,6 +33,7 @@ function serializable(data: any): boolean {
  */
 export function storageStringify(data: any, expires?: number): string {
   const saveData: StorageObj = {
+    version: STORAGE_VERSION,
     expires: Date.now() + +(expires || 0), // 当前时间 + 过期时间间隔 = 过期时间
     data,
   }
@@ -170,8 +170,15 @@ export function getStorage<T = any>(
   let content: Nullable<StorageObj<T>> = null
   if (hasStorage(storage, key)) {
     content = storageParse<T>(config.crypto ? aes.decrypt(<string>storage.getItem(key)) : <string>storage.getItem(key))
-    if (config.expires && content && Date.now() - content.expires >= 0) {
-      content = null
+    if (content) {
+      // 配置了过期时间并且数据过期了
+      if (config.expires && Date.now() - content.expires >= 0) {
+        content = null
+      }
+      // 数据格式版本不一致
+      if (content?.version !== STORAGE_VERSION) {
+        content = null
+      }
     }
   }
   return content && !isUndefined(content?.data) ? content.data : null

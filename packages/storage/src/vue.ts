@@ -11,7 +11,8 @@ import {
 import { type ConfigurableWindow, type StorageLike, defaultWindow, getSSRHandler, useEventListener } from '@vueuse/core'
 import { nextTick, ref, shallowRef } from 'vue'
 import type { StorageConfig } from '../types'
-import { aes, customStorageEventName, getStorage, setStorage, storageParse, storageStringify } from './storage'
+import { STORAGE_EVENT_NAME } from './const'
+import { aes, getStorage, setStorage, storageParse, storageStringify } from './storage'
 
 interface StorageEventLike {
   storageArea: StorageLike | null
@@ -126,7 +127,7 @@ function useStorage<T extends string | number | boolean | object | null>(
       if (storage instanceof Storage) {
         useEventListener(window, 'storage', update)
       } else {
-        useEventListener(window, customStorageEventName, updateFromCustomEvent)
+        useEventListener(window, STORAGE_EVENT_NAME, updateFromCustomEvent)
       }
       if (initOnMounted) {
         update()
@@ -153,7 +154,7 @@ function useStorage<T extends string | number | boolean | object | null>(
       window.dispatchEvent(
         storage instanceof Storage
           ? new StorageEvent('storage', payload)
-          : new CustomEvent<StorageEventLike>(customStorageEventName, {
+          : new CustomEvent<StorageEventLike>(STORAGE_EVENT_NAME, {
               detail: payload,
             })
       )

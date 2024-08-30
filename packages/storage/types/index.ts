@@ -1,6 +1,7 @@
 export interface StorageObj<T = any> {
   data: T
   expires: number
+  version: string
 }
 
 /**

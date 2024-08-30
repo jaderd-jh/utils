@@ -17,3 +17,11 @@ export enum STORAGE_EXPIRES {
    */
   MAX_DELAY = 2_147_483_647,
 }
+
+export const STORAGE_EVENT_NAME = 'jade-storage'
+
+/**
+ * increase when storage data structure changed
+ * - result in clearing storage when version unmatched
+ */
+export const STORAGE_VERSION = '0.0.1'
