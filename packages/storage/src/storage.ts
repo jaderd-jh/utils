@@ -48,21 +48,18 @@ export function storageStringify(data: any, expires?: number): string {
  * @returns {T} 返回反序列化后的数据
  */
 export function storageParse<T = any>(data: string, config: StorageConfig = {}): Nullable<T> {
-  let content: Nullable<StorageObj<T>> = null
-  if (data) {
-    content = parseToJSON<StorageObj<T>>(config.crypto ? aes.decrypt(data) : data, reviver)
-    if (content) {
-      // 配置了过期时间并且数据过期了
-      if (config.expires && Date.now() - content.expires >= 0) {
-        content = null
-      }
-      // 数据格式版本不一致
-      if (content?.version !== STORAGE_VERSION) {
-        content = null
-      }
+  let deserializedData = parseToJSON<StorageObj<T>>(config.crypto ? aes.decrypt(data) : data, reviver)
+  if (deserializedData) {
+    // 配置了过期时间并且数据过期了
+    if (config.expires && Date.now() - deserializedData.expires >= 0) {
+      deserializedData = null
+    }
+    // 数据格式版本不一致
+    if (deserializedData?.version !== STORAGE_VERSION) {
+      deserializedData = null
     }
   }
-  return content && !isUndefined(content?.data) ? content.data : null
+  return deserializedData && !isUndefined(deserializedData?.data) ? deserializedData.data : null
 }
 
 /**
