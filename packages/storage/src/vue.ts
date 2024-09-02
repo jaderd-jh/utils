@@ -1,4 +1,3 @@
-import { isUndefined } from '@jhqn/utils-core'
 import {
   type ConfigurableEventFilter,
   type ConfigurableFlush,
@@ -190,11 +189,7 @@ function useStorage<T extends string | number | boolean | object | null>(
       }
       return rawInit
     } else {
-      let content = storageParse<T>(crypto ? aes.decrypt(rawValue) : rawValue)
-      if (expires && content && new Date().getTime() - content.expires >= 0) {
-        content = null
-      }
-      return content && !isUndefined(content?.data) ? content.data : null
+      return storageParse(rawValue, { crypto, expires })
     }
   }
 

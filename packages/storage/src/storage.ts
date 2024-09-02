@@ -42,11 +42,27 @@ export function storageStringify(data: any, expires?: number): string {
 
 /**
  * 用于存储的反序列化方法
- * @param {string} data 需要反序列化的字符串
- * @returns {StorageObj} 返回反序列化后的数据
+ * @template T - 反序列化后的数据类型
+ * @param {string} data - 需要反序列化的字符串
+ * @param {StorageConfig} config - 存储配置项
+ * @returns {T} 返回反序列化后的数据
  */
-export function storageParse<T>(data: string): Nullable<StorageObj<T>> {
-  return parseToJSON<StorageObj<T>>(data, reviver)
+export function storageParse<T = any>(data: string, config: StorageConfig = {}): Nullable<T> {
+  let content: Nullable<StorageObj<T>> = null
+  if (data) {
+    content = parseToJSON<StorageObj<T>>(config.crypto ? aes.decrypt(data) : data, reviver)
+    if (content) {
+      // 配置了过期时间并且数据过期了
+      if (config.expires && Date.now() - content.expires >= 0) {
+        content = null
+      }
+      // 数据格式版本不一致
+      if (content?.version !== STORAGE_VERSION) {
+        content = null
+      }
+    }
+  }
+  return content && !isUndefined(content?.data) ? content.data : null
 }
 
 /**
@@ -157,26 +173,8 @@ export const setSession = <T = any>(key: string, value: T, config?: StorageConfi
  * @param {StorageConfig} config - 存储配置
  * @returns 存储数据
  */
-export function getStorage<T = any>(
-  storage: Storage,
-  key: string,
-  config: StorageConfig = { crypto: false }
-): Nullable<T> {
-  let content: Nullable<StorageObj<T>> = null
-  if (hasStorage(storage, key)) {
-    content = storageParse<T>(config.crypto ? aes.decrypt(<string>storage.getItem(key)) : <string>storage.getItem(key))
-    if (content) {
-      // 配置了过期时间并且数据过期了
-      if (config.expires && Date.now() - content.expires >= 0) {
-        content = null
-      }
-      // 数据格式版本不一致
-      if (content?.version !== STORAGE_VERSION) {
-        content = null
-      }
-    }
-  }
-  return content && !isUndefined(content?.data) ? content.data : null
+export function getStorage<T = any>(storage: Storage, key: string, config: StorageConfig = {}): Nullable<T> {
+  return hasStorage(storage, key) ? storageParse<T>(<string>storage.getItem(key), config) : null
 }
 
 /**

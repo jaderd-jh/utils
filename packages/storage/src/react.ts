@@ -1,7 +1,6 @@
-import { isUndefined } from '@jhqn/utils-core'
 import { atomWithStorage as _atomWithStorage } from 'jotai/utils'
 import type { StorageConfig } from '../types'
-import { aes, getStorage, hasStorage, removeStorage, setStorage, storageParse } from './storage'
+import { getStorage, hasStorage, removeStorage, setStorage, storageParse } from './storage'
 
 interface UseStorageConfig extends StorageConfig {
   /**
@@ -51,12 +50,7 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
             if (rawValue === null) {
               setStorage(storage, key, defaults, { crypto, expires })
             } else {
-              let content = storageParse<T>(crypto ? aes.decrypt(rawValue) : rawValue)
-              if (expires && content && new Date().getTime() - content.expires >= 0) {
-                content = null
-              }
-              const serialized = content && !isUndefined(content?.data) ? content.data : null
-              callback(serialized ?? defaults)
+              callback(storageParse(rawValue, { crypto, expires }) ?? defaults)
             }
           }
         }
