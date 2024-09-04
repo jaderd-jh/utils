@@ -33,9 +33,9 @@ function serializable(data: any): boolean {
  */
 export function storageStringify(data: any, expires?: number): string {
   const saveData: StorageObj = {
-    version: STORAGE_VERSION,
-    expires: Date.now() + +(expires || 0), // 当前时间 + 过期时间间隔 = 过期时间
     data,
+    expires: Date.now() + +(expires || 0), // 当前时间 + 过期时间间隔 = 过期时间
+    version: STORAGE_VERSION,
   }
   return JSON.stringify(saveData, replacer)
 }
