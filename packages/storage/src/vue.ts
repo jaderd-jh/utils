@@ -1,3 +1,5 @@
+import { jError, replacer } from '@jhqn/utils-core'
+import { type ConfigurableWindow, type StorageLike, defaultWindow, getSSRHandler, useEventListener } from '@vueuse/core'
 import {
   type ConfigurableEventFilter,
   type ConfigurableFlush,
@@ -7,17 +9,13 @@ import {
   toValue,
   tryOnMounted,
 } from '@vueuse/shared'
-import { type ConfigurableWindow, type StorageLike, defaultWindow, getSSRHandler, useEventListener } from '@vueuse/core'
 import { nextTick, ref, shallowRef } from 'vue'
 import type { StorageConfig } from '../types'
 import { STORAGE_EVENT_NAME } from './const'
-import { aes, getStorage, setStorage, storageParse, storageStringify } from './storage'
+import { aes, dispatchCustomStorageEvent, setStorage, storageParse, storageStringify } from './storage'
 
-interface StorageEventLike {
+interface StorageEventLike extends Pick<StorageEvent, 'key' | 'oldValue' | 'newValue'> {
   storageArea: StorageLike | null
-  key: StorageEvent['key']
-  oldValue: StorageEvent['oldValue']
-  newValue: StorageEvent['newValue']
 }
 
 interface UseStorageOptions extends ConfigurableEventFilter, ConfigurableWindow, ConfigurableFlush, StorageConfig {
@@ -69,12 +67,13 @@ interface UseStorageOptions extends ConfigurableEventFilter, ConfigurableWindow,
  *
  * @see https://vueuse.org/useStorage
  */
-function useStorage<T extends string | number | boolean | object | null>(
+function useJadeStorage<T extends string | number | boolean | object | null>(
   key: string,
   defaults: MaybeRefOrGetter<T>,
   storage: StorageLike | undefined,
   options: UseStorageOptions = {}
 ): RemovableRef<T> {
+  // jLog(key, 'useStorage', defaults, storage, options)
   const {
     flush = 'pre',
     deep = true,
@@ -84,7 +83,7 @@ function useStorage<T extends string | number | boolean | object | null>(
     window = defaultWindow,
     eventFilter,
     onError = e => {
-      console.error(e)
+      jError(e)
     },
     initOnMounted,
     crypto,
@@ -147,32 +146,32 @@ function useStorage<T extends string | number | boolean | object | null>(
         oldValue,
         newValue,
         storageArea: storage as Storage,
+        url: window.location.href,
       }
       // We also use a CustomEvent since StorageEvent cannot
       // be constructed with a non-built-in storage area
-      window.dispatchEvent(
-        storage instanceof Storage
-          ? new StorageEvent('storage', payload)
-          : new CustomEvent<StorageEventLike>(STORAGE_EVENT_NAME, {
-              detail: payload,
-            })
-      )
+      if (storage instanceof Storage) {
+        window.dispatchEvent(new StorageEvent('storage', payload))
+      } else {
+        dispatchCustomStorageEvent(payload)
+      }
     }
   }
 
-  function write(v: unknown) {
+  function write(newValue: unknown) {
     try {
-      const oldValue = getStorage(storage as Storage, key, { crypto, expires })
+      const oldValueStr = storage!.getItem(key)
+      const oldValue = oldValueStr ? storageParse(oldValueStr, { crypto, expires }) : null
 
-      if (v == null) {
+      if (newValue == null) {
         dispatchWriteEvent(oldValue, null)
         storage!.removeItem(key)
       } else {
-        if (oldValue !== v) {
-          const rawData = storageStringify(v, expires)
-          const serialized = crypto ? aes.encrypt(rawData) : rawData
-          storage!.setItem(key, serialized)
-          dispatchWriteEvent(oldValue, serialized)
+        if (JSON.stringify(oldValue, replacer) !== JSON.stringify(newValue, replacer)) {
+          const dataStr = storageStringify(newValue, expires)
+          const newValueStr = crypto ? aes.encrypt(dataStr) : dataStr
+          storage!.setItem(key, newValueStr)
+          dispatchWriteEvent(oldValueStr, newValueStr)
         }
       }
     } catch (e) {
@@ -181,7 +180,7 @@ function useStorage<T extends string | number | boolean | object | null>(
   }
 
   function read(event?: StorageEventLike) {
-    const rawValue = event ? event.newValue : storage!.getItem(key)
+    const rawValue = event ? event.newValue : storage?.getItem(key)
 
     if (rawValue == null) {
       if (writeDefaults && rawInit != null) {
@@ -189,7 +188,7 @@ function useStorage<T extends string | number | boolean | object | null>(
       }
       return rawInit
     } else {
-      return storageParse(rawValue, { crypto, expires })
+      return storageParse<T>(rawValue, { crypto, expires })
     }
   }
 
@@ -209,9 +208,9 @@ function useStorage<T extends string | number | boolean | object | null>(
 
     pauseWatch()
     try {
-      const shit = event?.newValue
+      const newValue = event?.newValue ? storageParse<T>(event.newValue, { crypto, expires }) : undefined
       const serialized = data.value
-      if (shit !== serialized) {
+      if (JSON.stringify(newValue, replacer) !== JSON.stringify(serialized, replacer)) {
         data.value = read(event)
       }
     } catch (e) {
@@ -241,14 +240,36 @@ function useStorage<T extends string | number | boolean | object | null>(
  * @param options
  */
 function useWindowStorage<T extends string | number | boolean | object | null>(
-  storage: 'localStorage' | 'sessionStorage',
   key: string,
   defaults: MaybeRefOrGetter<T>,
-  options?: UseStorageOptions
+  storage: 'localStorage' | 'sessionStorage',
+  options: UseStorageOptions = {}
 ): RemovableRef<T> {
-  const internalOptions = { window: defaultWindow, ...options }
-  return useStorage<T>(key, defaults, internalOptions.window?.[storage], internalOptions)
+  const { window = defaultWindow } = options
+  return useJadeStorage<T>(key, defaults, window?.[storage], options)
 }
+
+export function useLocal(
+  key: string,
+  defaults: MaybeRefOrGetter<string>,
+  options?: UseStorageOptions
+): RemovableRef<string>
+export function useLocal(
+  key: string,
+  defaults: MaybeRefOrGetter<boolean>,
+  options?: UseStorageOptions
+): RemovableRef<boolean>
+export function useLocal(
+  key: string,
+  defaults: MaybeRefOrGetter<number>,
+  options?: UseStorageOptions
+): RemovableRef<number>
+export function useLocal<T>(key: string, defaults: MaybeRefOrGetter<T>, options?: UseStorageOptions): RemovableRef<T>
+export function useLocal<T = unknown>(
+  key: string,
+  defaults: MaybeRefOrGetter<null>,
+  options?: UseStorageOptions
+): RemovableRef<T>
 
 /**
  * localStorage存储联动
@@ -259,10 +280,32 @@ function useWindowStorage<T extends string | number | boolean | object | null>(
 export function useLocal<T extends string | number | boolean | object | null>(
   key: string,
   defaults: MaybeRefOrGetter<T>,
-  options?: UseStorageOptions
+  options: UseStorageOptions = {}
 ) {
-  return useWindowStorage<T>('localStorage', key, defaults, options)
+  return useWindowStorage<T>(key, defaults, 'localStorage', options)
 }
+
+export function useSession(
+  key: string,
+  defaults: MaybeRefOrGetter<string>,
+  options?: UseStorageOptions
+): RemovableRef<string>
+export function useSession(
+  key: string,
+  defaults: MaybeRefOrGetter<boolean>,
+  options?: UseStorageOptions
+): RemovableRef<boolean>
+export function useSession(
+  key: string,
+  defaults: MaybeRefOrGetter<number>,
+  options?: UseStorageOptions
+): RemovableRef<number>
+export function useSession<T>(key: string, defaults: MaybeRefOrGetter<T>, options?: UseStorageOptions): RemovableRef<T>
+export function useSession<T = unknown>(
+  key: string,
+  defaults: MaybeRefOrGetter<null>,
+  options?: UseStorageOptions
+): RemovableRef<T>
 
 /**
  * sessionStorage存储联动
@@ -273,7 +316,7 @@ export function useLocal<T extends string | number | boolean | object | null>(
 export function useSession<T extends string | number | boolean | object | null>(
   key: string,
   defaults: MaybeRefOrGetter<T>,
-  options?: UseStorageOptions
+  options: UseStorageOptions = {}
 ) {
-  return useWindowStorage<T>('sessionStorage', key, defaults, options)
+  return useWindowStorage<T>(key, defaults, 'sessionStorage', options)
 }
