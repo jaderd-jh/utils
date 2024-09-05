@@ -44,23 +44,34 @@ export function storageStringify(data: any, config: StorageConfig = {}): string 
 /**
  * 用于存储的反序列化方法
  * @template T - 反序列化后的数据类型
- * @param {string} data - 需要反序列化的字符串
+ * @param {string} dataStr - 需要反序列化的字符串
  * @param {StorageConfig} config - 存储配置项
  * @returns {T} 返回反序列化后的数据
  */
-export function storageParse<T = any>(data: string, config: StorageConfig = {}): Nullable<T> {
-  let deserializedData = parseToJSON<StorageObj<T>>(config.crypto ? aes.decrypt(data) : data)
-  if (deserializedData) {
+export function storageParse<T = any>(dataStr: string, config: StorageConfig = {}): Nullable<StorageObj<T>> {
+  return parseToJSON<StorageObj<T>>(config.crypto ? aes.decrypt(dataStr) : dataStr)
+}
+
+/**
+ * 验证数据是否有效
+ * @template T - 数据类型
+ * @param {Nullable<StorageObj<T>>} rawData - 需要验证的反序列化数据
+ * @param {StorageConfig} config - 存储配置项
+ * @returns {Nullable<T>} 返回验证后的数据
+ */
+export function validateData<T = any>(rawData: Nullable<StorageObj<T>>, config: StorageConfig = {}): Nullable<T> {
+  let _rawData = rawData
+  if (_rawData) {
     // 配置了过期时间或者有效时间 并且数据过期了
-    if ((config.expiresAt || config.validTime) && Date.now() - deserializedData.expiresAt >= 0) {
-      deserializedData = null
+    if ((config.expiresAt || config.validTime) && Date.now() - _rawData.expiresAt >= 0) {
+      _rawData = null
     }
     // 数据格式版本不一致
-    if (deserializedData?.version !== STORAGE_VERSION) {
-      deserializedData = null
+    if (rawData?.version !== STORAGE_VERSION) {
+      _rawData = null
     }
   }
-  return deserializedData && !isUndefined(deserializedData?.data) ? deserializedData.data : null
+  return _rawData && !isUndefined(_rawData?.data) ? _rawData.data : null
 }
 
 /**
@@ -171,7 +182,7 @@ export const setSession = <T = any>(key: string, value: T, config?: StorageConfi
  * @returns 存储数据
  */
 export function getStorage<T = any>(storage: Storage, key: string, config: StorageConfig = {}): Nullable<T> {
-  return hasStorage(storage, key) ? storageParse<T>(<string>storage.getItem(key), config) : null
+  return hasStorage(storage, key) ? validateData(storageParse<T>(<string>storage.getItem(key), config), config) : null
 }
 
 /**

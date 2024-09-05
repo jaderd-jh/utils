@@ -12,7 +12,7 @@ import {
 import { nextTick, ref, shallowRef } from 'vue'
 import type { StorageConfig } from '../types'
 import { STORAGE_EVENT_NAME } from './const'
-import { aes, dispatchCustomStorageEvent, setStorage, storageParse, storageStringify } from './storage'
+import { aes, dispatchCustomStorageEvent, setStorage, storageParse, storageStringify, validateData } from './storage'
 
 interface StorageEventLike extends Pick<StorageEvent, 'key' | 'oldValue' | 'newValue'> {
   storageArea: StorageLike | null
@@ -160,7 +160,7 @@ function useJadeStorage<T extends string | number | boolean | object | null>(
   function write(newValue: unknown) {
     try {
       const oldValueStr = storage!.getItem(key)
-      const oldValue = oldValueStr ? storageParse(oldValueStr, options) : null
+      const oldValue = oldValueStr ? validateData(storageParse(oldValueStr, options), options) : null
 
       if (newValue == null) {
         dispatchWriteEvent(oldValue, null)
@@ -187,7 +187,7 @@ function useJadeStorage<T extends string | number | boolean | object | null>(
       }
       return rawInit
     } else {
-      return storageParse<T>(rawValue, options)
+      return validateData(storageParse<T>(rawValue, options), options)
     }
   }
 

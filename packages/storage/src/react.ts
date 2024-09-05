@@ -1,6 +1,6 @@
 import { atomWithStorage as _atomWithStorage } from 'jotai/utils'
 import type { StorageConfig } from '../types'
-import { getStorage, hasStorage, removeStorage, setStorage, storageParse } from './storage'
+import { getStorage, hasStorage, removeStorage, setStorage, storageParse, validateData } from './storage'
 
 interface UseStorageConfig extends StorageConfig {
   /**
@@ -50,7 +50,7 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
             if (rawValue === null) {
               setStorage(storage, key, defaults, options)
             } else {
-              callback(storageParse(rawValue, options) ?? defaults)
+              callback(validateData(storageParse(rawValue, options), options) ?? defaults)
             }
           }
         }
