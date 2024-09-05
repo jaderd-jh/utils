@@ -1,6 +1,5 @@
+import { type Nullable, isFunction, isSymbol, isUndefined, parseToJSON, stringifyFromJSON } from '@jhqn/utils-core'
 import { aes } from '@jhqn/utils-crypto/aes'
-import { type Nullable, isFunction, isSymbol, isUndefined } from '@jhqn/utils-core'
-import { parseToJSON, replacer, reviver } from '@jhqn/utils-core'
 import type { StorageConfig, StorageObj } from '../types'
 import { STORAGE_EVENT_NAME, STORAGE_VERSION } from './const'
 
@@ -27,17 +26,19 @@ function serializable(data: any): boolean {
 
 /**
  * 用于存储的带时间戳的序列化方法
- * @param {any} data 需要序列化的数据
- * @param {number} expires 过期时间 ms
- * @returns {string} 返回序列化后的字符串
+ * @param {any} data - 需要序列化的数据
+ * @param {StorageConfig} [config] - 序列化配置
+ * @returns {string} 序列化后的字符串
  */
-export function storageStringify(data: any, expires?: number): string {
-  const saveData: StorageObj = {
+export function storageStringify(data: any, config: StorageConfig = {}): string {
+  const rawData: StorageObj = {
     data,
-    expires: Date.now() + +(expires || 0), // 当前时间 + 过期时间间隔 = 过期时间
+    expiresAt: config.expiresAt
+      ? Math.max(config.expiresAt, Date.now()) // 过期时间需大于当前时间
+      : Date.now() + +(config.validTime || 0), // 当前时间 + 有效时间 = 过期时间
     version: STORAGE_VERSION,
   }
-  return JSON.stringify(saveData, replacer)
+  return config?.crypto ? aes.encrypt(stringifyFromJSON(rawData)) : stringifyFromJSON(rawData)
 }
 
 /**
@@ -48,10 +49,10 @@ export function storageStringify(data: any, expires?: number): string {
  * @returns {T} 返回反序列化后的数据
  */
 export function storageParse<T = any>(data: string, config: StorageConfig = {}): Nullable<T> {
-  let deserializedData = parseToJSON<StorageObj<T>>(config.crypto ? aes.decrypt(data) : data, reviver)
+  let deserializedData = parseToJSON<StorageObj<T>>(config.crypto ? aes.decrypt(data) : data)
   if (deserializedData) {
-    // 配置了过期时间并且数据过期了
-    if (config.expires && Date.now() - deserializedData.expires >= 0) {
+    // 配置了过期时间或者有效时间 并且数据过期了
+    if ((config.expiresAt || config.validTime) && Date.now() - deserializedData.expiresAt >= 0) {
       deserializedData = null
     }
     // 数据格式版本不一致
@@ -138,8 +139,7 @@ export const removeSessionAll = (regex?: RegExp) => removeStorageAll(sessionStor
  */
 export function setStorage<T = any>(storage: Storage, key: string, value: T, config: StorageConfig = {}) {
   if (serializable(value)) {
-    const rawData = storageStringify(value, config?.expires)
-    storage.setItem(key, config?.crypto ? aes.encrypt(rawData) : rawData)
+    storage.setItem(key, storageStringify(value, config))
   } else {
     throw new TypeError('待写入数据不支持 JSON.stringify()', { cause: value })
   }

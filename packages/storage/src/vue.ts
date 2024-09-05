@@ -87,7 +87,6 @@ function useJadeStorage<T extends string | number | boolean | object | null>(
     },
     initOnMounted,
     crypto,
-    expires,
   } = options
 
   const data = (shallow ? shallowRef : ref)(typeof defaults === 'function' ? defaults() : defaults) as RemovableRef<T>
@@ -161,14 +160,14 @@ function useJadeStorage<T extends string | number | boolean | object | null>(
   function write(newValue: unknown) {
     try {
       const oldValueStr = storage!.getItem(key)
-      const oldValue = oldValueStr ? storageParse(oldValueStr, { crypto, expires }) : null
+      const oldValue = oldValueStr ? storageParse(oldValueStr, options) : null
 
       if (newValue == null) {
         dispatchWriteEvent(oldValue, null)
         storage!.removeItem(key)
       } else {
         if (JSON.stringify(oldValue, replacer) !== JSON.stringify(newValue, replacer)) {
-          const dataStr = storageStringify(newValue, expires)
+          const dataStr = storageStringify(newValue, options)
           const newValueStr = crypto ? aes.encrypt(dataStr) : dataStr
           storage!.setItem(key, newValueStr)
           dispatchWriteEvent(oldValueStr, newValueStr)
@@ -184,11 +183,11 @@ function useJadeStorage<T extends string | number | boolean | object | null>(
 
     if (rawValue == null) {
       if (writeDefaults && rawInit != null) {
-        setStorage(storage as Storage, key, rawInit, { crypto, expires })
+        setStorage(storage as Storage, key, rawInit, options)
       }
       return rawInit
     } else {
-      return storageParse<T>(rawValue, { crypto, expires })
+      return storageParse<T>(rawValue, options)
     }
   }
 
@@ -208,7 +207,7 @@ function useJadeStorage<T extends string | number | boolean | object | null>(
 
     pauseWatch()
     try {
-      const newValue = event?.newValue ? storageParse<T>(event.newValue, { crypto, expires }) : undefined
+      const newValue = event?.newValue ? storageParse<T>(event.newValue, options) : undefined
       const serialized = data.value
       if (JSON.stringify(newValue, replacer) !== JSON.stringify(serialized, replacer)) {
         data.value = read(event)

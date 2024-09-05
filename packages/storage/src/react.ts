@@ -19,13 +19,13 @@ interface UseStorageConfig extends StorageConfig {
  * @param {StorageConfig} options - 存储配置
  */
 const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options: UseStorageConfig = {}) => {
-  const { crypto, expires, writeDefaults = true } = options
+  const { writeDefaults = true } = options
   const anAtom = _atomWithStorage(
     key,
     defaults,
     {
       getItem() {
-        const serialized = getStorage<T>(storage, key, { crypto, expires })
+        const serialized = getStorage<T>(storage, key, options)
         if (serialized === null) {
           if (hasStorage(storage, key)) {
             storage.removeItem(key)
@@ -35,7 +35,7 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
         return serialized ?? defaults
       },
       setItem(_, newValue) {
-        setStorage<T>(storage, key, newValue, { crypto, expires })
+        setStorage<T>(storage, key, newValue, options)
       },
       removeItem() {
         removeStorage(storage, key)
@@ -48,9 +48,9 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
           if (e.storageArea === storage && e.key === key) {
             const rawValue = e.newValue
             if (rawValue === null) {
-              setStorage(storage, key, defaults, { crypto, expires })
+              setStorage(storage, key, defaults, options)
             } else {
-              callback(storageParse(rawValue, { crypto, expires }) ?? defaults)
+              callback(storageParse(rawValue, options) ?? defaults)
             }
           }
         }
@@ -64,9 +64,9 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
   )
 
   anAtom.onMount = () => {
-    const serialized = getStorage<T>(storage, key, { crypto, expires })
+    const serialized = getStorage<T>(storage, key, options)
     if (writeDefaults && serialized === null) {
-      setStorage(storage, key, defaults, { crypto, expires })
+      setStorage(storage, key, defaults, options)
     }
   }
 
