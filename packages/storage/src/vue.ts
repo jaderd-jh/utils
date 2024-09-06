@@ -1,4 +1,4 @@
-import { jError, replacer } from '@jhqn/utils-core'
+import { dayjs, jError, stringifyFromJSON } from '@jhqn/utils-core'
 import { type ConfigurableWindow, type StorageLike, defaultWindow, getSSRHandler, useEventListener } from '@vueuse/core'
 import {
   type ConfigurableEventFilter,
@@ -8,11 +8,12 @@ import {
   pausableWatch,
   toValue,
   tryOnMounted,
+  useTimeoutFn,
 } from '@vueuse/shared'
 import { nextTick, ref, shallowRef } from 'vue'
 import type { StorageConfig } from '../types'
-import { STORAGE_EVENT_NAME } from './const'
-import { aes, dispatchCustomStorageEvent, setStorage, storageParse, storageStringify, validateData } from './storage'
+import { STORAGE_EVENT_NAME, STORAGE_EXPIRES } from './const'
+import { JadeStorage, dispatchCustomStorageEvent } from './storage'
 
 interface StorageEventLike extends Pick<StorageEvent, 'key' | 'oldValue' | 'newValue'> {
   storageArea: StorageLike | null
@@ -67,13 +68,12 @@ interface UseStorageOptions extends ConfigurableEventFilter, ConfigurableWindow,
  *
  * @see https://vueuse.org/useStorage
  */
-function useJadeStorage<T extends string | number | boolean | object | null>(
+function useStorage<T extends string | number | boolean | object | null>(
   key: string,
   defaults: MaybeRefOrGetter<T>,
   storage: StorageLike | undefined,
   options: UseStorageOptions = {}
 ): RemovableRef<T> {
-  // jLog(key, 'useStorage', defaults, storage, options)
   const {
     flush = 'pre',
     deep = true,
@@ -86,7 +86,8 @@ function useJadeStorage<T extends string | number | boolean | object | null>(
       jError(e)
     },
     initOnMounted,
-    crypto,
+    expiresAt,
+    validTime,
   } = options
 
   const data = (shallow ? shallowRef : ref)(typeof defaults === 'function' ? defaults() : defaults) as RemovableRef<T>
@@ -105,11 +106,28 @@ function useJadeStorage<T extends string | number | boolean | object | null>(
 
   const rawInit: T = toValue(defaults)
 
+  const js = new JadeStorage<T>(storage as Storage, key, rawInit, options)
+
+  const interval = ref(options.validTime || 0)
+
   const { pause: pauseWatch, resume: resumeWatch } = pausableWatch(data, () => write(data.value), {
     flush,
     deep,
     eventFilter,
   })
+
+  const { start } = useTimeoutFn(
+    () => {
+      if (interval.value > STORAGE_EXPIRES.MAX_DELAY) {
+        interval.value -= STORAGE_EXPIRES.MAX_DELAY
+        start()
+      } else {
+        update()
+      }
+    },
+    interval,
+    { immediate: false }
+  )
 
   if (window && listenToStorageChanges) {
     tryOnMounted(() => {
@@ -160,16 +178,20 @@ function useJadeStorage<T extends string | number | boolean | object | null>(
   function write(newValue: unknown) {
     try {
       const oldValueStr = storage!.getItem(key)
-      const oldValue = oldValueStr ? validateData(storageParse(oldValueStr, options), options) : null
+      const oldValue = oldValueStr ? js.validate(js.parse(oldValueStr)) : null
 
       if (newValue == null) {
-        dispatchWriteEvent(oldValue, null)
-        storage!.removeItem(key)
+        dispatchWriteEvent(oldValueStr, null)
+        js.remove()
       } else {
-        if (JSON.stringify(oldValue, replacer) !== JSON.stringify(newValue, replacer)) {
-          const dataStr = storageStringify(newValue, options)
-          const newValueStr = crypto ? aes.encrypt(dataStr) : dataStr
-          storage!.setItem(key, newValueStr)
+        if (stringifyFromJSON(oldValue) !== stringifyFromJSON(newValue)) {
+          if (expiresAt && dayjs(expiresAt).valueOf() < Date.now()) return
+          js.set(newValue)
+          const newValueStr = storage!.getItem(key)
+          if (validTime) {
+            interval.value = validTime
+            start()
+          }
           dispatchWriteEvent(oldValueStr, newValueStr)
         }
       }
@@ -183,11 +205,36 @@ function useJadeStorage<T extends string | number | boolean | object | null>(
 
     if (rawValue == null) {
       if (writeDefaults && rawInit != null) {
-        setStorage(storage as Storage, key, rawInit, options)
+        if (expiresAt && (dayjs(expiresAt).valueOf() < Date.now() || event)) {
+          return null
+        } else {
+          js.reset()
+        }
       }
       return rawInit
     } else {
-      return validateData(storageParse<T>(rawValue, options), options)
+      const rawData = js.parse(rawValue)
+      const validData = js.validate(rawData)
+
+      // 数据早已过期或者版本不对应
+      if (validData === null) {
+        if (expiresAt) return null
+        if (validTime) {
+          if (writeDefaults) {
+            js.reset()
+            interval.value = validTime
+            start()
+          }
+        }
+        return rawInit
+        // 数据尚且有效
+      } else {
+        if (rawData && (expiresAt || validTime)) {
+          interval.value = rawData.expiresAt - Date.now()
+          start()
+        }
+        return validData
+      }
     }
   }
 
@@ -207,9 +254,9 @@ function useJadeStorage<T extends string | number | boolean | object | null>(
 
     pauseWatch()
     try {
-      const newValue = event?.newValue ? storageParse<T>(event.newValue, options) : undefined
+      const newValue = event?.newValue ? js.validate(js.parse(event.newValue)) : undefined
       const serialized = data.value
-      if (JSON.stringify(newValue, replacer) !== JSON.stringify(serialized, replacer)) {
+      if (stringifyFromJSON(newValue) !== stringifyFromJSON(serialized)) {
         data.value = read(event)
       }
     } catch (e) {
@@ -233,10 +280,12 @@ function useJadeStorage<T extends string | number | boolean | object | null>(
 
 /**
  * storage存储联动
- * @param storage
- * @param key
- * @param defaults
- * @param options
+ * @template T - 存储数据类型
+ * @param {'localStorage' | 'sessionStorage'} storage - 存储对象
+ * @param {string} key - 存储键值
+ * @param {T} defaults - 默认值
+ * @param {UseStorageOptions} options - 配置项
+ * @returns {RemovableRef<T>} 存储数据
  */
 function useWindowStorage<T extends string | number | boolean | object | null>(
   key: string,
@@ -245,7 +294,7 @@ function useWindowStorage<T extends string | number | boolean | object | null>(
   options: UseStorageOptions = {}
 ): RemovableRef<T> {
   const { window = defaultWindow } = options
-  return useJadeStorage<T>(key, defaults, window?.[storage], options)
+  return useStorage<T>(key, defaults, window?.[storage], options)
 }
 
 export function useLocal(

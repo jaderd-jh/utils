@@ -237,18 +237,35 @@ export class JadeStorage<T> {
     this.options = options
   }
 
+  /**
+   * 获取存储对象
+   * @returns {Storage} 存储对象
+   */
   getStorage() {
     return this.storage
   }
 
+  /**
+   * 获取存储键值
+   * @returns {string} 存储键值
+   */
   getKey() {
     return this.key
   }
 
+  /**
+   * 获取默认值
+   * @template T - 默认值类型
+   * @returns {T} 默认值
+   */
   getDefaults() {
     return this.defaults
   }
 
+  /**
+   * 获取存储配置
+   * @returns {StorageConfig} 存储配置
+   */
   getOptions() {
     return this.options
   }
@@ -256,7 +273,7 @@ export class JadeStorage<T> {
   /**
    * 获取存储数据
    * @template T - 存储数据类型
-   * @returns {T} 存储数据
+   * @returns {Nullable<T>} 存储数据
    */
   get() {
     return getStorage<T>(this.storage, this.key, this.options)
@@ -300,7 +317,7 @@ export class JadeStorage<T> {
    * 反序列化存储数据
    * @template T - 反序列化数据类型
    * @param {string} dataStr - 存储字符串
-   * @returns {T} 反序列化后的数据
+   * @returns {Nullable<StorageObj<T>>} 反序列化后的数据
    */
   parse(dataStr: string) {
     return storageParse<T>(dataStr, this.options)
