@@ -1,5 +1,6 @@
 import {
   type Nullable,
+  dayjs,
   isFunction,
   isSymbol,
   isUndefined,
@@ -42,11 +43,11 @@ export function storageStringify(data: any, config: StorageConfig = {}): string 
   const rawData: StorageObj = {
     data,
     expiresAt: config.expiresAt
-      ? config.expiresAt // 过期时间需大于当前时间
+      ? dayjs(config.expiresAt).valueOf() // 过期时间需大于当前时间
       : Date.now() + +(config.validTime || 0), // 当前时间 + 有效时间 = 过期时间
     version: STORAGE_VERSION,
   }
-  if (config.expiresAt && config.expiresAt < Date.now()) {
+  if (config.expiresAt && dayjs(config.expiresAt).valueOf() < Date.now()) {
     jWarn('设置的过期时间小于当前时间，数据将立即过期', { expiresAt: config.expiresAt })
   }
   return config?.crypto ? aes.encrypt(stringifyFromJSON(rawData)) : stringifyFromJSON(rawData)

@@ -1,3 +1,5 @@
+import type { dayjs } from '@jhqn/utils-core'
+
 export interface StorageObj<T = any> {
   data: T
   expiresAt: number
@@ -16,7 +18,7 @@ export interface StorageConfig {
    * - 优先级高于 `validTime`
    * - 设置该属性后，一旦数据过期，将忽略设置的默认值并返回 `null`
    */
-  expiresAt?: number
+  expiresAt?: dayjs.ConfigType
   /**
    * 有效时间 ms
    * - 优先级低于 `expiresAt`
