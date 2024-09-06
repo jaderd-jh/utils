@@ -6,17 +6,20 @@ export interface StorageObj<T = any> {
 
 /**
  * 存储配置
- * @param {number} [expiresAt=undefined] - 过期时间 ms，优先级高于 validTime
- * @param {number} [validTime=undefined] - 有效时间 ms，优先级低于 expiresAt
+ * @param {number} [expiresAt=undefined] - 过期时间 ms
+ * @param {number} [validTime=undefined] - 有效时间 ms
  * @param {boolean} [crypto=false] - 是否加解密
  */
 export interface StorageConfig {
   /**
-   * 过期时间 ms，优先级高于 validTime
+   * 过期时间 ms
+   * - 优先级高于 `validTime`
+   * - 设置该属性后，一旦数据过期，将忽略设置的默认值并返回 `null`
    */
   expiresAt?: number
   /**
-   * 有效时间 ms，优先级低于 expiresAt
+   * 有效时间 ms
+   * - 优先级低于 `expiresAt`
    */
   validTime?: number
   /**

@@ -75,7 +75,7 @@ export function validateData<T = any>(rawData: Nullable<StorageObj<T>>, config: 
 }
 
 /**
- * 判断存储中是否已经存在
+ * 判断Storage存储中是否已经存在
  * @param storage
  * @param key
  */
@@ -84,19 +84,19 @@ export function hasStorage(storage: Storage, key: string): boolean {
 }
 
 /**
- * 判断存储中是否已经存在
+ * 判断localStorage存储中是否已经存在
  * @param key
  */
 export const hasLocal = (key: string) => hasStorage(localStorage, key)
 
 /**
- * 判断存储中是否已经存在
+ * 判断sessionStorage存储中是否已经存在
  * @param key
  */
 export const hasSession = (key: string) => hasStorage(sessionStorage, key)
 
 /**
- * 移除数据
+ * 移除Storage数据
  * @param storage
  * @param key
  */
@@ -105,7 +105,7 @@ export function removeStorage(storage: Storage, key: string) {
 }
 
 /**
- * 移除数据
+ * 移除全部Storage数据
  * @param storage
  * @param regex
  */
@@ -118,31 +118,31 @@ export function removeStorageAll(storage: Storage, regex?: RegExp) {
 }
 
 /**
- * 移除数据
+ * 移除localStorage数据
  * @param key
  */
 export const removeLocal = (key: string) => removeStorage(localStorage, key)
 
 /**
- * 移除数据
+ * 移除全部localStorage数据
  * @param regex
  */
 export const removeLocalAll = (regex?: RegExp) => removeStorageAll(localStorage, regex)
 
 /**
- * 移除数据
+ * 移除sessionStorage数据
  * @param key
  */
 export const removeSession = (key: string) => removeStorage(sessionStorage, key)
 
 /**
- * 移除数据
+ * 移除全部sessionStorage数据
  * @param regex
  */
 export const removeSessionAll = (regex?: RegExp) => removeStorageAll(sessionStorage, regex)
 
 /**
- * 设置数据
+ * 设置Storage数据
  * @param storage
  * @param {string} key 设置当前存储key
  * @param {any} value 设置当前存储value
@@ -157,7 +157,7 @@ export function setStorage<T = any>(storage: Storage, key: string, value: T, con
 }
 
 /**
- * 设置数据
+ * 设置localStorage数据
  * @param {string} key 设置当前存储key
  * @param {any} value 设置当前存储value
  * @param {StorageConfig} config - 存储配置
@@ -166,7 +166,7 @@ export const setLocal = <T = any>(key: string, value: T, config?: StorageConfig)
   setStorage(localStorage, key, value, config)
 
 /**
- * 设置数据
+ * 设置sessionStorage数据
  * @param {string} key 设置当前存储key
  * @param {any} value 设置当前存储value
  * @param {StorageConfig} config - 存储配置
@@ -175,7 +175,7 @@ export const setSession = <T = any>(key: string, value: T, config?: StorageConfi
   setStorage(sessionStorage, key, value, config)
 
 /**
- * 获取数据
+ * 获取Storage数据
  * @param storage
  * @param {string} key 获取当前数据key
  * @param {StorageConfig} config - 存储配置
@@ -186,7 +186,7 @@ export function getStorage<T = any>(storage: Storage, key: string, config: Stora
 }
 
 /**
- * 获取数据
+ * 获取localStorage数据
  * @param {string} key 当前数据键名
  * @param {StorageConfig} config - 存储配置
  * @returns 存储数据
@@ -194,9 +194,113 @@ export function getStorage<T = any>(storage: Storage, key: string, config: Stora
 export const getLocal = <T = any>(key: string, config?: StorageConfig) => getStorage<T>(localStorage, key, config)
 
 /**
- * 获取数据
+ * 获取sessionStorage数据
  * @param {string} key - 当前数据键名
  * @param {StorageConfig} config - 存储配置
  * @returns 存储数据
  */
 export const getSession = <T = any>(key: string, config?: StorageConfig) => getStorage<T>(sessionStorage, key, config)
+
+/**
+ * @class JadeStorage
+ * @description JadeStorage 类
+ */
+export class JadeStorage<T> {
+  private readonly storage: Storage
+  private readonly key: string
+  private readonly defaults: T
+  private readonly options: StorageConfig
+
+  /**
+   * JadeStorage 构造函数
+   * @param {Storage} storage - 存储对象
+   * @param {string} key - 存储键值
+   * @param {any} defaults - 默认值
+   * @param {StorageConfig} options - 存储配置
+   */
+  constructor(storage: Storage, key: string, defaults: T, options: StorageConfig = {}) {
+    this.storage = storage
+    this.key = key
+    this.defaults = defaults
+    this.options = options
+  }
+
+  getStorage() {
+    return this.storage
+  }
+
+  getKey() {
+    return this.key
+  }
+
+  getDefaults() {
+    return this.defaults
+  }
+
+  getOptions() {
+    return this.options
+  }
+
+  /**
+   * 获取存储数据
+   * @template T - 存储数据类型
+   * @returns {T} 存储数据
+   */
+  get() {
+    return getStorage<T>(this.storage, this.key, this.options) ?? this.defaults
+  }
+
+  /**
+   * 设置存储数据
+   * @param {any} value - 存储数据
+   * @returns {void}
+   */
+  set(value: any) {
+    setStorage(this.storage, this.key, value, this.options)
+  }
+
+  /**
+   * 移除存储数据
+   * @returns {void}
+   */
+  remove() {
+    removeStorage(this.storage, this.key)
+  }
+
+  /**
+   * 重置存储数据
+   * @returns {void}
+   */
+  reset() {
+    setStorage(this.storage, this.key, this.defaults, this.options)
+  }
+
+  /**
+   * 序列化存储数据
+   * @param {any} data - 存储数据
+   * @returns {string} 序列化后的字符串
+   */
+  stringify(data: any) {
+    return storageStringify(data, this.options)
+  }
+
+  /**
+   * 反序列化存储数据
+   * @template T - 反序列化数据类型
+   * @param {string} dataStr - 存储字符串
+   * @returns {T} 反序列化后的数据
+   */
+  parse(dataStr: string) {
+    return storageParse<T>(dataStr, this.options)
+  }
+
+  /**
+   * 验证存储数据有效性
+   * @template T - 存储数据类型
+   * @param {Nullable<StorageObj<T>>} rawData - 存储数据
+   * @returns {Nullable<T>} 验证后的数据
+   */
+  validate(rawData: Nullable<StorageObj<T>>) {
+    return validateData<T>(rawData, this.options)
+  }
+}

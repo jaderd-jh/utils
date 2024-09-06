@@ -1,7 +1,12 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 import { getLocal, getSession, setLocal, setSession, storageParse, storageStringify, validateData } from '../src'
 
 describe('storage', () => {
+  afterEach(() => {
+    localStorage.clear()
+    sessionStorage.clear()
+  })
+
   it('setLocal', () => {
     const key = 'key'
     const value = { foo: 1 }
@@ -21,7 +26,7 @@ describe('storage', () => {
     const key = 'key'
     const value = { foo: 1 }
     setSession(key, value, { expiresAt: new Date('2030-11-01 15:30:25:666').getTime() })
-    expect(localStorage.getItem(key)).toBe('{"data":{"foo":1},"expiresAt":1919748625666,"version":"0.0.1"}')
+    expect(sessionStorage.getItem(key)).toBe('{"data":{"foo":1},"expiresAt":1919748625666,"version":"0.0.1"}')
   })
 
   it('getSession', () => {
