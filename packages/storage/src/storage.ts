@@ -280,6 +280,19 @@ export class JadeStorage<T> {
   }
 
   /**
+   * 获取存储数据过期时间
+   * @returns {number} 过期时间
+   */
+  getExpiresAt() {
+    const rawStr = this.storage.getItem(this.key)
+    if (rawStr) {
+      return this.parse(rawStr)?.expiresAt
+    } else {
+      return Date.now() - 1 // storage里没有数据，返回一个过期时间
+    }
+  }
+
+  /**
    * 设置存储数据
    * @param {any} value - 存储数据
    * @returns {void}
@@ -297,11 +310,15 @@ export class JadeStorage<T> {
   }
 
   /**
-   * 重置存储数据
+   * 重置存储数据，如果默认值为 `null` 则移除存储数据，否则设置默认值
    * @returns {void}
    */
   reset() {
-    setStorage(this.storage, this.key, this.defaults, this.options)
+    if (this.defaults === null) {
+      this.remove()
+    } else {
+      this.set(this.defaults)
+    }
   }
 
   /**
