@@ -1,4 +1,5 @@
 import type { dayjs } from '@jhqn/utils-core'
+import type { StorageLike } from '@vueuse/core'
 
 export interface StorageObj<T = any> {
   data: T
@@ -28,4 +29,17 @@ export interface StorageConfig {
    * 是否加解密
    */
   crypto?: boolean
+}
+
+/**
+ * 类似 StorageEvent
+ */
+export interface StorageEventLike extends Pick<StorageEvent, 'key' | 'oldValue' | 'newValue'> {
+  storageArea: StorageLike | null
+}
+
+declare global {
+  interface WindowEventMap {
+    'jade-storage': CustomEvent<StorageEventLike>
+  }
 }

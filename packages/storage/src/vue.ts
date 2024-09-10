@@ -11,13 +11,9 @@ import {
   useTimeoutFn,
 } from '@vueuse/shared'
 import { nextTick, ref, shallowRef } from 'vue'
-import type { StorageConfig } from '../types'
+import type { StorageConfig, StorageEventLike } from '../types'
 import { STORAGE_EVENT_NAME, STORAGE_EXPIRES } from './const'
 import { JadeStorage, dispatchCustomStorageEvent } from './storage'
-
-interface StorageEventLike extends Pick<StorageEvent, 'key' | 'oldValue' | 'newValue'> {
-  storageArea: StorageLike | null
-}
 
 interface UseStorageOptions extends ConfigurableEventFilter, ConfigurableWindow, ConfigurableFlush, StorageConfig {
   /**
