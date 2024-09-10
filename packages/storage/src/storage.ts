@@ -285,11 +285,7 @@ export class JadeStorage<T> {
    */
   getExpiresAt() {
     const rawStr = this.storage.getItem(this.key)
-    if (rawStr) {
-      return this.parse(rawStr)?.expiresAt
-    } else {
-      return Date.now() - 1 // storage里没有数据，返回一个过期时间
-    }
+    return rawStr ? this.parse(rawStr)?.expiresAt || Date.now() : Date.now() // storage里没有数据，返回当前时间
   }
 
   /**
