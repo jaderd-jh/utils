@@ -56,16 +56,16 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
     }, interval)
   }
 
-  function loop() {
-    js.reset()
-    interval = js.getExpiresAt() - Date.now()
-    start(loop)
-  }
-
   const storageRawValue = js.get()
   const baseAtom = atom(storageRawValue ?? defaults)
 
   baseAtom.onMount = setAtom => {
+    const loop = () => {
+      js.reset()
+      interval = js.getExpiresAt() - Date.now()
+      start(loop)
+    }
+
     function doWhenStorageDataInvalid() {
       if (writeDefaults) {
         if (expiresAt) {
@@ -177,6 +177,12 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
         newValue = defaults
       } else {
         newValue = update
+      }
+
+      const loop = () => {
+        js.set(newValue)
+        interval = js.getExpiresAt() - Date.now()
+        start(loop)
       }
 
       if (expiresAt && dayjs(expiresAt).valueOf() > Date.now()) {
