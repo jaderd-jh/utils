@@ -33,7 +33,6 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
   const js = new JadeStorage<T>(storage, key, defaults, options)
 
   let timer: ReturnType<typeof setTimeout> | null = null
-  let interval = options.validTime || 0
 
   function clear() {
     if (timer) {
@@ -44,11 +43,11 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
 
   function start(cb: () => void) {
     clear()
+    const interval = js.getExpiresAt() - Date.now()
     timer = setTimeout(() => {
       timer = null
 
       if (interval > STORAGE_EXPIRES.MAX_DELAY) {
-        interval -= STORAGE_EXPIRES.MAX_DELAY
         start(cb)
       } else {
         cb()
@@ -62,7 +61,6 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
   baseAtom.onMount = setAtom => {
     const loop = () => {
       js.reset()
-      interval = js.getExpiresAt() - Date.now()
       start(loop)
     }
 
@@ -70,16 +68,18 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
       if (writeDefaults) {
         if (expiresAt) {
           if (dayjs(expiresAt).valueOf() > Date.now()) {
+            setAtom(defaults)
             js.reset()
-            interval = js.getExpiresAt() - Date.now()
             start(() => {
               setAtom(defaults)
               js.remove()
             })
           }
         } else if (validTime) {
+          setAtom(defaults)
           loop()
         } else {
+          setAtom(defaults)
           js.reset()
         }
       }
@@ -88,13 +88,11 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
     // 挂载时存储中有有效值
     if (isDef(storageRawValue)) {
       if (expiresAt) {
-        interval = js.getExpiresAt() - Date.now()
         start(() => {
           setAtom(defaults)
           js.remove()
         })
       } else if (validTime) {
-        interval = js.getExpiresAt() - Date.now()
         start(() => {
           setAtom(defaults)
           if (writeDefaults) {
@@ -108,9 +106,14 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
     }
 
     function storageEventCallback(e: StorageEventLike) {
-      if (e.storageArea === storage && e.key === key) {
+      if (e.storageArea !== storage) return
+      // clear site data
+      if (e.key === null) {
+        doWhenStorageDataInvalid()
+      }
+      if (e.key === key) {
         if (e.newValue === null) {
-          // 删除data，如果writeDefaults就写入默认值，否则就什么都不做
+          // 删除data，如果 writeDefaults=true 就写入默认值，否则就什么都不做
           if (writeDefaults) {
             setAtom(defaults)
             js.reset()
@@ -129,7 +132,6 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
               doWhenStorageDataInvalid()
             } else {
               setAtom(validData)
-              interval = js.getExpiresAt() - Date.now()
               start(() => {
                 setAtom(defaults)
                 if (writeDefaults) {
@@ -181,14 +183,12 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
 
       const loop = () => {
         js.set(newValue)
-        interval = js.getExpiresAt() - Date.now()
         start(loop)
       }
 
       if (expiresAt && dayjs(expiresAt).valueOf() > Date.now()) {
         set(baseAtom, newValue)
         js.set(newValue)
-        interval = dayjs(expiresAt).valueOf() - Date.now()
         start(() => {
           newValue = defaults
           set(baseAtom, newValue)
@@ -197,7 +197,6 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
       } else if (validTime) {
         set(baseAtom, newValue)
         js.set(newValue)
-        interval = js.getExpiresAt() - Date.now()
         start(() => {
           newValue = defaults
           set(baseAtom, newValue)
