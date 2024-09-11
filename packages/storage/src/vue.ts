@@ -1,5 +1,5 @@
 import { dayjs, jError, stringifyFromJSON } from '@jhqn/utils-core'
-import { type ConfigurableWindow, type StorageLike, defaultWindow, getSSRHandler, useEventListener } from '@vueuse/core'
+import { type ConfigurableWindow, defaultWindow, getSSRHandler, useEventListener } from '@vueuse/core'
 import {
   type ConfigurableEventFilter,
   type ConfigurableFlush,
@@ -11,7 +11,7 @@ import {
   useTimeoutFn,
 } from '@vueuse/shared'
 import { nextTick, ref, shallowRef } from 'vue'
-import type { StorageConfig, StorageEventLike } from '../types'
+import type { StorageConfig, StorageEventLike, StorageLike } from '../types'
 import { STORAGE_EVENT_NAME, STORAGE_EXPIRES } from './const'
 import { JadeStorage, dispatchCustomStorageEvent } from './storage'
 

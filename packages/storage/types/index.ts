@@ -1,5 +1,4 @@
 import type { dayjs } from '@jhqn/utils-core'
-import type { StorageLike } from '@vueuse/core'
 
 export interface StorageObj<T = any> {
   data: T
@@ -32,6 +31,15 @@ export interface StorageConfig {
    * 是否加解密
    */
   crypto?: boolean
+}
+
+/**
+ * 类似 Storage
+ */
+export interface StorageLike {
+  getItem: (key: string) => string | null
+  setItem: (key: string, value: string) => void
+  removeItem: (key: string) => void
 }
 
 /**
