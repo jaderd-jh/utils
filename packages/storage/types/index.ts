@@ -17,12 +17,15 @@ export interface StorageConfig {
   /**
    * 过期时间 ms
    * - 优先级高于 `validTime`
-   * - 设置该属性后，一旦数据过期，将忽略设置的默认值并返回 `null`
+   * - 过期后存储数据将被清除
+   * - 应当用于特定时间点，例如：今天10点后切换回默认主题
    */
   expiresAt?: dayjs.ConfigType
   /**
    * 有效时间 ms
    * - 优先级低于 `expiresAt`
+   * - 过期后若设置 `writeDefaults` = true 存储数据将被替换为默认值
+   * - 应当用于有效时间，例如：本地草稿将保存 7 天
    */
   validTime?: number
   /**
