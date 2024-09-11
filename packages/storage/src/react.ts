@@ -55,10 +55,11 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
     }, interval)
   }
 
-  const storageRawValue = js.get()
-  const baseAtom = atom(storageRawValue ?? defaults)
+  const baseAtom = atom(js.get() ?? defaults)
 
   baseAtom.onMount = setAtom => {
+    const storageRawValue = js.get()
+
     const loop = () => {
       js.reset()
       start(loop)
