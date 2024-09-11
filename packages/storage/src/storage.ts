@@ -9,18 +9,18 @@ import {
   stringifyFromJSON,
 } from '@jhqn/utils-core'
 import { aes } from '@jhqn/utils-crypto/aes'
-import type { StorageConfig, StorageObj } from '../types'
+import type { StorageConfig, StorageEventLike, StorageObj } from '../types'
 import { STORAGE_EVENT_NAME, STORAGE_VERSION } from './const'
 
 export { aes }
 
 /**
  * 触发自定义 storage 事件
- * @param {CustomEvent<Partial<StorageEvent>>['detail']} detail - 自定义事件参数
+ * @param {StorageEventLike} detail - 自定义事件参数
  */
-export function dispatchCustomStorageEvent(detail: CustomEvent<Partial<StorageEvent>>['detail']) {
+export function dispatchCustomStorageEvent(detail: StorageEventLike) {
   if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent<Partial<StorageEvent>>(STORAGE_EVENT_NAME, { detail }))
+    window.dispatchEvent(new CustomEvent<StorageEventLike>(STORAGE_EVENT_NAME, { detail }))
   }
 }
 

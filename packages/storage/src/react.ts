@@ -1,10 +1,19 @@
-import { atomWithStorage as _atomWithStorage } from 'jotai/utils'
-import type { StorageConfig } from '../types'
-import { getStorage, hasStorage, removeStorage, setStorage, storageParse, validateData } from './storage'
+import { type Nullable, dayjs, isDef, jError } from '@jhqn/utils-core'
+import { atom } from 'jotai'
+import { RESET } from 'jotai/utils'
+import type { StorageConfig, StorageEventLike } from '../types'
+import { STORAGE_EVENT_NAME, STORAGE_EXPIRES } from './const'
+import { JadeStorage } from './storage'
 
 interface UseStorageConfig extends StorageConfig {
   /**
-   * Write the default value to the storage when it does not exist
+   * 是否监听存储变化
+   *
+   * @default true
+   */
+  listenToStorageChanges?: boolean
+  /**
+   * 当存储中不存在有效值时，是否写入默认值
    *
    * @default true
    */
@@ -16,70 +25,193 @@ interface UseStorageConfig extends StorageConfig {
  * @param storage
  * @param {string} key - 存储键值
  * @param {any} defaults - 初始值
- * @param {StorageConfig} options - 存储配置
+ * @param {UseStorageConfig} options - 存储配置
  */
 const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options: UseStorageConfig = {}) => {
-  const { writeDefaults = true } = options
-  const anAtom = _atomWithStorage(
-    key,
-    defaults,
-    {
-      getItem() {
-        const serialized = getStorage<T>(storage, key, options)
-        if (serialized === null) {
-          if (hasStorage(storage, key)) {
-            storage.removeItem(key)
-            return defaults
-          }
-        }
-        return serialized ?? defaults
-      },
-      setItem(_, newValue) {
-        setStorage<T>(storage, key, newValue, options)
-      },
-      removeItem() {
-        removeStorage(storage, key)
-      },
-      subscribe(_key, callback) {
-        if (typeof window === 'undefined' || typeof window.addEventListener === 'undefined') {
-          return () => {}
-        }
-        const storageEventCallback = (e: StorageEvent) => {
-          if (e.storageArea === storage && e.key === key) {
-            const rawValue = e.newValue
-            if (rawValue === null) {
-              setStorage(storage, key, defaults, options)
-            } else {
-              callback(validateData(storageParse(rawValue, options), options) ?? defaults)
-            }
-          }
-        }
-        window.addEventListener('storage', storageEventCallback)
-        return () => {
-          window.removeEventListener('storage', storageEventCallback)
-        }
-      },
-    },
-    { getOnInit: true }
-  )
+  const { expiresAt, validTime, writeDefaults = true, listenToStorageChanges = true } = options
 
-  anAtom.onMount = () => {
-    const serialized = getStorage<T>(storage, key, options)
-    if (writeDefaults && serialized === null) {
-      setStorage(storage, key, defaults, options)
+  const js = new JadeStorage<T>(storage, key, defaults, options)
+
+  let timer: ReturnType<typeof setTimeout> | null = null
+  let interval = options.validTime || 0
+
+  function clear() {
+    if (timer) {
+      clearTimeout(timer)
+      timer = null
     }
   }
 
-  return anAtom
+  function start(cb: () => void) {
+    clear()
+    timer = setTimeout(() => {
+      timer = null
+
+      if (interval > STORAGE_EXPIRES.MAX_DELAY) {
+        interval -= STORAGE_EXPIRES.MAX_DELAY
+        start(cb)
+      } else {
+        cb()
+      }
+    }, interval)
+  }
+
+  function loop() {
+    js.reset()
+    interval = js.getExpiresAt() - Date.now()
+    start(loop)
+  }
+
+  const storageRawValue = js.get()
+  const baseAtom = atom(storageRawValue ?? defaults)
+
+  baseAtom.onMount = setAtom => {
+    function doWhenStorageDataInvalid() {
+      if (writeDefaults) {
+        if (expiresAt) {
+          if (dayjs(expiresAt).valueOf() > Date.now()) {
+            js.reset()
+            interval = js.getExpiresAt() - Date.now()
+            start(() => {
+              setAtom(defaults)
+              js.remove()
+            })
+          }
+        } else if (validTime) {
+          loop()
+        } else {
+          js.reset()
+        }
+      }
+    }
+
+    // 挂载时存储中有有效值
+    if (isDef(storageRawValue)) {
+      if (expiresAt) {
+        interval = js.getExpiresAt() - Date.now()
+        start(() => {
+          setAtom(defaults)
+          js.remove()
+        })
+      } else if (validTime) {
+        interval = js.getExpiresAt() - Date.now()
+        start(() => {
+          setAtom(defaults)
+          if (writeDefaults) {
+            loop()
+          }
+        })
+      }
+      // 无有效值
+    } else {
+      doWhenStorageDataInvalid()
+    }
+
+    function storageEventCallback(e: StorageEventLike) {
+      if (e.storageArea === storage && e.key === key) {
+        if (e.newValue === null) {
+          // 删除data，如果writeDefaults就写入默认值，否则就什么都不做
+          if (writeDefaults) {
+            setAtom(defaults)
+            js.reset()
+          }
+          // 有新值
+        } else {
+          const rawValue = js.parse(e.newValue)
+          // rawValue 为 null 说明数据无法解析，已经损坏
+          if (rawValue === null) {
+            jError('无法解析的存储数据，将重置', { key, value: e.newValue })
+            doWhenStorageDataInvalid()
+          } else {
+            const validData = js.validate(rawValue)
+            // validData 为 null 说明数据已经过期，或者版本不对应
+            if (validData === null) {
+              doWhenStorageDataInvalid()
+            } else {
+              setAtom(validData)
+              interval = js.getExpiresAt() - Date.now()
+              start(() => {
+                setAtom(defaults)
+                if (writeDefaults) {
+                  loop()
+                }
+              })
+            }
+          }
+        }
+      }
+    }
+
+    function customStorageCallback(e: CustomEvent<StorageEventLike>) {
+      storageEventCallback(e.detail)
+    }
+
+    if (listenToStorageChanges) {
+      if (storage instanceof Storage) {
+        window.addEventListener('storage', storageEventCallback)
+      } else {
+        window.addEventListener(STORAGE_EVENT_NAME, customStorageCallback)
+      }
+    }
+
+    return () => {
+      if (listenToStorageChanges) {
+        if (storage instanceof Storage) {
+          window.removeEventListener('storage', storageEventCallback)
+        } else {
+          window.removeEventListener(STORAGE_EVENT_NAME, customStorageCallback)
+        }
+      }
+      clear()
+    }
+  }
+
+  return atom(
+    get => get(baseAtom),
+    (get, set, update: T | ((prev: T) => T) | typeof RESET) => {
+      let newValue: Nullable<T>
+
+      if (update instanceof Function) {
+        newValue = update(get(baseAtom))
+      } else if (update === RESET) {
+        newValue = defaults
+      } else {
+        newValue = update
+      }
+
+      if (expiresAt && dayjs(expiresAt).valueOf() > Date.now()) {
+        set(baseAtom, newValue)
+        js.set(newValue)
+        interval = dayjs(expiresAt).valueOf() - Date.now()
+        start(() => {
+          newValue = defaults
+          set(baseAtom, newValue)
+          js.remove()
+        })
+      } else if (validTime) {
+        set(baseAtom, newValue)
+        js.set(newValue)
+        interval = js.getExpiresAt() - Date.now()
+        start(() => {
+          newValue = defaults
+          set(baseAtom, newValue)
+          loop()
+        })
+      } else {
+        set(baseAtom, newValue)
+        js.set(newValue)
+      }
+    }
+  )
 }
 
 /**
  * localStorage 存储联动 atom
  * @param {string} key - 存储键值
  * @param {any} defaults - 初始值
- * @param {StorageConfig} options - 存储配置项
+ * @param {UseStorageConfig} options - 存储配置项
  */
-export function atomWithLocal<Value>(key: string, defaults: Value, options?: StorageConfig) {
+export function atomWithLocal<Value>(key: string, defaults: Value, options?: UseStorageConfig) {
   return atomWithStorage(localStorage, key, defaults, options)
 }
 
@@ -87,8 +219,8 @@ export function atomWithLocal<Value>(key: string, defaults: Value, options?: Sto
  * sessionStorage 存储联动 atom
  * @param {string} key - 存储键值
  * @param {any} defaults - 初始值
- * @param {StorageConfig} options - 存储配置项
+ * @param {UseStorageConfig} options - 存储配置项
  */
-export function atomWithSession<Value>(key: string, defaults: Value, options?: StorageConfig) {
+export function atomWithSession<Value>(key: string, defaults: Value, options?: UseStorageConfig) {
   return atomWithStorage(sessionStorage, key, defaults, options)
 }
