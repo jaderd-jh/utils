@@ -13,7 +13,7 @@ export enum STORAGE_EXPIRES {
   MONTH = 2_592_000_000,
   YEAR = 31_536_000_000,
   /**
-   * 2 ** 31 - 1 [ref](https://developer.mozilla.org/en-US/docs/Web/API/setTimeout#maximum_delay_value)
+   * 2 ** 31 - 1 [why this number](https://developer.mozilla.org/en-US/docs/Web/API/setTimeout#maximum_delay_value)
    */
   MAX_DELAY = 2_147_483_647,
 }

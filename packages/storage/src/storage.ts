@@ -75,7 +75,7 @@ export function validateData<T = any>(rawData: Nullable<StorageObj<T>>, config: 
   let _rawData = rawData
   if (_rawData) {
     // 配置了过期时间或者有效时间 并且数据过期了
-    if ((config.expiresAt || config.validTime) && Date.now() - _rawData.expiresAt >= 0) {
+    if ((config.expiresAt || config.validTime) && Date.now() >= _rawData.expiresAt) {
       _rawData = null
     }
     // 数据格式版本不一致
@@ -83,7 +83,7 @@ export function validateData<T = any>(rawData: Nullable<StorageObj<T>>, config: 
       _rawData = null
     }
   }
-  return _rawData && !isUndefined(_rawData?.data) ? _rawData.data : null
+  return _rawData && !isUndefined(_rawData.data) ? _rawData.data : null
 }
 
 /**
@@ -215,6 +215,7 @@ export const getSession = <T = any>(key: string, config?: StorageConfig) => getS
 
 /**
  * @class JadeStorage
+ * @template T - 存储数据类型
  * @description JadeStorage 类
  */
 export class JadeStorage<T> {
@@ -241,7 +242,7 @@ export class JadeStorage<T> {
    * 获取存储对象
    * @returns {Storage} 存储对象
    */
-  getStorage() {
+  getStorage(): Storage {
     return this.storage
   }
 
@@ -249,7 +250,7 @@ export class JadeStorage<T> {
    * 获取存储键值
    * @returns {string} 存储键值
    */
-  getKey() {
+  getKey(): string {
     return this.key
   }
 
@@ -258,7 +259,7 @@ export class JadeStorage<T> {
    * @template T - 默认值类型
    * @returns {T} 默认值
    */
-  getDefaults() {
+  getDefaults(): T {
     return this.defaults
   }
 
@@ -266,24 +267,26 @@ export class JadeStorage<T> {
    * 获取存储配置
    * @returns {StorageConfig} 存储配置
    */
-  getOptions() {
+  getOptions(): StorageConfig {
     return this.options
   }
 
   /**
    * 获取存储数据
    * @template T - 存储数据类型
+   * @param {boolean} [withDefaults] - 是否返回默认值
    * @returns {Nullable<T>} 存储数据
    */
-  get() {
-    return getStorage<T>(this.storage, this.key, this.options)
+  get(withDefaults = false): Nullable<T> {
+    const data = getStorage<T>(this.storage, this.key, this.options)
+    return withDefaults && data === null ? this.defaults : data
   }
 
   /**
    * 获取存储数据过期时间
    * @returns {number} 过期时间
    */
-  getExpiresAt() {
+  getExpiresAt(): number {
     const rawStr = this.storage.getItem(this.key)
     return rawStr ? this.parse(rawStr)?.expiresAt || Date.now() : Date.now() // storage里没有数据，返回当前时间
   }
@@ -293,7 +296,7 @@ export class JadeStorage<T> {
    * @param {any} value - 存储数据
    * @returns {void}
    */
-  set(value: any) {
+  set(value: any): void {
     setStorage(this.storage, this.key, value, this.options)
   }
 
@@ -301,7 +304,7 @@ export class JadeStorage<T> {
    * 移除存储数据
    * @returns {void}
    */
-  remove() {
+  remove(): void {
     removeStorage(this.storage, this.key)
   }
 
@@ -309,7 +312,7 @@ export class JadeStorage<T> {
    * 重置存储数据，如果默认值为 `null` 则移除存储数据，否则设置默认值
    * @returns {void}
    */
-  reset() {
+  reset(): void {
     if (this.defaults === null) {
       this.remove()
     } else {
@@ -322,7 +325,7 @@ export class JadeStorage<T> {
    * @param {any} data - 存储数据
    * @returns {string} 序列化后的字符串
    */
-  stringify(data: any) {
+  stringify(data: any): string {
     return storageStringify(data, this.options)
   }
 
@@ -332,7 +335,7 @@ export class JadeStorage<T> {
    * @param {string} dataStr - 存储字符串
    * @returns {Nullable<StorageObj<T>>} 反序列化后的数据
    */
-  parse(dataStr: string) {
+  parse(dataStr: string): Nullable<StorageObj<T>> {
     return storageParse<T>(dataStr, this.options)
   }
 
@@ -342,7 +345,7 @@ export class JadeStorage<T> {
    * @param {Nullable<StorageObj<T>>} rawData - 存储数据
    * @returns {Nullable<T>} 验证后的数据
    */
-  validate(rawData: Nullable<StorageObj<T>>) {
+  validate(rawData: Nullable<StorageObj<T>>): Nullable<T> {
     return validateData<T>(rawData, this.options)
   }
 }
