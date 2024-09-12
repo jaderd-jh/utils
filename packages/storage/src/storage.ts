@@ -15,6 +15,16 @@ import type { StorageConfig, StorageEventLike, StorageObj } from '../types'
 export { aes }
 
 /**
+ * 触发 storage 事件
+ * @param {StorageEventInit} eventInitDict - storage事件参数
+ */
+export function dispatchStorageEvent(eventInitDict: StorageEventInit) {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new StorageEvent('storage', eventInitDict))
+  }
+}
+
+/**
  * 触发自定义 storage 事件
  * @param {StorageEventLike} detail - 自定义事件参数
  */
@@ -113,7 +123,9 @@ export const hasSession = (key: string) => hasStorage(sessionStorage, key)
  * @param key
  */
 export function removeStorage(storage: Storage, key: string) {
+  const oldValue = storage.getItem(key)
   storage.removeItem(key)
+  dispatchStorageEvent({ key, oldValue, newValue: null, storageArea: storage })
 }
 
 /**
@@ -162,7 +174,9 @@ export const removeSessionAll = (regex?: RegExp) => removeStorageAll(sessionStor
  */
 export function setStorage<T = any>(storage: Storage, key: string, value: T, config: StorageConfig = {}) {
   if (serializable(value)) {
+    const oldValue = storage.getItem(key)
     storage.setItem(key, storageStringify(value, config))
+    dispatchStorageEvent({ key, oldValue, newValue: storage.getItem(key), storageArea: storage })
   } else {
     throw new TypeError('待写入数据不支持 JSON.stringify()', { cause: value })
   }
