@@ -1,4 +1,3 @@
-export * from './storage'
+export type { StorageConfig, StorageEventLike, StorageLike, StorageObj } from '../types'
 export * from './const'
-
-export type { StorageObj, StorageConfig, StorageLike, StorageEventLike } from '../types'
+export * from './storage'

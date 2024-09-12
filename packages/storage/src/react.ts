@@ -1,9 +1,9 @@
-import { type Nullable, dayjs, isDef, jError } from '@jhqn/utils-core'
+import { dayjs, isDef, jError, type Nullable } from '@jhqn/utils-core'
 import { atom } from 'jotai'
 import { RESET } from 'jotai/utils'
-import type { StorageConfig, StorageEventLike } from '../types'
 import { STORAGE_EVENT_NAME, STORAGE_EXPIRES } from './const'
 import { JadeStorage } from './storage'
+import type { StorageConfig, StorageEventLike } from '../types'
 
 interface UseStorageConfig extends StorageConfig {
   /**
@@ -47,7 +47,7 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
     timer = setTimeout(() => {
       timer = null
 
-      if (interval > STORAGE_EXPIRES.MAX_DELAY) {
+      if (interval >= STORAGE_EXPIRES.MAX_DELAY) {
         start(cb)
       } else {
         cb()
@@ -187,14 +187,16 @@ const atomWithStorage = <T>(storage: Storage, key: string, defaults: T, options:
         start(loop)
       }
 
-      if (expiresAt && dayjs(expiresAt).valueOf() > Date.now()) {
-        set(baseAtom, newValue)
-        js.set(newValue)
-        start(() => {
-          newValue = defaults
+      if (expiresAt) {
+        if (dayjs(expiresAt).valueOf() > Date.now()) {
           set(baseAtom, newValue)
-          js.remove()
-        })
+          js.set(newValue)
+          start(() => {
+            newValue = defaults
+            set(baseAtom, newValue)
+            js.remove()
+          })
+        }
       } else if (validTime) {
         set(baseAtom, newValue)
         js.set(newValue)
