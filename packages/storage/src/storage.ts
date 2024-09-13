@@ -123,9 +123,7 @@ export const hasSession = (key: string) => hasStorage(sessionStorage, key)
  * @param key
  */
 export function removeStorage(storage: Storage, key: string) {
-  const oldValue = storage.getItem(key)
   storage.removeItem(key)
-  dispatchStorageEvent({ key, oldValue, newValue: null, storageArea: storage })
 }
 
 /**
@@ -174,9 +172,7 @@ export const removeSessionAll = (regex?: RegExp) => removeStorageAll(sessionStor
  */
 export function setStorage<T = any>(storage: Storage, key: string, value: T, config: StorageConfig = {}) {
   if (serializable(value)) {
-    const oldValue = storage.getItem(key)
     storage.setItem(key, storageStringify(value, config))
-    dispatchStorageEvent({ key, oldValue, newValue: storage.getItem(key), storageArea: storage })
   } else {
     throw new TypeError('待写入数据不支持 JSON.stringify()', { cause: value })
   }
