@@ -1,8 +1,8 @@
-import { isArrStr, isDef } from '../validate'
 import type { MaybeArray, UnDef, Undefinable } from '../../types'
 import type { Resource } from '../../types/upload'
-import { parseToJSON } from './core'
+import { isArrStr, isDef } from '../validate'
 import { getBaseAttachUrl } from './baseAttachUrl'
+import { parseToJSON } from './core'
 
 /**
  * 获取文件完整地址
@@ -10,7 +10,7 @@ import { getBaseAttachUrl } from './baseAttachUrl'
  */
 export const resUrl = (url: Undefinable<string>) => {
   if (!isDef(url)) return undefined
-  if (/^https?:\/\//.test(url) || /^blob:/.test(url) || /^data:/.test(url)) {
+  if (/^https?:\/\//.test(url) || url.startsWith('blob:') || url.startsWith('data:')) {
     return url
   }
   const baseUrl = getBaseAttachUrl()

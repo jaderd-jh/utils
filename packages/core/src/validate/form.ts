@@ -3,6 +3,21 @@ import { isDef } from './core'
 
 const cnPhoneRE = /^1[3-9]\d{9}$/
 const cnTelRE = /^0\d{9,11}$/
+const cnUSCIRE = /^[0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}$/
+
+/**
+ * 是否是[统一社会信用代码](https://zh.wikipedia.org/zh-cn/%E7%BB%9F%E4%B8%80%E7%A4%BE%E4%BC%9A%E4%BF%A1%E7%94%A8%E4%BB%A3%E7%A0%81)
+ * @example
+ * ```ts
+ * isUSCI('91350100M000100Y43') // true
+ * ```
+ * @param {UnDef<string>} val - 待校验的值
+ * @returns {boolean} 是否是统一社会信用代码
+ */
+export const isUSCI = (val: UnDef<string>): boolean => {
+  if (!isDef(val)) return false
+  return cnUSCIRE.test(val)
+}
 
 /**
  * 是否是中国手机号

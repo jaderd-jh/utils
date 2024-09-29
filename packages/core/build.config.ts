@@ -20,7 +20,6 @@ export default defineBuildConfig({
       ;['ts', 'mts', 'cts'].forEach(ext => {
         readFile(`${ctx.options.outDir}/index.d.${ext}`, 'utf-8').then(content => {
           writeFile(`${ctx.options.outDir}/index.d.${ext}`, dayjsReferences + content).then(() => {
-            // eslint-disable-next-line no-console
             console.log(`dayjs references added in index.d.${ext}`)
           })
         })

@@ -1,4 +1,4 @@
-import { expect, it } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import {
   checkImg,
   getVariableType,
@@ -7,6 +7,7 @@ import {
   isEmpty,
   isJSONStr,
   isNumeric,
+  isUSCI,
   isValidArrRes,
   isValidFileType,
   isValidKey,
@@ -164,4 +165,14 @@ it('validateRes', () => {
       message: '',
     })
   ).toBe(true)
+})
+
+describe('form validate', () => {
+  it('isUSCI', () => {
+    expect(isUSCI('')).toBe(false)
+    expect(isUSCI(' ')).toBe(false)
+    expect(isUSCI('91350100M000100Y43')).toBe(true)
+    expect(isUSCI('91350100M000100Y43 ')).toBe(false)
+    expect(isUSCI('91350100M000100Y4')).toBe(false)
+  })
 })

@@ -1,7 +1,7 @@
 {
   "name": "@jhqn/utils-faker",
   "type": "module",
-  "version": "0.0.3-beta.7",
+  "version": "0.0.3-beta.8",
   "author": "jade-gjz <jiangang.zhang@jaderd.com>",
   "license": "MIT",
   "homepage": "https://github.com/jaderd-jh/utils/tree/main/packages/faker#readme",
@@ -37,7 +37,7 @@
     "publint": "publint"
   },
   "peerDependencies": {
-    "@faker-js/faker": "^8.0.0"
+    "@faker-js/faker": "^9.0.3"
   },
   "peerDependenciesMeta": {
     "@faker-js/faker": {
@@ -48,6 +48,6 @@
     "nanoid": "^5.0.7"
   },
   "devDependencies": {
-    "@faker-js/faker": "^8.4.1"
+    "@faker-js/faker": "^9.0.3"
   }
 }

@@ -1,5 +1,5 @@
-import { isJSONStr } from '../validate'
 import type { Nullable } from '../../types'
+import { isDate, isJSONStr, isMap, isSet } from '../validate'
 
 /**
  * Json字符串转对象
@@ -17,10 +17,22 @@ export const parseToJSON = <T = any>(
  * @param value
  */
 export const replacer = (_: any, value: any) => {
-  if (value instanceof Map) {
+  if (isMap(value)) {
     return {
       dataType: 'Map',
       value: [...value],
+    }
+  }
+  if (isSet(value)) {
+    return {
+      dataType: 'Set',
+      value: [...value],
+    }
+  }
+  if (isDate(value)) {
+    return {
+      dataType: 'Date',
+      value: value.toISOString(),
     }
   }
   return value
@@ -35,6 +47,12 @@ export const reviver = (_: any, value: any) => {
   if (typeof value === 'object' && value !== null) {
     if (value.dataType === 'Map') {
       return new Map(value.value)
+    }
+    if (value.dataType === 'Set') {
+      return new Set(value.value)
+    }
+    if (value.dataType === 'Date') {
+      return new Date(value.value)
     }
   }
   return value
