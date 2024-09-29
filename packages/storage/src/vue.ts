@@ -1,3 +1,11 @@
+import type {
+  ConfigurableEventFilter,
+  ConfigurableFlush,
+  ConfigurableWindow,
+  MaybeRefOrGetter,
+  RemovableRef,
+} from '@vueuse/core'
+import type { StorageConfig, StorageEventLike, StorageLike } from '../types'
 import { dayjs, jError, stringifyFromJSON } from '@jhqn/utils-core'
 import {
   defaultWindow,
@@ -9,16 +17,8 @@ import {
   useTimeoutFn,
 } from '@vueuse/core'
 import { nextTick, ref, shallowRef } from 'vue'
-import type {
-  ConfigurableEventFilter,
-  ConfigurableFlush,
-  ConfigurableWindow,
-  MaybeRefOrGetter,
-  RemovableRef,
-} from '@vueuse/core'
 import { STORAGE_EVENT_NAME, STORAGE_EXPIRES } from './const'
 import { dispatchCustomStorageEvent, JadeStorage } from './storage'
-import type { StorageConfig, StorageEventLike, StorageLike } from '../types'
 
 interface UseStorageOptions extends ConfigurableEventFilter, ConfigurableWindow, ConfigurableFlush, StorageConfig {
   /**

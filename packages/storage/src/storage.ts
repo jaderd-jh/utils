@@ -1,3 +1,4 @@
+import type { StorageConfig, StorageEventLike, StorageObj } from '../types'
 import {
   dayjs,
   isFunction,
@@ -10,7 +11,6 @@ import {
 } from '@jhqn/utils-core'
 import { aes } from '@jhqn/utils-crypto/aes'
 import { STORAGE_EVENT_NAME, STORAGE_VERSION } from './const'
-import type { StorageConfig, StorageEventLike, StorageObj } from '../types'
 
 export { aes }
 

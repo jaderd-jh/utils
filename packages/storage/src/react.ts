@@ -1,9 +1,9 @@
+import type { StorageConfig, StorageEventLike } from '../types'
 import { dayjs, isDef, jError, type Nullable } from '@jhqn/utils-core'
 import { atom } from 'jotai'
 import { RESET } from 'jotai/utils'
 import { STORAGE_EVENT_NAME, STORAGE_EXPIRES } from './const'
 import { JadeStorage } from './storage'
-import type { StorageConfig, StorageEventLike } from '../types'
 
 interface UseStorageConfig extends StorageConfig {
   /**
