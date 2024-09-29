@@ -1,221 +1,361 @@
-import type { Nullable } from '@jhqn/utils-core'
-import type { StorageObj } from '../types'
-import { parseToJSON, replacer, reviver } from '@jhqn/utils-core'
+import type { StorageConfig, StorageEventLike, StorageObj } from '../types'
+import {
+  dayjs,
+  isFunction,
+  isSymbol,
+  isUndefined,
+  jWarn,
+  type Nullable,
+  parseToJSON,
+  stringifyFromJSON,
+} from '@jhqn/utils-core'
 import { aes } from '@jhqn/utils-crypto/aes'
+import { STORAGE_EVENT_NAME, STORAGE_VERSION } from './const'
 
 export { aes }
 
 /**
- * 判断当前类型是否是Symbol
- * @param val 需要判断的值
- * @returns 当前参数是否是symbol
+ * 触发 storage 事件
+ * @param {StorageEventInit} eventInitDict - storage事件参数
  */
-function isSymbol(val: any): boolean {
-  return typeof val === 'symbol'
+export function dispatchStorageEvent(eventInitDict: StorageEventInit) {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new StorageEvent('storage', eventInitDict))
+  }
 }
 
 /**
- * 判断当前值是否能够呗JSON.stringify识别
- * @param data 需要判断的值
- * @returns 前参数是否可以string化
+ * 触发自定义 storage 事件
+ * @param {StorageEventLike} detail - 自定义事件参数
  */
-function hasStringify(data: any): boolean {
-  if (data === undefined) {
-    return false
+export function dispatchCustomStorageEvent(detail: StorageEventLike) {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent<StorageEventLike>(STORAGE_EVENT_NAME, { detail }))
   }
+}
 
-  if (data instanceof Function) {
-    return false
-  }
-
-  if (data instanceof Date) {
-    return false
-  }
-
-  return !isSymbol(data)
+/**
+ * 判断当前值是否能够被 JSON.stringify() 方法序列化
+ * @param data 需要判断的值
+ * @returns 当前参数是否可以序列化
+ */
+function serializable(data: any): boolean {
+  return !(isSymbol(data) || isFunction(data) || isUndefined(data))
 }
 
 /**
  * 用于存储的带时间戳的序列化方法
- * @param {any} data 需要序列化的数据
- * @returns {string} 返回序列化后的字符串
+ * @param {any} data - 需要序列化的数据
+ * @param {StorageConfig} [config] - 序列化配置
+ * @returns {string} 序列化后的字符串
  */
-export function storageStringify(data: any): string {
-  const saveData: StorageObj = {
-    expires: new Date().getTime(),
+export function storageStringify(data: any, config: StorageConfig = {}): string {
+  const rawData: StorageObj = {
     data,
+    expiresAt: config.expiresAt
+      ? dayjs(config.expiresAt).valueOf() // 过期时间需大于当前时间
+      : Date.now() + +(config.validTime || 0), // 当前时间 + 有效时间 = 过期时间
+    version: STORAGE_VERSION,
   }
-  return JSON.stringify(saveData, replacer)
+  if (config.expiresAt && dayjs(config.expiresAt).valueOf() < Date.now()) {
+    jWarn('设置的过期时间小于当前时间，数据将立即过期', { expiresAt: config.expiresAt })
+  }
+  return config?.crypto ? aes.encrypt(stringifyFromJSON(rawData)) : stringifyFromJSON(rawData)
 }
 
 /**
  * 用于存储的反序列化方法
- * @param {string} data 需要反序列化的字符串
- * @returns {StorageObj} 返回反序列化后的数据
+ * @template T - 反序列化后的数据类型
+ * @param {string} dataStr - 需要反序列化的字符串
+ * @param {StorageConfig} config - 存储配置项
+ * @returns {T} 返回反序列化后的数据
  */
-export function storageParse<T>(data: string): Nullable<StorageObj<T>> {
-  return parseToJSON<StorageObj<T>>(data, reviver)
+export function storageParse<T = any>(dataStr: string, config: StorageConfig = {}): Nullable<StorageObj<T>> {
+  return parseToJSON<StorageObj<T>>(config.crypto ? aes.decrypt(dataStr) : dataStr)
 }
 
 /**
- * 判断存储中是否已经存在
+ * 验证数据是否有效
+ * @template T - 数据类型
+ * @param {Nullable<StorageObj<T>>} rawData - 需要验证的反序列化数据
+ * @param {StorageConfig} config - 存储配置项
+ * @returns {Nullable<T>} 返回验证后的数据
+ */
+export function validateData<T = any>(rawData: Nullable<StorageObj<T>>, config: StorageConfig = {}): Nullable<T> {
+  let _rawData = rawData
+  if (_rawData) {
+    // 配置了过期时间或者有效时间 并且数据过期了
+    if ((config.expiresAt || config.validTime) && Date.now() >= _rawData.expiresAt) {
+      _rawData = null
+    }
+    // 数据格式版本不一致
+    if (rawData?.version !== STORAGE_VERSION) {
+      _rawData = null
+    }
+  }
+  return _rawData && !isUndefined(_rawData.data) ? _rawData.data : null
+}
+
+/**
+ * 判断Storage存储中是否已经存在
  * @param storage
  * @param key
  */
 export function hasStorage(storage: Storage, key: string): boolean {
-  // eslint-disable-next-line no-prototype-builtins
-  return Object.hasOwn(storage, key) || storage.hasOwnProperty(key)
+  return storage.getItem(key) !== null
 }
 
 /**
- * 判断存储中是否已经存在
+ * 判断localStorage存储中是否已经存在
  * @param key
  */
 export const hasLocal = (key: string) => hasStorage(localStorage, key)
 
 /**
- * 判断存储中是否已经存在
+ * 判断sessionStorage存储中是否已经存在
  * @param key
  */
 export const hasSession = (key: string) => hasStorage(sessionStorage, key)
 
 /**
- * 移除数据
+ * 移除Storage数据
  * @param storage
  * @param key
  */
 export function removeStorage(storage: Storage, key: string) {
-  if (hasStorage(storage, key)) storage.removeItem(key)
+  storage.removeItem(key)
 }
 
 /**
- * 移除数据
+ * 移除全部Storage数据
  * @param storage
  * @param regex
  */
 export function removeStorageAll(storage: Storage, regex?: RegExp) {
-  if (!regex) {
-    storage.clear()
-    return
-  }
-  const keys = Object.keys(storage)
-  keys.forEach(key => {
-    if (regex.test(key)) {
-      storage.removeItem(key)
+  Object.getOwnPropertyNames(storage).forEach(key => {
+    if (regex ? regex.test(key) : true) {
+      removeStorage(storage, key)
     }
   })
 }
 
 /**
- * 移除数据
+ * 移除localStorage数据
  * @param key
  */
 export const removeLocal = (key: string) => removeStorage(localStorage, key)
 
 /**
- * 移除数据
+ * 移除全部localStorage数据
  * @param regex
  */
 export const removeLocalAll = (regex?: RegExp) => removeStorageAll(localStorage, regex)
 
 /**
- * 移除数据
+ * 移除sessionStorage数据
  * @param key
  */
 export const removeSession = (key: string) => removeStorage(sessionStorage, key)
 
 /**
- * 移除数据
+ * 移除全部sessionStorage数据
  * @param regex
  */
 export const removeSessionAll = (regex?: RegExp) => removeStorageAll(sessionStorage, regex)
 
 /**
- * 设置数据
+ * 设置Storage数据
  * @param storage
  * @param {string} key 设置当前存储key
  * @param {any} value 设置当前存储value
- * @param config
- * @param config.crypto 是否使用加密算法
+ * @param {StorageConfig} config - 存储配置
  */
-export function setStorage(storage: Storage, key: string, value: any, config?: { crypto?: boolean }) {
-  if (hasStringify(value)) {
-    const rawData = storageStringify(value)
-    storage.setItem(key, config?.crypto ? aes.encrypt(rawData) : rawData)
+export function setStorage<T = any>(storage: Storage, key: string, value: T, config: StorageConfig = {}) {
+  if (serializable(value)) {
+    storage.setItem(key, storageStringify(value, config))
   } else {
-    throw new Error('需要存储的 data 不支持 JSON.stringify 方法，请检查当前数据')
+    throw new TypeError('待写入数据不支持 JSON.stringify()', { cause: value })
   }
 }
 
 /**
- * 设置数据
+ * 设置localStorage数据
  * @param {string} key 设置当前存储key
  * @param {any} value 设置当前存储value
- * @param config
- * @param config.crypto 是否使用加密算法
+ * @param {StorageConfig} config - 存储配置
  */
-export const setLocal = (key: string, value: any, config?: { crypto?: boolean }) =>
+export const setLocal = <T = any>(key: string, value: T, config?: StorageConfig) =>
   setStorage(localStorage, key, value, config)
 
 /**
- * 设置数据
+ * 设置sessionStorage数据
  * @param {string} key 设置当前存储key
  * @param {any} value 设置当前存储value
- * @param config
- * @param config.crypto 是否使用加密算法
+ * @param {StorageConfig} config - 存储配置
  */
-export const setSession = (key: string, value: any, config?: { crypto?: boolean }) =>
+export const setSession = <T = any>(key: string, value: T, config?: StorageConfig) =>
   setStorage(sessionStorage, key, value, config)
 
 /**
- * 获取数据
+ * 获取Storage数据
  * @param storage
  * @param {string} key 获取当前数据key
- * @param config
- * @param config.expires expires 过期时间 ms
- * @param config.crypto crypto 是否使用解密算法
+ * @param {StorageConfig} config - 存储配置
  * @returns 存储数据
  */
-export function getStorage<T = any>(
-  storage: Storage,
-  key: string,
-  config: { expires?: number; crypto?: boolean } = { crypto: false, expires: undefined }
-): Nullable<T> {
-  let content: Nullable<StorageObj<T>>
-  if (hasStorage(storage, key)) {
-    content = storageParse<T>(config.crypto ? aes.decrypt(<string>storage.getItem(key)) : <string>storage.getItem(key))
-    if (config.expires && content && new Date().getTime() - content.expires >= config.expires) {
-      removeStorage(storage, key)
-      content = null
-    }
-  } else {
-    content = null
-  }
-  return content && content?.data !== undefined ? content.data : null
+export function getStorage<T = any>(storage: Storage, key: string, config: StorageConfig = {}): Nullable<T> {
+  return hasStorage(storage, key) ? validateData(storageParse<T>(<string>storage.getItem(key), config), config) : null
 }
 
 /**
- * 获取数据
- * @param {string} key 获取当前数据key
- * @param config
- * @param config.expires expires 过期时间 ms
- * @param config.crypto crypto 是否使用解密算法
+ * 获取localStorage数据
+ * @param {string} key 当前数据键名
+ * @param {StorageConfig} config - 存储配置
  * @returns 存储数据
  */
-export const getLocal = <T = any>(
-  key: string,
-  config: { expires?: number; crypto?: boolean } = { crypto: false, expires: undefined }
-) => getStorage<T>(localStorage, key, config)
+export const getLocal = <T = any>(key: string, config?: StorageConfig) => getStorage<T>(localStorage, key, config)
 
 /**
- * 获取数据
- * @param {string} key 获取当前数据key
- * @param config
- * @param config.expires expires 过期时间 ms
- * @param config.crypto crypto 是否使用解密算法
+ * 获取sessionStorage数据
+ * @param {string} key - 当前数据键名
+ * @param {StorageConfig} config - 存储配置
  * @returns 存储数据
  */
-export const getSession = <T = any>(
-  key: string,
-  config: { expires?: number; crypto?: boolean } = { crypto: false, expires: undefined }
-) => getStorage<T>(sessionStorage, key, config)
+export const getSession = <T = any>(key: string, config?: StorageConfig) => getStorage<T>(sessionStorage, key, config)
+
+/**
+ * @class JadeStorage
+ * @template T - 存储数据类型
+ * @description JadeStorage 类
+ */
+export class JadeStorage<T> {
+  private readonly storage: Storage
+  private readonly key: string
+  private readonly defaults: T
+  private readonly options: StorageConfig
+
+  /**
+   * JadeStorage 构造函数
+   * @param {Storage} storage - 存储对象
+   * @param {string} key - 存储键值
+   * @param {any} defaults - 默认值
+   * @param {StorageConfig} options - 存储配置
+   */
+  constructor(storage: Storage, key: string, defaults: T, options: StorageConfig = {}) {
+    this.storage = storage
+    this.key = key
+    this.defaults = defaults
+    this.options = options
+  }
+
+  /**
+   * 获取存储对象
+   * @returns {Storage} 存储对象
+   */
+  getStorage(): Storage {
+    return this.storage
+  }
+
+  /**
+   * 获取存储键值
+   * @returns {string} 存储键值
+   */
+  getKey(): string {
+    return this.key
+  }
+
+  /**
+   * 获取默认值
+   * @template T - 默认值类型
+   * @returns {T} 默认值
+   */
+  getDefaults(): T {
+    return this.defaults
+  }
+
+  /**
+   * 获取存储配置
+   * @returns {StorageConfig} 存储配置
+   */
+  getOptions(): StorageConfig {
+    return this.options
+  }
+
+  /**
+   * 获取存储数据
+   * @template T - 存储数据类型
+   * @param {boolean} [withDefaults] - 是否返回默认值
+   * @returns {Nullable<T>} 存储数据
+   */
+  get(withDefaults = false): Nullable<T> {
+    const data = getStorage<T>(this.storage, this.key, this.options)
+    return withDefaults && data === null ? this.defaults : data
+  }
+
+  /**
+   * 获取存储数据过期时间
+   * @returns {number} 过期时间
+   */
+  getExpiresAt(): number {
+    const rawStr = this.storage.getItem(this.key)
+    return rawStr ? this.parse(rawStr)?.expiresAt || Date.now() : Date.now() // storage里没有数据，返回当前时间
+  }
+
+  /**
+   * 设置存储数据
+   * @param {any} value - 存储数据
+   * @returns {void}
+   */
+  set(value: any): void {
+    setStorage(this.storage, this.key, value, this.options)
+  }
+
+  /**
+   * 移除存储数据
+   * @returns {void}
+   */
+  remove(): void {
+    removeStorage(this.storage, this.key)
+  }
+
+  /**
+   * 重置存储数据，如果默认值为 `null` 则移除存储数据，否则设置默认值
+   * @returns {void}
+   */
+  reset(): void {
+    if (this.defaults === null) {
+      this.remove()
+    } else {
+      this.set(this.defaults)
+    }
+  }
+
+  /**
+   * 序列化存储数据
+   * @param {any} data - 存储数据
+   * @returns {string} 序列化后的字符串
+   */
+  stringify(data: any): string {
+    return storageStringify(data, this.options)
+  }
+
+  /**
+   * 反序列化存储数据
+   * @template T - 反序列化数据类型
+   * @param {string} dataStr - 存储字符串
+   * @returns {Nullable<StorageObj<T>>} 反序列化后的数据
+   */
+  parse(dataStr: string): Nullable<StorageObj<T>> {
+    return storageParse<T>(dataStr, this.options)
+  }
+
+  /**
+   * 验证存储数据有效性
+   * @template T - 存储数据类型
+   * @param {Nullable<StorageObj<T>>} rawData - 存储数据
+   * @returns {Nullable<T>} 验证后的数据
+   */
+  validate(rawData: Nullable<StorageObj<T>>): Nullable<T> {
+    return validateData<T>(rawData, this.options)
+  }
+}

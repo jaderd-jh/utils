@@ -4,19 +4,29 @@ import { isDate, isJSONStr, isMap, isSet } from '../validate'
 /**
  * Json字符串转对象
  * @param str
- * @param reviver
+ * @param reviverFn
  */
 export const parseToJSON = <T = any>(
   str: string,
-  reviver?: (this: any, key: string, value: any) => any
-): Nullable<T> => (isJSONStr(str) ? JSON.parse(str, reviver) : null)
+  reviverFn: (this: any, key: string, value: any) => any = reviver
+): Nullable<T> => (isJSONStr(str) ? JSON.parse(str, reviverFn) : null)
+
+/**
+ * 对象转JSON字符串
+ * @param value
+ * @param replacerFn
+ */
+export const stringifyFromJSON = (
+  value: any,
+  replacerFn: (this: any, key: string, value: any) => any = replacer
+): string => JSON.stringify(value, replacerFn)
 
 /**
  * JSON.stringify() second param
- * @param _
+ * @param _key
  * @param value
  */
-export const replacer = (_: any, value: any) => {
+export function replacer(_key: any, value: any) {
   if (isMap(value)) {
     return {
       dataType: 'Map',
@@ -40,10 +50,10 @@ export const replacer = (_: any, value: any) => {
 
 /**
  * JSON.parse() second param
- * @param _
+ * @param _key
  * @param value
  */
-export const reviver = (_: any, value: any) => {
+export function reviver(_key: any, value: any) {
   if (typeof value === 'object' && value !== null) {
     if (value.dataType === 'Map') {
       return new Map(value.value)
