@@ -1,3 +1,3 @@
-export * from './storage'
-
 export type { StorageObj } from '../types'
+
+export * from './storage'

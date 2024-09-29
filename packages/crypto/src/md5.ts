@@ -1,5 +1,5 @@
-import MD5 from 'crypto-js/md5'
 import type { CryptoMap } from '../types'
+import MD5 from 'crypto-js/md5'
 
 /**
  * MD5加密

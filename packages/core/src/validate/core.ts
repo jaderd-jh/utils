@@ -1,4 +1,5 @@
 import type { Numeric, UnDef } from '../../types'
+import { jError } from '../console'
 
 /**
  * 检测变量类型
@@ -68,6 +69,7 @@ export const isArray = (val: any): val is Array<any> => getVariableType(val) ===
  * 是否是函数，但也有可能是Class
  * @param {any} val 检测的目标
  */
+// eslint-disable-next-line ts/no-unsafe-function-type
 export const isFunction = (val: any): val is Function => getVariableType(val) === 'function'
 
 /**
@@ -152,6 +154,7 @@ export const isJSONStr = (str: UnDef<string>) => {
       JSON.parse(str)
       return true
     } catch (e) {
+      jError('isJSONStr', e)
       return false
     }
   }
@@ -167,6 +170,7 @@ export const isArrStr = (str: UnDef<string>) => {
     try {
       return Array.isArray(JSON.parse(str))
     } catch (e) {
+      jError('isArrStr', e)
       return false
     }
   }

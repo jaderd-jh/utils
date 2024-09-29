@@ -1,5 +1,5 @@
-import { isDef } from '../validate'
 import type { Numeric, UnDef } from '../../types'
+import { isDef } from '../validate'
 
 /**
  * 千位分隔符

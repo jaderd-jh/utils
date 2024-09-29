@@ -70,9 +70,9 @@
     "publint": "publint"
   },
   "peerDependencies": {
-    "@vueuse/core": "^10.2.0",
-    "@vueuse/shared": "^10.2.0",
-    "jotai": "^2.2.1"
+    "@vueuse/core": "^11.1.0",
+    "@vueuse/shared": "^11.1.0",
+    "jotai": "^2.10.0"
   },
   "peerDependenciesMeta": {
     "@vueuse/core": {
@@ -90,8 +90,8 @@
     "@jhqn/utils-crypto": "workspace:*"
   },
   "devDependencies": {
-    "@vueuse/core": "^10.10.0",
-    "@vueuse/shared": "^10.10.0",
-    "jotai": "^2.8.3"
+    "@vueuse/core": "^11.1.0",
+    "@vueuse/shared": "^11.1.0",
+    "jotai": "^2.10.0"
   }
 }
