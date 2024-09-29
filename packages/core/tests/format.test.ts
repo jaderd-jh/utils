@@ -20,21 +20,31 @@ it('parseToJSON', () => {
 })
 
 it('replacer', () => {
-  expect(JSON.stringify({ foo: 'bar' }, replacer)).toBe('{"foo":"bar"}')
+  expect(JSON.stringify({ foo: 'bar', a: undefined, b: null }, replacer)).toBe('{"foo":"bar","b":null}')
   const map = new Map()
   map.set('foo', 'bar')
-  expect(JSON.stringify({ foo: 'bar', map }, replacer)).toBe(
-    '{"foo":"bar","map":{"dataType":"Map","value":[["foo","bar"]]}}'
+  const set = new Set()
+  set.add(1).add(2).add(3).add(1)
+  expect(JSON.stringify({ foo: 'bar', map, set }, replacer)).toBe(
+    '{"foo":"bar","map":{"dataType":"Map","value":[["foo","bar"]]},"set":{"dataType":"Set","value":[1,2,3]}}'
   )
 })
 
 it('reviver', () => {
-  expect(parseToJSON('{"foo":"bar"}', reviver)).toStrictEqual({ foo: 'bar' })
+  expect(parseToJSON('{"foo":"bar","b":null}', reviver)).toStrictEqual({ b: null, foo: 'bar' })
   const map = new Map()
   map.set('foo', 'bar')
-  expect(parseToJSON('{"foo":"bar","map":{"dataType":"Map","value":[["foo","bar"]]}}', reviver)).toStrictEqual({
+  const set = new Set()
+  set.add(1).add(2).add(3).add(1)
+  expect(
+    parseToJSON(
+      '{"foo":"bar","map":{"dataType":"Map","value":[["foo","bar"]]},"set":{"dataType":"Set","value":[1,2,3]}}',
+      reviver
+    )
+  ).toStrictEqual({
     foo: 'bar',
     map,
+    set,
   })
 })
 
