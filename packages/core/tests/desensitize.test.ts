@@ -17,6 +17,7 @@ describe('desensitize', () => {
   it('hidePhone', () => {
     expect(hidePhone(null)).toBe('')
     expect(hidePhone(undefined)).toBe('')
+    expect(hidePhone('')).toBe('')
     expect(hidePhone('12345678901')).toBe('12345678901')
     expect(hidePhone('13454678901')).toBe('134****8901')
     expect(hidePhone('134546789017')).toBe('134546789017')
@@ -26,6 +27,7 @@ describe('desensitize', () => {
   it('hideCardNo', () => {
     expect(hideCardNo(null)).toBe('')
     expect(hideCardNo(undefined)).toBe('')
+    expect(hideCardNo('')).toBe('')
     expect(hideCardNo('12345678901')).toBe('12345678901')
     expect(hideCardNo('134546789017')).toBe('134546789017')
     expect(hideCardNo('33072319641008384x')).toBe('3****************x')
@@ -44,6 +46,7 @@ describe('desensitize', () => {
   it('hideSurname', () => {
     expect(hideSurname(null)).toBe('')
     expect(hideSurname(undefined)).toBe('')
+    expect(hideSurname('')).toBe('')
     expect(hideSurname('小明')).toBe('*明')
     expect(hideSurname('财神爷')).toBe('*神爷')
     expect(hideSurname('古力娜扎')).toBe('*力娜扎')
@@ -57,6 +60,7 @@ describe('desensitize', () => {
   it('hideEmail', () => {
     expect(hideEmail(null)).toBe('')
     expect(hideEmail(undefined)).toBe('')
+    expect(hideEmail('')).toBe('')
     expect(hideEmail('1@email.com')).toBe('1***@email.com')
     expect(hideEmail('1')).toBe('1')
     expect(hideEmail('12')).toBe('12')
@@ -82,6 +86,7 @@ describe('desensitize', () => {
   it('hideThird', () => {
     expect(hideThird(null)).toBe('')
     expect(hideThird(undefined)).toBe('')
+    expect(hideThird('')).toBe('')
     expect(hideThird('鸡')).toBe('*')
     expect(hideThird('小明')).toBe('**')
     expect(hideThird('财神爷')).toBe('财*爷')
@@ -94,6 +99,7 @@ describe('desensitize', () => {
   it('hideHead', () => {
     expect(hideHead(null)).toBe('')
     expect(hideHead(undefined)).toBe('')
+    expect(hideHead('')).toBe('')
     expect(hideHead('鸡')).toBe('*')
     expect(hideHead('小明')).toBe('*明')
     expect(hideHead('财神爷')).toBe('**爷')
@@ -108,6 +114,7 @@ describe('desensitize', () => {
   it('hideTail', () => {
     expect(hideTail(null)).toBe('')
     expect(hideTail(undefined)).toBe('')
+    expect(hideTail('')).toBe('')
     expect(hideTail('鸡')).toBe('*')
     expect(hideTail('小明')).toBe('小*')
     expect(hideTail('财神爷')).toBe('财**')

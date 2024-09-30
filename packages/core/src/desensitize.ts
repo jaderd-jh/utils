@@ -36,6 +36,7 @@ export const hideHead = (str: UnDef<string>, count?: number) => {
   if (!isDef(str)) return ''
   const len = str.length
   const cnt = count !== undefined ? Math.max(Math.min(len, count), 0) : len - 1
+  if (len === 0) return ''
   if (len === 1) return '*'
   return '*'.repeat(cnt) + str.substring(cnt)
 }
@@ -49,6 +50,7 @@ export const hideTail = (str: UnDef<string>, count?: number) => {
   if (!isDef(str)) return ''
   const len = str.length
   const cnt = count !== undefined ? Math.max(Math.min(len, count), 0) : len - 1
+  if (len === 0) return ''
   if (len === 1) return '*'
   return str.substring(0, len - cnt) + '*'.repeat(cnt)
 }
