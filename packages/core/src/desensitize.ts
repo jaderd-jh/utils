@@ -8,6 +8,7 @@ import { isDef, isIdCard, isPhone, isTel } from './validate'
 export const hideMiddle = (str: UnDef<string>) => {
   if (!isDef(str)) return ''
   const len = str.length
+  if (len === 0) return ''
   if (len === 1) return '*'
   if (len === 2) return '**'
   return str[0] + '*'.repeat(len - 2) + str[len - 1]
