@@ -13,7 +13,7 @@ export type {
   Undefinable,
   VK,
 } from '../types'
-export { HostEnv } from '../types/dom'
+export type { HostEnv } from '../types/dom'
 export * from './case'
 export * from './console'
 export * from './desensitize'
