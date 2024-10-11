@@ -1,5 +1,5 @@
 import type { UnDef } from '../types'
-import { isDef, isIdCard, isPhone, isTel } from './validate'
+import { cnTelRE, cnTelRE2, isDef, isIdCard, isPhone } from './validate'
 
 /**
  * 隐藏中间部分
@@ -56,17 +56,22 @@ export const hideTail = (str: UnDef<string>, count?: number) => {
 }
 
 /**
- * 隐藏手机号
- * @param {string} phone 手机号
+ * 隐藏手机号/座机号
+ * @param {string} phone 手机号/座机号
+ * @returns {string} 隐藏后的手机号/座机号
  */
 export const hidePhone = (phone: UnDef<string>) => {
   if (phone) {
-    if (isPhone(phone)) {
-      return phone.replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2')
+    const phoneStr = phone.replaceAll(' ', '') // remove all blanks
+    if (isPhone(phoneStr)) {
+      return phoneStr.replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2')
     }
-    if (isTel(phone)) {
+    if (cnTelRE.test(phoneStr)) {
       // eslint-disable-next-line regexp/no-misleading-capturing-group
-      return phone.replace(/^(\d{3,4})-?\d{3,4}(\d{4})$/, '$1****$2')
+      return phoneStr.replace(/^(0\d{2,3})-?\d{3,4}(\d{4})$/, '$1****$2')
+    }
+    if (cnTelRE2.test(phoneStr)) {
+      return phoneStr.replace(/^\((0\d{2,3})\)\d{3,4}(\d{4})$/, '$1****$2')
     }
     return phone
   }

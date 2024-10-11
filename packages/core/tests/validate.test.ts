@@ -7,6 +7,7 @@ import {
   isEmpty,
   isJSONStr,
   isNumeric,
+  isTel,
   isUSCI,
   isValidArrRes,
   isValidFileType,
@@ -174,5 +175,27 @@ describe('form validate', () => {
     expect(isUSCI('91350100M000100Y43')).toBe(true)
     expect(isUSCI('91350100M000100Y43 ')).toBe(false)
     expect(isUSCI('91350100M000100Y4')).toBe(false)
+  })
+  it('isTel', () => {
+    expect(isTel(undefined)).toBe(false)
+    expect(isTel(null)).toBe(false)
+    expect(isTel('')).toBe(false)
+    expect(isTel(' ')).toBe(false)
+    expect(isTel('12345678901')).toBe(false)
+    expect(isTel('157988909090')).toBe(false)
+    expect(isTel('057988909090')).toBe(true)
+    expect(isTel('05798-890909')).toBe(false)
+    expect(isTel('0579-8890909')).toBe(true)
+    expect(isTel('0579-88909090')).toBe(true)
+    expect(isTel('(0579)88909090')).toBe(true)
+    expect(isTel('(0579) 88909090')).toBe(true)
+    expect(isTel('(0579) 8890 9090')).toBe(true)
+    expect(isTel('0105293382')).toBe(true)
+    expect(isTel('01-05293382')).toBe(false)
+    expect(isTel('010-5293382')).toBe(true)
+    expect(isTel('010-52933827')).toBe(true)
+    expect(isTel('(010)52933827')).toBe(true)
+    expect(isTel('(010) 52933827')).toBe(true)
+    expect(isTel('(010) 5293 3827')).toBe(true)
   })
 })
