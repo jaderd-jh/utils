@@ -6,7 +6,6 @@ import {
   hideFirstName,
   hideHead,
   hideMiddle,
-  hideName,
   hidePhone,
   hideSurname,
   hideTail,
@@ -46,15 +45,6 @@ describe('desensitize', () => {
     expect(hideCardNo('134546789017')).toBe('134546789017')
     expect(hideCardNo('33072319641008384x')).toBe('3****************x')
     expect(hideCardNo('33072319641008384x', false)).toBe('3***23196410*****x')
-  })
-
-  it('hideName', () => {
-    expect(hideName(null)).toBe('')
-    expect(hideName(undefined)).toBe('')
-    expect(hideName('小明')).toBe('*明')
-    expect(hideName('财神爷')).toBe('*神爷')
-    expect(hideName('古力娜扎')).toBe('*力娜扎')
-    expect(hideName('Tom Holland')).toBe('*om Holland')
   })
 
   it('hideSurname', () => {

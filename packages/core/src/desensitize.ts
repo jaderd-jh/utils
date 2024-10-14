@@ -94,26 +94,6 @@ export const hideCardNo = (cardNo: UnDef<string>, strong = true) => {
 }
 
 /**
- * 隐藏姓名第一个字
- * @param {string} name 姓名
- * @deprecated 请使用 hideSurname
- */
-export const hideName = (name: UnDef<string>) => {
-  if (name) {
-    let res = ''
-    for (let i = 0; i < name.length; i += 1) {
-      if (i === 0) {
-        res += '*'
-      } else {
-        res += name[i]
-      }
-    }
-    return res
-  }
-  return ''
-}
-
-/**
  * 隐藏姓氏
  * @param {string} name 姓名
  */
