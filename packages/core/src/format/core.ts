@@ -2,21 +2,51 @@ import type { Nullable } from '../../types'
 import { isDate, isJSONStr, isMap, isSet } from '../validate'
 
 /**
- * Json字符串转对象
- * @param str
- * @param reviver
+ * JSON 字符串转对象
+ * @template T - 解析数据类型
+ * @param {string} str - JSON字符串
+ * @param {(this: any, key: string, value: any) => any} reviverFn - 解析函数
+ * @returns {Nullable<T>} 解析后的对象
+ * @deprecated 请使用 `parseJSON`
  */
-export const parseToJSON = <T = any>(
+export function parseToJSON<T = any>(
   str: string,
-  reviver?: (this: any, key: string, value: any) => any
-): Nullable<T> => (isJSONStr(str) ? JSON.parse(str, reviver) : null)
+  reviverFn?: (this: any, key: string, value: any) => any
+): Nullable<T> {
+  return isJSONStr(str) ? JSON.parse(str, reviverFn) : null
+}
+
+/**
+ * JSON 字符串转对象
+ * @alias parseToJSON
+ * @template T - 解析数据类型
+ * @param {string} str - JSON字符串
+ * @param {(this: any, key: string, value: any) => any} reviverFn - 解析函数
+ * @returns {Nullable<T>} 解析后的对象
+ */
+export function parseJSON<T = any>(
+  str: string,
+  reviverFn: (this: any, key: string, value: any) => any = reviver
+): Nullable<T> {
+  return isJSONStr(str) ? JSON.parse(str, reviverFn) : null
+}
+
+/**
+ * 对象转 JSON 字符串
+ * @param {any} value - 对象
+ * @param {(this: any, key: string, value: any) => any} replacerFn - 替换函数
+ * @returns {string} JSON 字符串
+ */
+export function stringifyJSON(value: any, replacerFn: (this: any, key: string, value: any) => any = replacer): string {
+  return JSON.stringify(value, replacerFn)
+}
 
 /**
  * JSON.stringify() second param
- * @param _
+ * @param _key
  * @param value
  */
-export const replacer = (_: any, value: any) => {
+export function replacer(_key: any, value: any) {
   if (isMap(value)) {
     return {
       dataType: 'Map',
@@ -40,10 +70,10 @@ export const replacer = (_: any, value: any) => {
 
 /**
  * JSON.parse() second param
- * @param _
+ * @param _key
  * @param value
  */
-export const reviver = (_: any, value: any) => {
+export function reviver(_key: any, value: any) {
   if (typeof value === 'object' && value !== null) {
     if (value.dataType === 'Map') {
       return new Map(value.value)
