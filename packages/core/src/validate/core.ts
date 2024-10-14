@@ -1,5 +1,5 @@
 import type { Numeric, UnDef } from '../../types'
-import { jError } from '../console'
+import { jWarn } from '../console'
 
 /**
  * 检测变量类型
@@ -154,7 +154,7 @@ export const isJSONStr = (str: UnDef<string>) => {
       JSON.parse(str)
       return true
     } catch (e) {
-      jError('isJSONStr', e)
+      jWarn('Failed to parse invalid string', e)
       return false
     }
   }
@@ -170,7 +170,7 @@ export const isArrStr = (str: UnDef<string>) => {
     try {
       return Array.isArray(JSON.parse(str))
     } catch (e) {
-      jError('isArrStr', e)
+      jWarn('Failed to parse invalid string', e)
       return false
     }
   }
