@@ -2,7 +2,7 @@ import type { MaybeArray, UnDef, Undefinable } from '../../types'
 import type { Resource } from '../../types/upload'
 import { isArrStr, isDef } from '../validate'
 import { getBaseAttachUrl } from './baseAttachUrl'
-import { parseToJSON } from './core'
+import { parseJSON } from './core'
 
 /**
  * 获取文件完整地址
@@ -54,9 +54,9 @@ export const attachFmt = (data: UnDef<MaybeArray<Resource>> | string) => {
   } else if (typeof data === 'string') {
     // Upload.Resource[] string
     if (isArrStr(data)) {
-      attachList = (parseToJSON<Resource[]>(data) || []).filter(Boolean)
+      attachList = (parseJSON<Resource[]>(data) || []).filter(Boolean)
     } else {
-      const jsonData = parseToJSON<Resource | string>(data)
+      const jsonData = parseJSON<Resource | string>(data)
       const prototypeJson = Object.prototype.toString.call(jsonData)
       // Upload.Resource string
       if (prototypeJson === '[object Object]') attachList = [jsonData as Resource].filter(Boolean)
