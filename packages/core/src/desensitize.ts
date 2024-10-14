@@ -8,9 +8,7 @@ import { cnTelRE, cnTelRE2, isDef, isIdCard, isPhone } from './validate'
 export const hideMiddle = (str: UnDef<string>) => {
   if (!isDef(str)) return ''
   const len = str.length
-  if (len === 0) return ''
-  if (len === 1) return '*'
-  if (len === 2) return '**'
+  if (len <= 2) return '*'.repeat(len)
   return str[0] + '*'.repeat(len - 2) + str[len - 1]
 }
 
@@ -21,9 +19,8 @@ export const hideMiddle = (str: UnDef<string>) => {
 export const hideThird = (str: UnDef<string>) => {
   if (!isDef(str)) return ''
   const len = str.length
+  if (len <= 2) return '*'.repeat(len)
   const partLen = Math.round(len / 3)
-  if (len === 1) return '*'
-  if (len === 2) return '**'
   return str.slice(0, partLen) + '*'.repeat(len - 2 * partLen) + str.slice(len - partLen)
 }
 
@@ -35,9 +32,8 @@ export const hideThird = (str: UnDef<string>) => {
 export const hideHead = (str: UnDef<string>, count?: number) => {
   if (!isDef(str)) return ''
   const len = str.length
+  if (len <= 1) return '*'.repeat(len)
   const cnt = count !== undefined ? Math.max(Math.min(len, count), 0) : len - 1
-  if (len === 0) return ''
-  if (len === 1) return '*'
   return '*'.repeat(cnt) + str.substring(cnt)
 }
 
@@ -49,9 +45,8 @@ export const hideHead = (str: UnDef<string>, count?: number) => {
 export const hideTail = (str: UnDef<string>, count?: number) => {
   if (!isDef(str)) return ''
   const len = str.length
+  if (len <= 1) return '*'.repeat(len)
   const cnt = count !== undefined ? Math.max(Math.min(len, count), 0) : len - 1
-  if (len === 0) return ''
-  if (len === 1) return '*'
   return str.substring(0, len - cnt) + '*'.repeat(cnt)
 }
 
