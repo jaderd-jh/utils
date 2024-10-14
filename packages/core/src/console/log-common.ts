@@ -29,12 +29,18 @@ export const jDebug = (...args: any[]) =>
 /**
  * jade console.warn
  */
-export const jWarn = console.error.bind(console, '%c[WARN]', `${sharedStyle} background: tomato;`)
+export const jWarn = (...args: any[]) =>
+  console.warn.bind(console, `%c[${args.length === 1 ? 'WARN' : '%s'}]`, `${sharedStyle} background: tomato;`)(...args)
 
 /**
  * jade console.error
  */
-export const jError = console.error.bind(console, '%c[ERROR]', `${sharedStyle} background: crimson;`)
+export const jError = (...args: any[]) =>
+  console.error.bind(
+    console,
+    `%c[${args.length === 1 ? 'ERROR' : '%s'}]`,
+    `${sharedStyle} background: crimson;`
+  )(...args)
 
 /**
  * jade console.info
