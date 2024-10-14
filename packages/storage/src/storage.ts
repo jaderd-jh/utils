@@ -1,6 +1,6 @@
 import type { Nullable } from '@jhqn/utils-core'
 import type { StorageObj } from '../types'
-import { parseToJSON, replacer, reviver } from '@jhqn/utils-core'
+import { parseJSON, stringifyJSON } from '@jhqn/utils-core'
 import { aes } from '@jhqn/utils-crypto/aes'
 
 export { aes }
@@ -45,7 +45,7 @@ export function storageStringify(data: any): string {
     expires: new Date().getTime(),
     data,
   }
-  return JSON.stringify(saveData, replacer)
+  return stringifyJSON(saveData)
 }
 
 /**
@@ -54,7 +54,7 @@ export function storageStringify(data: any): string {
  * @returns {StorageObj} 返回反序列化后的数据
  */
 export function storageParse<T>(data: string): Nullable<StorageObj<T>> {
-  return parseToJSON<StorageObj<T>>(data, reviver)
+  return parseJSON<StorageObj<T>>(data)
 }
 
 /**
