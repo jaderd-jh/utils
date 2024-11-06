@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main
-
+    tags:
+      - '!**'
   pull_request:
     branches:
       - main
@@ -53,11 +54,6 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         node_version: [20, 22]
-        include:
-          - os: macos-latest
-            node_version: lts/*
-          - os: windows-latest
-            node_version: lts/*
       fail-fast: false
 
     steps:
@@ -90,3 +86,27 @@ jobs:
 
       - name: Typecheck
         run: pnpm check:type
+
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - run: corepack enable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
+
+      - name: Publish
+        run: pnpx pkg-pr-new publish --compact --pnpm './packages/*'
