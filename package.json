@@ -33,7 +33,7 @@
     "@jhqn/eslint-config": "^0.7.20",
     "@types/node": "^22.7.4",
     "@vitest/coverage-v8": "^2.1.1",
-    "bumpp": "^9.6.1",
+    "bumpp": "^10.0.0",
     "eslint": "^9.11.1",
     "eslint-plugin-oxlint": "^0.9.9",
     "jsdom": "^25.0.1",
