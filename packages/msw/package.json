@@ -49,6 +49,6 @@
     "@jhqn/utils-faker": "workspace:*"
   },
   "devDependencies": {
-    "msw": "^2.4.9"
+    "msw": "^2.7.5"
   }
 }
