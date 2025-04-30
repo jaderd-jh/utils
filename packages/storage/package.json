@@ -70,8 +70,8 @@
     "publint": "publint"
   },
   "peerDependencies": {
-    "@vueuse/core": "^11.1.0",
-    "@vueuse/shared": "^11.1.0",
+    "@vueuse/core": "^13.0.0",
+    "@vueuse/shared": "^13.0.0",
     "jotai": "^2.10.0"
   },
   "peerDependenciesMeta": {
