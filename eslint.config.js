@@ -11,6 +11,11 @@ export default jhqn(
         'style/operator-linebreak': 'off',
       },
     },
+    unicorn: {
+      overrides: {
+        'unicorn/no-instanceof-builtins': 'off',
+      },
+    },
   },
   oxlint.configs['flat/recommended']
 )
