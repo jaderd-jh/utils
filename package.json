@@ -3,11 +3,14 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.15.0",
   "description": "jade's utils monorepo",
   "author": "jade-gjz <jiangang.zhang@jaderd.com>",
   "license": "MIT",
-  "keywords": ["jade", "utils"],
+  "keywords": [
+    "jade",
+    "utils"
+  ],
   "scripts": {
     "test": "vitest",
     "coverage": "vitest run --coverage",
@@ -29,34 +32,32 @@
     "update:nolyfill": "pnpx nolyfill install && pnpm i"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@jhqn/eslint-config": "^0.9.1",
-    "@types/node": "^22.15.3",
-    "@vitest/coverage-v8": "^3.1.2",
-    "bumpp": "^10.1.0",
-    "eslint": "^9.25.1",
-    "eslint-plugin-oxlint": "^0.16.8",
-    "jsdom": "^26.1.0",
-    "lint-staged": "^15.5.1",
-    "npm-run-all2": "^7.0.2",
-    "oxlint": "^0.16.8",
-    "publint": "^0.3.12",
-    "simple-git-hooks": "^2.13.0",
-    "typescript": "^5.8.3",
-    "unbuild": "^3.5.0",
-    "vite": "^6.3.3",
-    "vitest": "^3.1.2"
-  },
-  "pnpm": {
-    "overrides": {
-      "is-core-module": "npm:@nolyfill/is-core-module@^1",
-      "safer-buffer": "npm:@nolyfill/safer-buffer@^1"
-    }
+    "@biomejs/biome": "catalog:",
+    "@jhqn/eslint-config": "catalog:",
+    "@types/node": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "bumpp": "catalog:",
+    "eslint": "catalog:",
+    "eslint-plugin-oxlint": "catalog:",
+    "jsdom": "catalog:",
+    "lint-staged": "catalog:",
+    "npm-run-all2": "catalog:",
+    "oxlint": "catalog:",
+    "publint": "catalog:",
+    "simple-git-hooks": "catalog:",
+    "tsdown": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm pre-commit"
   },
   "lint-staged": {
-    "*": ["oxlint --quiet --fix", "eslint --cache --fix", "biome check --write --no-errors-on-unmatched"]
+    "*": [
+      "oxlint --quiet --fix",
+      "eslint --cache --fix",
+      "biome check --write --no-errors-on-unmatched"
+    ]
   }
 }

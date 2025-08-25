@@ -14,7 +14,8 @@ dayjs.extend(relativeTime)
 dayjs.extend(customParseFormat)
 dayjs.extend(objectSupport)
 
-export { dayjs, Dayjs }
+export { dayjs }
+export type { Dayjs }
 
 /**
  * 格式化时间

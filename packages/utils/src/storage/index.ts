@@ -1,1 +1,20 @@
-export * from '@jhqn/utils-storage'
+export {
+  getLocal,
+  getSession,
+  getStorage,
+  hasLocal,
+  hasSession,
+  hasStorage,
+  removeLocal,
+  removeLocalAll,
+  removeSession,
+  removeSessionAll,
+  removeStorage,
+  removeStorageAll,
+  setLocal,
+  setSession,
+  setStorage,
+  type StorageObj,
+  storageParse,
+  storageStringify,
+} from '@jhqn/utils-storage'
