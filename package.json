@@ -45,8 +45,8 @@
     "oxlint": "catalog:",
     "publint": "catalog:",
     "simple-git-hooks": "catalog:",
+    "tsdown": "catalog:",
     "typescript": "catalog:",
-    "unbuild": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:"
   },
