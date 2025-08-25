@@ -29,7 +29,7 @@
     "update:nolyfill": "pnpx nolyfill install && pnpm i"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.0.0",
     "@jhqn/eslint-config": "^0.9.1",
     "@types/node": "^22.15.3",
     "@vitest/coverage-v8": "^3.1.2",
