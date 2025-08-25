@@ -38,7 +38,7 @@
     "publint": "publint"
   },
   "peerDependencies": {
-    "@faker-js/faker": "^9.7.0"
+    "@faker-js/faker": "^10.0.0"
   },
   "peerDependenciesMeta": {
     "@faker-js/faker": {
