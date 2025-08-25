@@ -1,1 +1,1 @@
-export * from '@jhqn/utils-storage/react'
+export { atomWithLocal, atomWithSession } from '@jhqn/utils-storage/react'

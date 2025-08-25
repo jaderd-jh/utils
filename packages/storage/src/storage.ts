@@ -183,7 +183,9 @@ export function getStorage<T = any>(
 ): Nullable<T> {
   let content: Nullable<StorageObj<T>>
   if (hasStorage(storage, key)) {
-    content = storageParse<T>(config.crypto ? aes.decrypt(<string>storage.getItem(key)) : <string>storage.getItem(key))
+    content = storageParse<T>(
+      config.crypto ? aes.decrypt(storage.getItem(key) as string) : (storage.getItem(key) as string)
+    )
     if (config.expires && content && new Date().getTime() - content.expires >= config.expires) {
       removeStorage(storage, key)
       content = null

@@ -1,0 +1,6 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "types": ["./types/service.d.ts", "./types/env.d.ts"]
+  }
+}
