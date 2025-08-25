@@ -13,7 +13,10 @@
   "bugs": {
     "url": "https://github.com/jaderd-jh/utils/issues"
   },
-  "keywords": ["jade", "utils"],
+  "keywords": [
+    "jade",
+    "utils"
+  ],
   "sideEffects": false,
   "exports": {
     ".": {
@@ -85,7 +88,9 @@
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "vitest",
     "build": "unbuild",
@@ -100,9 +105,9 @@
     }
   },
   "dependencies": {
-    "crypto-js": "^4.2.0"
+    "crypto-js": "catalog:"
   },
   "devDependencies": {
-    "@types/crypto-js": "^4.2.2"
+    "@types/crypto-js": "catalog:"
   }
 }

@@ -13,7 +13,10 @@
   "bugs": {
     "url": "https://github.com/jaderd-jh/utils/issues"
   },
-  "keywords": ["jade", "utils"],
+  "keywords": [
+    "jade",
+    "utils"
+  ],
   "sideEffects": false,
   "exports": {
     ".": {
@@ -118,7 +121,10 @@
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "files": ["*.d.ts", "dist"],
+  "files": [
+    "*.d.ts",
+    "dist"
+  ],
   "scripts": {
     "test": "vitest",
     "//build": "tsup",
