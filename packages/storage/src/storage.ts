@@ -2,6 +2,7 @@ import type { Nullable } from '@jhqn/utils-core'
 import type { StorageObj } from '../types'
 import { parseJSON, stringifyJSON } from '@jhqn/utils-core'
 import { aes } from '@jhqn/utils-crypto/aes'
+import { STORAGE_VERSION } from './const'
 
 export { aes }
 
@@ -42,8 +43,9 @@ function hasStringify(data: any): boolean {
  */
 export function storageStringify(data: any): string {
   const saveData: StorageObj = {
-    expires: new Date().getTime(),
     data,
+    expires: Date.now(),
+    version: STORAGE_VERSION,
   }
   return stringifyJSON(saveData)
 }
