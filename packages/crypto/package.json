@@ -1,7 +1,7 @@
 {
   "name": "@jhqn/utils-crypto",
   "type": "module",
-  "version": "0.3.0",
+  "version": "0.3.1-beta.1",
   "author": "jade-gjz <jiangang.zhang@jaderd.com>",
   "license": "MIT",
   "homepage": "https://github.com/jaderd-jh/utils/tree/main/packages/crypto#readme",
