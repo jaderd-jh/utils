@@ -1,5 +1,5 @@
 import type { UseStorageOptions } from '@vueuse/core'
-import type { MaybeRef } from '@vueuse/shared'
+import type { MaybeRef } from 'vue'
 import { defaultWindow, useStorage } from '@vueuse/core'
 import { aes, storageParse, storageStringify } from './storage'
 

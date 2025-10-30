@@ -9,5 +9,5 @@ export default defineConfig({
   publint: true,
   platform: 'browser',
   clean: ['dist'],
-  external: ['@vueuse/core', '@vueuse/shared', 'jotai'],
+  external: ['@vueuse/core', 'vue', 'jotai'],
 })

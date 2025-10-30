@@ -59,18 +59,18 @@
     "publint": "publint"
   },
   "peerDependencies": {
-    "@vueuse/core": "^13.1.0",
-    "@vueuse/shared": "^13.1.0",
-    "jotai": "^2.12.3"
+    "@vueuse/core": "^14.0.0",
+    "jotai": "^2.12.3",
+    "vue": "^3.5.22"
   },
   "peerDependenciesMeta": {
     "@vueuse/core": {
       "optional": true
     },
-    "@vueuse/shared": {
+    "jotai": {
       "optional": true
     },
-    "jotai": {
+    "vue": {
       "optional": true
     }
   },
@@ -80,7 +80,7 @@
   },
   "devDependencies": {
     "@vueuse/core": "catalog:",
-    "@vueuse/shared": "catalog:",
-    "jotai": "catalog:"
+    "jotai": "catalog:",
+    "vue": "catalog:"
   }
 }
