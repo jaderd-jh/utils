@@ -26,6 +26,8 @@ export {
   getCodeOfHour,
   getCodeOfMonth,
   getHostEnv,
+  getMockData,
+  getMockDataList,
   getVariableType,
   hideBankCard,
   hideCardNo,

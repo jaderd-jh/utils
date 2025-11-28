@@ -1,4 +1,4 @@
-import type { PageRes, PageResData, Res } from '@jhqn/utils-core'
+import type { PageRes, PageResData, Res } from '../types'
 
 export const getMockData = <T>(data: T, code = 200, message = 'success'): Res<T> => {
   return { data, code, message }

@@ -1,1 +1,1 @@
-export { commonArrRes, commonPageRes, commonRes, getMockData, getMockDataList, type MaybeFn } from '@jhqn/utils-msw'
+export { commonArrRes, commonPageRes, commonRes, type MaybeFn } from '@jhqn/utils-msw'
