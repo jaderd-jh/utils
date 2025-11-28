@@ -4,39 +4,38 @@ packages:
 overrides:
   is-core-module: npm:@nolyfill/is-core-module@^1
   safer-buffer: npm:@nolyfill/safer-buffer@^1
-
 catalog:
-  '@biomejs/biome': ^2.3.2
+  '@biomejs/biome': ^2.3.8
   '@faker-js/faker': ^10.1.0
   '@jhqn/eslint-config': ^0.10.0
   '@types/crypto-js': ^4.2.2
-  '@types/node': ^24.9.2
-  '@vitest/coverage-v8': ^4.0.5
-  '@vueuse/core': ^14.0.0
-  bumpp: ^10.3.1
+  '@types/node': ^24.10.1
+  '@vitest/coverage-v8': ^4.0.14
+  '@vueuse/core': ^14.1.0
+  bumpp: ^10.3.2
   crypto-js: ^4.2.0
-  dayjs: ^1.11.18
+  dayjs: ^1.11.19
   detect-browser: ^5.3.0
-  eslint: ^9.38.0
-  eslint-plugin-oxlint: ^1.24.0
-  jotai: ^2.15.0
-  jsdom: ^27.0.1
-  lint-staged: ^16.2.6
-  msw: ^2.11.6
+  eslint: ^9.39.1
+  eslint-plugin-oxlint: ^1.30.0
+  jotai: ^2.15.1
+  jsdom: ^27.2.0
+  lint-staged: ^16.2.7
+  msw: ^2.12.3
   nanoid: ^5.1.6
   npm-run-all2: ^8.0.4
-  oxlint: ^1.25.0
+  oxlint: ^1.30.0
   publint: ^0.3.15
   simple-git-hooks: ^2.13.1
-  tsdown: ^0.15.12
+  tsdown: ^0.16.8
   typescript: ^5.9.3
-  vite: ^7.1.12
-  vitest: ^4.0.5
-  vue: ^3.5.22
+  vite: ^7.2.4
+  vitest: ^4.0.14
+  vue: ^3.5.25
 
 cleanupUnusedCatalogs: true
 
+dedupeDirectDeps: true
+
 onlyBuiltDependencies:
   - msw
-
-dedupeDirectDeps: true
