@@ -1,23 +1,10 @@
-import type { PageRes, PageResData, Res } from '@jhqn/utils-core'
+import type { PageRes, Res } from '@jhqn/utils-core'
 import type { http } from 'msw'
 import type { MaybeFn } from '../types'
 import { isNumber } from '@jhqn/utils-core'
 import { fakeIntRange } from '@jhqn/utils-faker'
 import { delay, HttpResponse } from 'msw'
-
-export const getMockData = <T>(data: T, code = 200, message = 'success'): Res<T> => {
-  return { data, code, message }
-}
-
-export const getMockDataList = <T>(
-  data: T[],
-  total: number,
-  code = 200,
-  message = 'success',
-  options: Partial<PageResData<T>> = {}
-): PageRes<T> => {
-  return { data: { records: data, list: data, total, ...options }, code, message } as PageRes<T>
-}
+import { getMockData, getMockDataList } from './mock'
 
 const randomDelay = () => delay(fakeIntRange(100, 1000))
 
