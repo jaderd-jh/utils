@@ -1,7 +1,7 @@
 {
   "name": "utils",
   "type": "module",
-  "version": "0.3.3-beta.2",
+  "version": "0.3.3",
   "private": true,
   "packageManager": "pnpm@10.23.0",
   "description": "jade's utils monorepo",
