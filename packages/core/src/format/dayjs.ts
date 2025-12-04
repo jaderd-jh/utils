@@ -1,11 +1,11 @@
 import type { ConfigType, Dayjs } from 'dayjs'
 import dayjs from 'dayjs'
-import zhCN from 'dayjs/locale/zh-cn'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
-import duration from 'dayjs/plugin/duration'
-import localeData from 'dayjs/plugin/localeData'
-import objectSupport from 'dayjs/plugin/objectSupport'
-import relativeTime from 'dayjs/plugin/relativeTime'
+import zhCN from 'dayjs/locale/zh-cn.js'
+import customParseFormat from 'dayjs/plugin/customParseFormat.js'
+import duration from 'dayjs/plugin/duration.js'
+import localeData from 'dayjs/plugin/localeData.js'
+import objectSupport from 'dayjs/plugin/objectSupport.js'
+import relativeTime from 'dayjs/plugin/relativeTime.js'
 import { isDef } from '../validate'
 
 dayjs.extend(localeData).locale('zh-cn', zhCN)
