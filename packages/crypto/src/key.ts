@@ -1,4 +1,4 @@
-import encUTF8 from 'crypto-js/enc-utf8'
+import encUTF8 from 'crypto-js/enc-utf8.js'
 
 /**
  * AES加密密钥

@@ -1,6 +1,6 @@
 import type { CryptoMap } from '../types'
-import Base64 from 'crypto-js/enc-base64url'
-import Utf8 from 'crypto-js/enc-utf8'
+import Base64 from 'crypto-js/enc-base64url.js'
+import Utf8 from 'crypto-js/enc-utf8.js'
 
 /**
  * Base64加密
