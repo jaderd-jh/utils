@@ -78,11 +78,6 @@ export const getHostEnv = () => {
 }
 
 /**
- * 检测浏览器环境
- */
-export { detect } from 'detect-browser'
-
-/**
  * 异或值
  */
 const XOR_VAL = 1111

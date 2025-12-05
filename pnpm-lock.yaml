@@ -6,87 +6,12 @@ settings:
 
 catalogs:
   default:
-    '@biomejs/biome':
-      specifier: ^2.3.8
-      version: 2.3.8
-    '@faker-js/faker':
-      specifier: ^10.1.0
-      version: 10.1.0
-    '@jhqn/eslint-config':
-      specifier: ^0.10.0
-      version: 0.10.0
-    '@types/crypto-js':
-      specifier: ^4.2.2
-      version: 4.2.2
-    '@types/node':
-      specifier: ^24.10.1
-      version: 24.10.1
-    '@vitest/coverage-v8':
-      specifier: ^4.0.14
-      version: 4.0.14
-    '@vueuse/core':
-      specifier: ^14.1.0
-      version: 14.1.0
-    bumpp:
-      specifier: ^10.3.2
-      version: 10.3.2
-    crypto-js:
-      specifier: ^4.2.0
-      version: 4.2.0
     dayjs:
       specifier: ^1.11.19
       version: 1.11.19
-    detect-browser:
-      specifier: ^5.3.0
-      version: 5.3.0
-    eslint:
-      specifier: ^9.39.1
-      version: 9.39.1
-    eslint-plugin-oxlint:
-      specifier: ^1.30.0
-      version: 1.30.0
-    jotai:
-      specifier: ^2.15.1
-      version: 2.15.1
-    jsdom:
-      specifier: ^27.2.0
-      version: 27.2.0
-    lint-staged:
-      specifier: ^16.2.7
-      version: 16.2.7
-    msw:
-      specifier: ^2.12.3
-      version: 2.12.3
-    nanoid:
-      specifier: ^5.1.6
-      version: 5.1.6
-    npm-run-all2:
-      specifier: ^8.0.4
-      version: 8.0.4
-    oxlint:
-      specifier: ^1.30.0
-      version: 1.30.0
-    publint:
-      specifier: ^0.3.15
-      version: 0.3.15
-    simple-git-hooks:
-      specifier: ^2.13.1
-      version: 2.13.1
-    tsdown:
-      specifier: ^0.16.8
-      version: 0.16.8
-    typescript:
-      specifier: ^5.9.3
-      version: 5.9.3
-    vite:
-      specifier: ^7.2.4
-      version: 7.2.4
-    vitest:
-      specifier: ^4.0.14
-      version: 4.0.14
-    vue:
-      specifier: ^3.5.25
-      version: 3.5.25
+    detect-browser-es:
+      specifier: 0.1.1
+      version: 0.1.1
 
 overrides:
   is-core-module: npm:@nolyfill/is-core-module@^1
@@ -153,9 +78,9 @@ importers:
       dayjs:
         specifier: 'catalog:'
         version: 1.11.19
-      detect-browser:
+      detect-browser-es:
         specifier: 'catalog:'
-        version: 5.3.0
+        version: 0.1.1
 
   packages/crypto:
     dependencies:
@@ -1598,8 +1523,8 @@ packages:
   destr@2.0.5:
     resolution: {integrity: sha512-ugFTXCtDZunbzasqBxrK93Ik/DRYsO6S/fedkWEMKqt04xZ4csmnmwGDBAb07QWNaGMAmnTIemsYZCksjATwsA==}
 
-  detect-browser@5.3.0:
-    resolution: {integrity: sha512-53rsFbGdwMwlF7qvCt0ypLM5V5/Mbl0szB7GPN8y9NCcbknYOeVVXdrXEq+90IwAfrrzt6Hd+u2E2ntakICU8w==}
+  detect-browser-es@0.1.1:
+    resolution: {integrity: sha512-52VdvdWHjcOClq8zuDJ0FiO5MIOv7e7VukV4C7WH4AHg0Sghsf+Ma8YNYXHBPQClMXunwdvs+cgeZeqbPzBheg==}
 
   devlop@1.1.0:
     resolution: {integrity: sha512-RWmIqhcFf1lRYBvNmr7qTNuyCt/7/ns2jbpp1+PalgE/rDQcBT0fioSMUpJ93irlUhC5hrg4cYqe6U+0ImW0rA==}
@@ -4347,7 +4272,9 @@ snapshots:
 
   destr@2.0.5: {}
 
-  detect-browser@5.3.0: {}
+  detect-browser-es@0.1.1:
+    dependencies:
+      std-env: 3.10.0
 
   devlop@1.1.0:
     dependencies:

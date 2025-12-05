@@ -39,6 +39,6 @@
   },
   "dependencies": {
     "dayjs": "catalog:",
-    "detect-browser": "catalog:"
+    "detect-browser-es": "catalog:"
   }
 }
