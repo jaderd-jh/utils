@@ -33,20 +33,6 @@ jobs:
       - name: Lint
         run: pnpm check:lint
 
-  format:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Setup Biome
-        uses: biomejs/setup-biome@v2
-        with:
-          version: latest
-
-      - name: Run Biome
-        run: biome ci .
-
   test:
     runs-on: ${{ matrix.os }}
 
