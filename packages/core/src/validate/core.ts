@@ -5,53 +5,49 @@ import { jWarn } from '../console'
  * 检测变量类型
  * @param {any} val 检测的目标
  */
-export const getVariableType = (val: any) => {
-  const value = Object.prototype.toString.call(val)
-  const result = value.match(/\[object (\S*)\]/)?.[1]
-  return result?.toLocaleLowerCase()
-}
+export const getVariableType = (val: any) => Object.prototype.toString.call(val).toLocaleLowerCase().slice(8, -1)
 
 /**
  * 是否是数字
  * @param {any} val 检测的目标
  */
-export const isNumber = (val: any): val is number => getVariableType(val) === 'number'
+export const isNumber = (val: any): val is number => typeof val === 'number'
 
 /**
  * 是否是任意精度整数
  * @param {any} val 检测的目标
  */
-export const isBigInt = (val: any): val is bigint => getVariableType(val) === 'bigint'
+export const isBigInt = (val: any): val is bigint => typeof val === 'bigint'
 
 /**
  * 是否是字符串
  * @param {any} val 检测的目标
  */
-export const isString = (val: any): val is string => getVariableType(val) === 'string'
+export const isString = (val: any): val is string => typeof val === 'string'
 
 /**
  * 是否是布尔值
  * @param {any} val 检测的目标
  */
-export const isBoolean = (val: any): val is boolean => getVariableType(val) === 'boolean'
+export const isBoolean = (val: any): val is boolean => typeof val === 'boolean'
 
 /**
  * 是否是null
  * @param {any} val 检测的目标
  */
-export const isNull = (val: any): val is null => getVariableType(val) === 'null'
+export const isNull = (val: any): val is null => val === null
 
 /**
  * 是否是undefined
  * @param {any} val 检测的目标
  */
-export const isUndefined = (val: any): val is undefined => getVariableType(val) === 'undefined'
+export const isUndefined = (val: any): val is undefined => typeof val === 'undefined'
 
 /**
  * 是否是symbol
  * @param {any} val 检测的目标
  */
-export const isSymbol = (val: any): val is symbol => getVariableType(val) === 'symbol'
+export const isSymbol = (val: any): val is symbol => typeof val === 'symbol'
 
 /**
  * 是否是对象
@@ -63,7 +59,7 @@ export const isObject = (val: any): val is Record<any, any> => getVariableType(v
  * 是否是数组
  * @param {any} val 检测的目标
  */
-export const isArray = (val: any): val is Array<any> => getVariableType(val) === 'array'
+export const isArray = (val: any): val is Array<any> => Array.isArray(val)
 
 /**
  * 是否是函数，但也有可能是Class
@@ -76,7 +72,7 @@ export const isFunction = (val: any): val is Function => getVariableType(val) ==
  * 是否是日期
  * @param {any} val 检测的目标
  */
-export const isDate = (val: any): val is Date => getVariableType(val) === 'date'
+export const isDate = (val: any): val is Date => val instanceof Date
 
 /**
  * 是否是正则

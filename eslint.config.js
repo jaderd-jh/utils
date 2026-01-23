@@ -17,5 +17,11 @@ export default jhqn(
       },
     },
   },
+  {
+    rules: {
+      'perfectionist/sort-imports': 'off',
+      'jsonc/sort-keys': 'off',
+    },
+  },
   oxlint.configs['flat/recommended']
 )

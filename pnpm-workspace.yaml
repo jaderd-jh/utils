@@ -5,35 +5,33 @@ overrides:
   is-core-module: npm:@nolyfill/is-core-module@^1
   safer-buffer: npm:@nolyfill/safer-buffer@^1
   vite: 8.0.0-beta.0
-
 catalog:
-  '@biomejs/biome': ^2.3.8
-  '@faker-js/faker': ^10.1.0
+  '@biomejs/biome': ^2.3.11
+  '@faker-js/faker': ^10.2.0
   '@jhqn/eslint-config': ^0.10.0
   '@types/crypto-js': ^4.2.2
   '@types/node': ^24.10.1
-  '@vitest/coverage-v8': ^4.0.15
+  '@vitest/coverage-v8': ^4.0.18
   '@vueuse/core': ^14.1.0
-  bumpp: ^10.3.2
+  bumpp: ^10.4.0
   crypto-js: ^4.2.0
   dayjs: ^1.11.19
   detect-browser-es: 0.1.1
-  eslint: ^9.39.1
-  eslint-plugin-oxlint: ^1.31.0
-  jotai: ^2.15.2
-  jsdom: ^27.2.0
+  eslint: ^9.39.2
+  eslint-plugin-oxlint: ^1.41.0
+  jotai: ^2.16.2
+  jsdom: ^27.4.0
   lint-staged: ^16.2.7
-  msw: ^2.12.4
+  msw: ^2.12.7
   nanoid: ^5.1.6
   npm-run-all2: ^8.0.4
-  oxlint: ^1.31.0
-  publint: ^0.3.15
+  oxlint: ^1.41.0
+  publint: ^0.3.17
   simple-git-hooks: ^2.13.1
-  tsdown: ^0.18.0
+  tsdown: ^0.20.1
   typescript: ^5.9.3
-  vite: 8.0.0-beta.5
-  vitest: ^4.0.15
-  vue: ^3.5.25
+  vitest: ^4.0.18
+  vue: ^3.5.27
 
 cleanupUnusedCatalogs: true
 

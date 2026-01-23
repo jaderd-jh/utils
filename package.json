@@ -1,16 +1,15 @@
 {
   "name": "utils",
-  "type": "module",
   "version": "0.3.4",
   "private": true,
-  "packageManager": "pnpm@10.26.2",
   "description": "jade's utils monorepo",
-  "author": "jade-gjz <jiangang.zhang@jaderd.com>",
-  "license": "MIT",
   "keywords": [
     "jade",
     "utils"
   ],
+  "license": "MIT",
+  "author": "jade-gjz <jiangang.zhang@jaderd.com>",
+  "type": "module",
   "scripts": {
     "test": "vitest",
     "coverage": "vitest run --coverage",
@@ -18,8 +17,8 @@
     "release": "bumpp -r",
     "check:lint": "oxlint && eslint --cache .",
     "fix:lint": "oxlint --quiet --fix && eslint --cache --fix .",
-    "check:fmt": "biome check .",
-    "fix:fmt": "biome check --write",
+    "check:fmt": "oxfmt --no-error-on-unmatched-pattern --check",
+    "fix:fmt": "oxfmt --no-error-on-unmatched-pattern",
     "publint": "pnpm -r publint",
     "check:type": "tsc --noEmit",
     "check:staged": "lint-staged",
@@ -42,12 +41,13 @@
     "jsdom": "catalog:",
     "lint-staged": "catalog:",
     "npm-run-all2": "catalog:",
+    "oxfmt": "^0.26.0",
     "oxlint": "catalog:",
     "publint": "catalog:",
     "simple-git-hooks": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:",
-    "vite": "catalog:",
+    "vite": "8.0.0-beta.0",
     "vitest": "catalog:"
   },
   "simple-git-hooks": {
@@ -55,9 +55,10 @@
   },
   "lint-staged": {
     "*": [
+      "oxfmt --no-error-on-unmatched-pattern",
       "oxlint --quiet --fix",
-      "eslint --cache --fix",
-      "biome check --write --no-errors-on-unmatched"
+      "eslint --cache --fix"
     ]
-  }
+  },
+  "packageManager": "pnpm@10.28.1"
 }

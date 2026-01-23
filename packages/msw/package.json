@@ -1,23 +1,29 @@
 {
   "name": "@jhqn/utils-msw",
-  "type": "module",
   "version": "0.3.4",
-  "author": "jade-gjz <jiangang.zhang@jaderd.com>",
-  "license": "MIT",
+  "keywords": [
+    "jade",
+    "utils"
+  ],
   "homepage": "https://github.com/jaderd-jh/utils/tree/main/packages/msw#readme",
+  "bugs": {
+    "url": "https://github.com/jaderd-jh/utils/issues"
+  },
+  "license": "MIT",
+  "author": "jade-gjz <jiangang.zhang@jaderd.com>",
   "repository": {
     "type": "git",
     "url": "https://github.com/jaderd-jh/utils",
     "directory": "packages/msw"
   },
-  "bugs": {
-    "url": "https://github.com/jaderd-jh/utils/issues"
-  },
-  "keywords": [
-    "jade",
-    "utils"
+  "files": [
+    "dist"
   ],
+  "type": "module",
   "sideEffects": false,
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": {
@@ -26,16 +32,17 @@
       }
     }
   },
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "test": "vitest",
     "build": "tsdown",
     "publint": "publint"
+  },
+  "dependencies": {
+    "@jhqn/utils-core": "workspace:*",
+    "@jhqn/utils-faker": "workspace:*"
+  },
+  "devDependencies": {
+    "msw": "catalog:"
   },
   "peerDependencies": {
     "msw": "^2.7.5"
@@ -44,12 +51,5 @@
     "msw": {
       "optional": false
     }
-  },
-  "dependencies": {
-    "@jhqn/utils-core": "workspace:*",
-    "@jhqn/utils-faker": "workspace:*"
-  },
-  "devDependencies": {
-    "msw": "catalog:"
   }
 }

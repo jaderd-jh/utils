@@ -1,11 +1,8 @@
 import { defineConfig } from 'tsdown'
 
 export default defineConfig({
-  dts: {
-    sourcemap: true,
-  },
-  minify: true,
+  dts: true,
   publint: true,
   platform: 'browser',
-  clean: ['dist'],
+  clean: true,
 })

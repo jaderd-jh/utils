@@ -8,13 +8,10 @@ const dayjsReferences = `/// <reference types="dayjs/plugin/localeData" />
 `
 
 export default defineConfig({
-  dts: {
-    sourcemap: true,
-  },
-  minify: true,
+  dts: true,
   publint: true,
   platform: 'browser',
-  clean: ['dist'],
+  clean: true,
   outputOptions: {
     banner: ({ fileName }) => {
       if (fileName.endsWith('.d.ts')) {
