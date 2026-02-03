@@ -31,7 +31,6 @@
     "update:nolyfill": "pnpx nolyfill install && pnpm i"
   },
   "devDependencies": {
-    "@biomejs/biome": "catalog:",
     "@jhqn/eslint-config": "catalog:",
     "@types/node": "catalog:",
     "@vitest/coverage-v8": "catalog:",
@@ -41,13 +40,13 @@
     "jsdom": "catalog:",
     "lint-staged": "catalog:",
     "npm-run-all2": "catalog:",
-    "oxfmt": "^0.26.0",
+    "oxfmt": "^0.28.0",
     "oxlint": "catalog:",
     "publint": "catalog:",
     "simple-git-hooks": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:",
-    "vite": "8.0.0-beta.0",
+    "vite": "beta",
     "vitest": "catalog:"
   },
   "simple-git-hooks": {
@@ -60,5 +59,5 @@
       "eslint --cache --fix"
     ]
   },
-  "packageManager": "pnpm@10.28.1"
+  "packageManager": "pnpm@10.28.2"
 }
