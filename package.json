@@ -40,13 +40,13 @@
     "jsdom": "catalog:",
     "lint-staged": "catalog:",
     "npm-run-all2": "catalog:",
-    "oxfmt": "^0.28.0",
+    "oxfmt": "catalog:",
     "oxlint": "catalog:",
     "publint": "catalog:",
     "simple-git-hooks": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:",
-    "vite": "beta",
+    "vite": "catalog:",
     "vitest": "catalog:"
   },
   "simple-git-hooks": {
