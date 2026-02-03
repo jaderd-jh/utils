@@ -75,7 +75,7 @@ export const isNumeric = (val: UnDef<Numeric>): val is string => {
  * @param ext
  */
 export const checkImg = (ext?: string) => {
-  return /\.(?:jpg|jpeg|png|gif)$/.test((ext || '').toLowerCase())
+  return /\.(?:jpg|jpeg|png|gif|webp|avif|heic|heif|svg)$/.test((ext || '').toLowerCase())
 }
 
 /**

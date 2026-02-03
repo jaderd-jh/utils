@@ -87,8 +87,11 @@ it('checkImg', () => {
   expect(checkImg('.jpeg')).toBe(true)
   expect(checkImg('.png')).toBe(true)
   expect(checkImg('.gif')).toBe(true)
-  expect(checkImg('.heic')).toBe(false)
-  expect(checkImg('.avif')).toBe(false)
+  expect(checkImg('.webp')).toBe(true)
+  expect(checkImg('.avif')).toBe(true)
+  expect(checkImg('.heic')).toBe(true)
+  expect(checkImg('.heif')).toBe(true)
+  expect(checkImg('.svg')).toBe(true)
 })
 
 it('isJSONStr', () => {
