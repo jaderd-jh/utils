@@ -140,41 +140,36 @@ export const isError = (val: any): val is Error => getVariableType(val) === 'err
  */
 export const isDef = <T>(val: T): val is NonNullable<T> => !isNull(val) && !isUndefined(val)
 
+const INVALID_JSON = Symbol('invalid_json')
+
+const parseJSONLikeStr = (str: UnDef<string>) => {
+  if (!isDef(str)) return INVALID_JSON
+  const normalized = str.trim()
+  if (normalized === '') return INVALID_JSON
+  const firstChar = normalized[0]
+  if (!'{["tfn-0123456789'.includes(firstChar)) return INVALID_JSON
+
+  try {
+    return JSON.parse(normalized)
+  } catch (e) {
+    jWarn('Failed to parse invalid string', e)
+    return INVALID_JSON
+  }
+}
+
 /**
  * 判断是否合法JSON字符串
  * @param str
  */
-export const isJSONStr = (str: UnDef<string>) => {
-  if (isDef(str)) {
-    const normalized = str.trim()
-    if (normalized === '') return false
-    const firstChar = normalized[0]
-    if (!'{["tfn-0123456789'.includes(firstChar)) return false
-    try {
-      JSON.parse(normalized)
-      return true
-    } catch (e) {
-      jWarn('Failed to parse invalid string', e)
-      return false
-    }
-  }
-  return false
-}
+export const isJSONStr = (str: UnDef<string>) => parseJSONLikeStr(str) !== INVALID_JSON
 
 /**
  * 判断是否合法JSON数组字符串
  * @param str
  */
 export const isArrStr = (str: UnDef<string>) => {
-  if (isDef(str)) {
-    try {
-      return isArray(JSON.parse(str))
-    } catch (e) {
-      jWarn('Failed to parse invalid string', e)
-      return false
-    }
-  }
-  return false
+  const parsed = parseJSONLikeStr(str)
+  return parsed !== INVALID_JSON && isArray(parsed)
 }
 
 /**
