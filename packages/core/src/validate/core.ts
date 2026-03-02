@@ -168,7 +168,7 @@ export const isJSONStr = (str: UnDef<string>) => {
 export const isArrStr = (str: UnDef<string>) => {
   if (isDef(str)) {
     try {
-      return Array.isArray(JSON.parse(str))
+      return isArray(JSON.parse(str))
     } catch (e) {
       jWarn('Failed to parse invalid string', e)
       return false

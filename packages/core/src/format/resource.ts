@@ -1,6 +1,6 @@
 import type { MaybeArray, UnDef, Undefinable } from '../../types'
 import type { Resource } from '../../types/upload'
-import { isArrStr, isDef } from '../validate'
+import { isArray, isArrStr, isDef } from '../validate'
 import { getBaseAttachUrl } from './baseAttachUrl'
 import { parseJSON } from './core'
 
@@ -48,7 +48,7 @@ export const attachFmt = (data: UnDef<MaybeArray<Resource>> | string) => {
   if (!data) {
     attachList = []
     // Upload.Resource[]
-  } else if (Array.isArray(data)) {
+  } else if (isArray(data)) {
     attachList = data.filter(Boolean)
     // 字符串
   } else if (typeof data === 'string') {
