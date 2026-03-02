@@ -96,9 +96,19 @@ it('checkImg', () => {
 
 it('isJSONStr', () => {
   expect(isJSONStr('{"foo":"bar"}')).toBe(true)
+  expect(isJSONStr('  {"foo":"bar"}  ')).toBe(true)
+  expect(isJSONStr(' 1 ')).toBe(true)
+  expect(isJSONStr(' true ')).toBe(true)
+  expect(isJSONStr(' "bar" ')).toBe(true)
+  expect(isJSONStr(' null ')).toBe(true)
+  expect(isJSONStr('bar')).toBe(false)
+  expect(isJSONStr('  bar  ')).toBe(false)
+  // eslint-disable-next-line style/quotes
+  expect(isJSONStr("'bar'")).toBe(false)
   expect(isJSONStr('{"foo":/"bar"}')).toBe(false)
   expect(isJSONStr('/{/"foo":/"bar"}')).toBe(false)
   expect(isJSONStr('')).toBe(false)
+  expect(isJSONStr('   ')).toBe(false)
   expect(isJSONStr(null)).toBe(false)
   expect(isJSONStr(undefined)).toBe(false)
 })

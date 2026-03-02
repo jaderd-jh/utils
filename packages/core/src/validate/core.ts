@@ -146,8 +146,12 @@ export const isDef = <T>(val: T): val is NonNullable<T> => !isNull(val) && !isUn
  */
 export const isJSONStr = (str: UnDef<string>) => {
   if (isDef(str)) {
+    const normalized = str.trim()
+    if (normalized === '') return false
+    const firstChar = normalized[0]
+    if (!'{["tfn-0123456789'.includes(firstChar)) return false
     try {
-      JSON.parse(str)
+      JSON.parse(normalized)
       return true
     } catch (e) {
       jWarn('Failed to parse invalid string', e)
