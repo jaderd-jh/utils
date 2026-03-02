@@ -141,6 +141,11 @@ export const isError = (val: any): val is Error => getVariableType(val) === 'err
 export const isDef = <T>(val: T): val is NonNullable<T> => !isNull(val) && !isUndefined(val)
 
 const INVALID_JSON = Symbol('invalid_json')
+const JSON_LITERAL_PREFIXES: Record<'t' | 'f' | 'n', 'true' | 'false' | 'null'> = {
+  t: 'true',
+  f: 'false',
+  n: 'null',
+}
 
 const parseJSONLikeStr = (str: UnDef<string>) => {
   if (!isDef(str)) return INVALID_JSON
@@ -148,6 +153,12 @@ const parseJSONLikeStr = (str: UnDef<string>) => {
   if (normalized === '') return INVALID_JSON
   const firstChar = normalized[0]
   if (!'{["tfn-0123456789'.includes(firstChar)) return INVALID_JSON
+  if (firstChar in JSON_LITERAL_PREFIXES) {
+    const literal = JSON_LITERAL_PREFIXES[firstChar as keyof typeof JSON_LITERAL_PREFIXES]
+    if (!normalized.startsWith(literal)) return INVALID_JSON
+    const nextChar = normalized[literal.length]
+    if (isDef(nextChar) && !',]} \t\r\n'.includes(nextChar)) return INVALID_JSON
+  }
 
   try {
     return JSON.parse(normalized)

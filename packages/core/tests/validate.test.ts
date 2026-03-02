@@ -105,6 +105,10 @@ it('isJSONStr', () => {
   expect(isJSONStr('  bar  ')).toBe(false)
   // eslint-disable-next-line style/quotes
   expect(isJSONStr("'bar'")).toBe(false)
+  expect(isJSONStr('test')).toBe(false)
+  expect(isJSONStr('trueValue')).toBe(false)
+  expect(isJSONStr('falsehood')).toBe(false)
+  expect(isJSONStr('nullValue')).toBe(false)
   expect(isJSONStr('{"foo":/"bar"}')).toBe(false)
   expect(isJSONStr('/{/"foo":/"bar"}')).toBe(false)
   expect(isJSONStr('')).toBe(false)
