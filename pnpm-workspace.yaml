@@ -4,36 +4,34 @@ packages:
 overrides:
   is-core-module: npm:@nolyfill/is-core-module@^1
   safer-buffer: npm:@nolyfill/safer-buffer@^1
-  vite: beta
-
 catalog:
-  '@faker-js/faker': ^10.2.0
-  '@jhqn/eslint-config': ^0.11.1
+  '@faker-js/faker': ^10.3.0
+  '@jhqn/eslint-config': ^0.11.2
   '@types/crypto-js': ^4.2.2
-  '@types/node': ^24.10.1
+  '@types/node': ^24.11.0
   '@vitest/coverage-v8': ^4.0.18
-  '@vueuse/core': ^14.2.0
-  bumpp: ^10.4.0
+  '@vueuse/core': ^14.2.1
+  bumpp: ^10.4.1
   crypto-js: ^4.2.0
   dayjs: ^1.11.19
   detect-browser-es: 0.1.1
-  eslint: ^9.39.2
-  eslint-plugin-oxlint: ^1.43.0
-  jotai: ^2.17.0
-  jsdom: ^28.0.0
-  lint-staged: ^16.2.7
-  msw: ^2.12.7
+  eslint: ^10.0.2
+  eslint-plugin-oxlint: ^1.50.0
+  jotai: ^2.18.0
+  jsdom: ^28.1.0
+  lint-staged: ^16.3.1
+  msw: ^2.12.10
   nanoid: ^5.1.6
   npm-run-all2: ^8.0.4
-  oxfmt: ^0.28.0
-  oxlint: ^1.43.0
-  publint: ^0.3.17
+  oxfmt: ^0.35.0
+  oxlint: ^1.50.0
+  publint: ^0.3.18
   simple-git-hooks: ^2.13.1
-  tsdown: ^0.20.1
+  tsdown: ^0.20.3
   typescript: ^5.9.3
-  vite: beta
+  vite: ^7.3.1
   vitest: ^4.0.18
-  vue: ^3.5.27
+  vue: ^3.5.29
 
 cleanupUnusedCatalogs: true
 

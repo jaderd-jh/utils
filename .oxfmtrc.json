@@ -17,8 +17,7 @@
       "value-external",
       "value-internal",
       ["value-parent", "value-sibling", "value-index"],
-      "side-effect",
-      "ts-equals-import",
+      "side_effect",
       "unknown"
     ],
     "newlinesBetween": false
