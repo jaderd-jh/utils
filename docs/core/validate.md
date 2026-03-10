@@ -1,4 +1,18 @@
+---
+description: 类型校验工具函数，提供 30+ 个类型判断函数，包括基础类型、特殊类型和业务校验
+---
+
 # Validate
+
+类型校验模块提供了丰富的类型判断函数，支持基础类型、特殊类型和业务相关的数据校验。
+
+<llm-only>
+Comprehensive type checking functions including:
+- Basic types: isNumber, isString, isBoolean, isObject, isArray, etc.
+- Special types: isPromise, isMap, isSet, isFile, isBlob, etc.
+- Business validation: isPhone (Chinese mobile), isTel, isEmail, isIdCard (Chinese ID).
+- API response validation: isValidRes, isValidArrRes, isValidPageRes.
+</llm-only>
 
 ## getVariableType
 检测变量类型
