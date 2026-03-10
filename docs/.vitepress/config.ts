@@ -1,3 +1,6 @@
+import { defineConfig } from 'vitepress'
+import llmstxt, { copyOrDownloadAsMarkdownButtons } from 'vitepress-plugin-llms'
+
 const sidebarReference = () => {
   return [
     {
@@ -49,12 +52,14 @@ const nav = () => {
 /**
  * @type {import('vitepress').UserConfig}
  */
-const config = {
+const config = defineConfig({
   lang: 'zh-CN',
   title: 'Utils使用文档',
   description: '工具库',
   lastUpdated: true,
   cleanUrls: true,
+
+  head: [['link', { rel: 'icon', type: 'image/png', href: '/logo.png' }]],
 
   themeConfig: {
     siteTitle: 'Utils使用文档',
@@ -68,6 +73,16 @@ const config = {
   footer: {
     copyright: 'Copyright (c) 2022 金华青鸟',
   },
-}
+
+  vite: {
+    plugins: [llmstxt()],
+  },
+
+  markdown: {
+    config(md) {
+      md.use(copyOrDownloadAsMarkdownButtons)
+    },
+  },
+})
 
 export default config
