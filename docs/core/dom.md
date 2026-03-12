@@ -41,6 +41,7 @@ import { inBrowser, getHostEnv, waitTime } from '@jhqn/utils-core'
 **返回值**：`boolean` - 如果在浏览器环境返回 `true`，否则返回 `false`
 
 **用法**
+
 ```ts
 import { inBrowser } from '@jhqn/utils'
 
@@ -62,6 +63,7 @@ if (inBrowser) {
 ```
 
 **使用场景**：
+
 - 判断是否可以访问浏览器 API（window、document 等）
 - 在 SSR（服务端渲染）中避免访问浏览器 API
 - 编写跨平台代码时进行环境判断
@@ -73,6 +75,7 @@ if (inBrowser) {
 **返回值**：`string` - User Agent 字符串，非浏览器环境返回空字符串
 
 **用法**
+
 ```ts
 import { userAgent } from '@jhqn/utils'
 
@@ -97,6 +100,7 @@ console.log(isMobile ? '移动设备' : '桌面设备')
 ```
 
 **使用场景**：
+
 - 获取用户浏览器信息
 - 简单的 User Agent 解析
 - 日志记录和调试
@@ -108,43 +112,45 @@ console.log(isMobile ? '移动设备' : '桌面设备')
 **返回值**：`HostEnv` 对象
 
 **HostEnv 接口**
+
 ```ts
 interface HostEnv {
   // 基础环境信息（来自 detect-browser）
-  type: string       // 环境类型：'browser' | 'app'
-  name: string       // 浏览器名称：'chrome' | 'firefox' | 'safari' | 'edge' 等
-  version: string    // 浏览器版本
-  os: string         // 操作系统：'iOS' | 'Android' | 'Windows' | 'macOS' | 'Linux' 等
+  type: string // 环境类型：'browser' | 'app'
+  name: string // 浏览器名称：'chrome' | 'firefox' | 'safari' | 'edge' 等
+  version: string // 浏览器版本
+  os: string // 操作系统：'iOS' | 'Android' | 'Windows' | 'macOS' | 'Linux' 等
 
   // 中国特有应用环境
-  zlb: boolean       // 是否浙里办（浙江政务服务）
-  zyd: boolean       // 是否专有钉（政务钉钉）
-  zzd: boolean       // 是否浙政钉（浙江政务钉钉）
-  wx: boolean        // 是否微信
-  zfb: boolean       // 是否支付宝
-  mini: boolean      // 是否小程序（微信小程序、支付宝小程序等）
+  zlb: boolean // 是否浙里办（浙江政务服务）
+  zyd: boolean // 是否专有钉（政务钉钉）
+  zzd: boolean // 是否浙政钉（浙江政务钉钉）
+  wx: boolean // 是否微信
+  zfb: boolean // 是否支付宝
+  mini: boolean // 是否小程序（微信小程序、支付宝小程序等）
 }
 ```
 
 **用法**
+
 ```ts
 import { getHostEnv } from '@jhqn/utils'
 
 const env = getHostEnv()
 
 // 基础信息
-console.log(env.type)     // 'browser'
-console.log(env.name)     // 'chrome'
-console.log(env.version)  // '120.0.0.0'
-console.log(env.os)       // 'Windows 10'
+console.log(env.type) // 'browser'
+console.log(env.name) // 'chrome'
+console.log(env.version) // '120.0.0.0'
+console.log(env.os) // 'Windows 10'
 
 // 中国特有应用环境
-console.log(env.zlb)      // 是否浙里办
-console.log(env.zyd)      // 是否专有钉
-console.log(env.zzd)      // 是否浙政钉
-console.log(env.wx)       // 是否微信
-console.log(env.zfb)      // 是否支付宝
-console.log(env.mini)     // 是否小程序
+console.log(env.zlb) // 是否浙里办
+console.log(env.zyd) // 是否专有钉
+console.log(env.zzd) // 是否浙政钉
+console.log(env.wx) // 是否微信
+console.log(env.zfb) // 是否支付宝
+console.log(env.mini) // 是否小程序
 
 // 判断运行环境
 if (env.wx) {
@@ -191,6 +197,7 @@ if (env.name === 'wechat') {
 ```
 
 **检测逻辑**
+
 - **浙里办**：User Agent 包含 `@zlb`
 - **专有钉**：User Agent 包含 `saas`
 - **浙政钉**：User Agent 包含 `zhejiang` 或 `tauruszjd`
@@ -199,6 +206,7 @@ if (env.name === 'wechat') {
 - **小程序**：User Agent 包含 `miniprogram`
 
 **使用场景**：
+
 - **移动端适配**：根据设备类型调整布局和交互
 - **平台特定逻辑**：针对不同平台执行不同代码
 - **SDK 初始化**：根据环境加载对应的 JS-SDK
@@ -211,13 +219,14 @@ if (env.name === 'wechat') {
 
 异步等待一段时间（Promise 包装的 setTimeout）
 
-| 参数   | 类型     | 是否必填 | 描述              |
-|:-----|:-------|:-----|:----------------|
-| time | number | false | 等待时间（毫秒），默认 100ms |
+| 参数 | 类型   | 是否必填 | 描述                         |
+| :--- | :----- | :------- | :--------------------------- |
+| time | number | false    | 等待时间（毫秒），默认 100ms |
 
 **返回值**：`Promise<boolean>` - 始终返回 `true`
 
 **用法**
+
 ```ts
 import { waitTime } from '@jhqn/utils'
 
@@ -269,6 +278,7 @@ async function debouncedSearch(keyword: string) {
 ```
 
 **使用场景**：
+
 - **延迟执行**：在异步流程中延迟执行某些操作
 - **轮询间隔**：在轮询 API 状态时添加间隔
 - **动画时间**：等待动画完成后再执行操作
@@ -282,15 +292,18 @@ async function debouncedSearch(keyword: string) {
 防止 iOS 因输入框字体小于 16px 而在 focus 时页面缩放变大
 
 **iOS 自动缩放问题**：
+
 - iOS Safari 对字体小于 16px 的输入框会自动缩放页面
 - 即使用户无法手动缩放（viewport 设置了 `user-scalable=no`），iOS 10+ 仍允许 pinch-zoom
 - 这导致页面布局错乱，需要手动回正
 
 **解决方案**：
+
 - 检测 iOS 设备
 - 动态修改 viewport，添加 `user-scalable=no`
 
 **用法**
+
 ```ts
 import { fixiOSInputAutoZoomIn } from '@jhqn/utils'
 
@@ -299,17 +312,20 @@ fixiOSInputAutoZoomIn()
 ```
 
 **使用场景**：
+
 - **移动端应用**：主要针对 iOS 设备
 - **表单页面**：包含大量输入框的页面
 - **SPA 应用**：在应用入口处调用
 
 **注意事项**：
+
 - 此函数会修改 viewport meta 标签
 - 只在 iOS 设备上生效
 - 建议在应用初始化时调用一次
 - 不会影响桌面浏览器
 
 **完整示例**
+
 ```ts
 // main.ts 或 app.ts
 import { fixiOSInputAutoZoomIn, inBrowser } from '@jhqn/utils'
@@ -324,9 +340,12 @@ if (inBrowser) {
 ```
 
 **替代方案**：
+
 ```css
 /* CSS 方案：设置输入框字体大小 >= 16px */
-input, textarea, select {
+input,
+textarea,
+select {
   font-size: 16px;
 }
 
@@ -337,6 +356,77 @@ input, textarea, select {
   transform-origin: left center;
 }
 ```
+
+## 时间戳编码
+
+### getCodeOfHour
+
+获取当小时的时间戳异或值的绝对值，在当小时内获取的值是唯一的
+
+**返回值**：`number` - 当小时的唯一编码
+
+**用法**
+
+```ts
+import { getCodeOfHour } from '@jhqn/utils'
+
+// 用于生成短期内唯一的验证码
+const code = getCodeOfHour()
+console.log(code) // 例如: 1705312225000
+
+// 同一小时内多次调用返回相同值
+const code1 = getCodeOfHour()
+const code2 = getCodeOfHour()
+console.log(code1 === code2) // true
+```
+
+### getCodeOfDate
+
+获取当天的时间戳异或值的绝对值，在当天内获取的值是唯一的
+
+**返回值**：`number` - 当天的唯一编码
+
+**用法**
+
+```ts
+import { getCodeOfDate } from '@jhqn/utils'
+
+// 用于生成当天内唯一的验证码
+const code = getCodeOfDate()
+console.log(code) // 例如: 1705276800000
+
+// 同一天内多次调用返回相同值
+const code1 = getCodeOfDate()
+const code2 = getCodeOfDate()
+console.log(code1 === code2) // true
+```
+
+### getCodeOfMonth
+
+获取当月的时间戳异或值的绝对值，在当月内获取的值是唯一的
+
+**返回值**：`number` - 当月的唯一编码
+
+**用法**
+
+```ts
+import { getCodeOfMonth } from '@jhqn/utils'
+
+// 用于生成当月内唯一的验证码
+const code = getCodeOfMonth()
+console.log(code) // 例如: 1704067200000
+
+// 同一月份内多次调用返回相同值
+const code1 = getCodeOfMonth()
+const code2 = getCodeOfMonth()
+console.log(code1 === code2) // true
+```
+
+**使用场景**：
+
+- **防重放攻击**：生成基于时间窗口的唯一令牌
+- **缓存键**：基于时间窗口的缓存键名
+- **临时验证码**：生成时效性验证码
 
 ## 完整示例
 
@@ -388,7 +478,7 @@ async function initApp() {
 
 // 加载微信 SDK
 async function loadWeChatSDK() {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const script = document.createElement('script')
     script.src = 'https://res.wx.qq.com/open/js/jweixin-1.6.0.js'
     script.onload = resolve
@@ -398,7 +488,7 @@ async function loadWeChatSDK() {
 
 // 加载支付宝 SDK
 async function loadAlipaySDK() {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const script = document.createElement('script')
     script.src = 'https://appx/web-view.min.js'
     script.onload = resolve
@@ -444,7 +534,9 @@ function EnvironmentBadge({ showInDev = false }: EnvironmentBadgeProps) {
   return (
     <div className="environment-badge">
       {badges.map(badge => (
-        <span key={badge} className="badge">{badge}</span>
+        <span key={badge} className="badge">
+          {badge}
+        </span>
       ))}
     </div>
   )
@@ -458,8 +550,8 @@ export default defineComponent({
   props: {
     showInDev: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   setup(props) {
     if (!inBrowser) return () => null
@@ -478,11 +570,13 @@ export default defineComponent({
     return () => (
       <div class="environment-badge">
         {badges.map(badge => (
-          <span key={badge} class="badge">{badge}</span>
+          <span key={badge} class="badge">
+            {badge}
+          </span>
         ))}
       </div>
     )
-  }
+  },
 })
 ```
 
@@ -530,7 +624,7 @@ async function share(config: ShareConfig) {
 async function shareInWeChatMini(config: ShareConfig) {
   if (wx?.miniProgram) {
     wx.miniProgram.postMessage({
-      data: config
+      data: config,
     })
   }
 }
@@ -549,7 +643,7 @@ async function shareInWeChatH5(config: ShareConfig) {
 async function shareInAlipayMini(config: ShareConfig) {
   if (my?.postMessage) {
     my.postMessage({
-      share: config
+      share: config,
     })
   }
 }
@@ -567,7 +661,7 @@ async function shareNative(config: ShareConfig) {
     await navigator.share({
       title: config.title,
       text: config.desc,
-      url: config.link
+      url: config.link,
     })
   } else {
     // 降级方案：复制链接
@@ -582,7 +676,7 @@ async function handleShare() {
     title: '分享标题',
     desc: '分享描述',
     link: window.location.href,
-    imgUrl: 'https://example.com/share.jpg'
+    imgUrl: 'https://example.com/share.jpg',
   })
 }
 ```
@@ -600,10 +694,7 @@ async function loadUserData(userId: string) {
 
   try {
     // 确保加载动画至少显示 300ms，避免闪烁
-    const [data] = await Promise.all([
-      fetchUserData(userId),
-      waitTime(300)
-    ])
+    const [data] = await Promise.all([fetchUserData(userId), waitTime(300)])
 
     return data
   } finally {
@@ -751,7 +842,7 @@ function getViewportSize() {
   }
   return {
     width: window.innerWidth,
-    height: window.innerHeight
+    height: window.innerHeight,
   }
 }
 
@@ -785,47 +876,55 @@ declare const userAgent: string
 // 宿主环境信息
 interface HostEnv {
   // 基础信息（来自 detect-browser）
-  type: string       // 环境类型
-  name: string       // 浏览器名称
-  version: string    // 浏览器版本
-  os: string         // 操作系统
+  type: string // 环境类型
+  name: string // 浏览器名称
+  version: string // 浏览器版本
+  os: string // 操作系统
 
   // 中国特有应用环境
-  zlb: boolean       // 浙里办
-  zyd: boolean       // 专有钉
-  zzd: boolean       // 浙政钉
-  wx: boolean        // 微信
-  zfb: boolean       // 支付宝
-  mini: boolean      // 小程序
+  zlb: boolean // 浙里办
+  zyd: boolean // 专有钉
+  zzd: boolean // 浙政钉
+  wx: boolean // 微信
+  zfb: boolean // 支付宝
+  mini: boolean // 小程序
 }
 
 // 函数签名
 declare function waitTime(time?: number): Promise<boolean>
 declare function getHostEnv(): HostEnv
 declare function fixiOSInputAutoZoomIn(): void
+declare function getCodeOfHour(): number
+declare function getCodeOfDate(): number
+declare function getCodeOfMonth(): number
 ```
 
 ## API 速查表
 
-| 函数/变量 | 说明 | 返回类型 |
-|:------|:----|:--------|
-| `inBrowser` | 是否浏览器环境 | `boolean` |
-| `userAgent` | User Agent 字符串 | `string` |
-| `waitTime(time?)` | 异步等待 | `Promise<boolean>` |
-| `getHostEnv()` | 获取环境信息 | `HostEnv` |
-| `fixiOSInputAutoZoomIn()` | 修复 iOS 输入缩放 | `void` |
+| 函数/变量                 | 说明              | 返回类型           |
+| :------------------------ | :---------------- | :----------------- |
+| `inBrowser`               | 是否浏览器环境    | `boolean`          |
+| `userAgent`               | User Agent 字符串 | `string`           |
+| `waitTime(time?)`         | 异步等待          | `Promise<boolean>` |
+| `getHostEnv()`            | 获取环境信息      | `HostEnv`          |
+| `fixiOSInputAutoZoomIn()` | 修复 iOS 输入缩放 | `void`             |
+| `getCodeOfHour()`         | 获取当小时异或码  | `number`           |
+| `getCodeOfDate()`         | 获取当天异或码    | `number`           |
+| `getCodeOfMonth()`        | 获取当月异或码    | `number`           |
 
 ::: tip 最佳实践
+
 - **SSR 兼容**：使用 `inBrowser` 判断后再访问浏览器 API
 - **环境适配**：使用 `getHostEnv()` 获取环境信息，针对不同平台适配
 - **SDK 加载**：根据环境按需加载对应的 JS-SDK
 - **优雅加载**：使用 `waitTime` 确保加载动画显示足够时间
 - **轮询优化**：使用指数退避避免频繁轮询
-:::
+  :::
 
 ::: warning 注意事项
+
 - **环境检测**：某些特殊浏览器或 WebView 可能检测不准确
 - **User Agent**：User Agent 可以被伪造，不要用于安全验证
 - **iOS 适配**：`fixiOSInputAutoZoomIn()` 会修改 viewport，只在 iOS 生效
 - **等待时间**：`waitTime` 是异步的，必须使用 `await` 或 `.then()`
-:::
+  :::

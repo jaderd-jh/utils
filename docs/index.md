@@ -2,9 +2,9 @@
 layout: home
 
 hero:
-  name: "@jhqn/utils"
+  name: '@jhqn/utils'
   text: JavaScript/TypeScript 工具函数库
-  tagline: 专注于中国本土业务场景的高质量工具函数集合
+  tagline: 专注于本公司业务场景的高质量工具函数集合
   image:
     src: /logo.png
     alt: Utils Logo
@@ -19,7 +19,7 @@ hero:
 features:
   - icon: 🎯
     title: 业务导向
-    details: 专注于中国本土业务场景，提供手机号、身份证、中文姓名等验证和脱敏功能
+    details: 专注于本公司业务场景，提供手机号、身份证、中文姓名等验证和脱敏功能
   - icon: 📦
     title: 模块化设计
     details: Monorepo 架构，按需引入，支持 Tree-shaking，减少打包体积
@@ -42,4 +42,3 @@ This is a comprehensive JavaScript/TypeScript utility library focused on Chinese
 It provides type checking, data desensitization, string conversion, formatting, encryption, storage and other utilities.
 The library follows Monorepo architecture with full TypeScript support and unit test coverage.
 </llm-only>
-

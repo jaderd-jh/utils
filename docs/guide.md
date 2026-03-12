@@ -10,37 +10,53 @@ description: 工具库使用指南
 
 ### 安装主包（推荐）
 
-```bash
-# npm
-npm add @jhqn/utils
+::: code-group
 
-# pnpm
-pnpm add @jhqn/utils
-
-# yarn
-yarn add @jhqn/utils
+```sh [npm]
+$ npm add @jhqn/utils
 ```
+
+```sh [pnpm]
+$ pnpm add @jhqn/utils
+```
+
+```sh [yarn]
+$ yarn add @jhqn/utils
+```
+
+:::
 
 ### 安装子包（可选）
 
 如果只需要特定功能，可以单独安装子包：
 
-```bash
-# 核心工具（格式化、验证、脱敏等）
-npm add @jhqn/utils-core
+::: code-group
 
-# 加密工具
-npm add @jhqn/utils-crypto
-
-# 存储管理
-npm add @jhqn/utils-storage
-
-# 模拟数据
-npm add @jhqn/utils-faker
-
-# Mock Service Worker
-npm add @jhqn/utils-msw
+```sh [npm]
+$ npm add @jhqn/utils-core      # 核心工具函数
+$ npm add @jhqn/utils-crypto    # 加密解密
+$ npm add @jhqn/utils-storage   # 存储管理
+$ npm add @jhqn/utils-faker     # 模拟数据
+$ npm add @jhqn/utils-msw       # Mock Service Worker
 ```
+
+```sh [pnpm]
+$ pnpm add @jhqn/utils-core      # 核心工具函数
+$ pnpm add @jhqn/utils-crypto    # 加密解密
+$ pnpm add @jhqn/utils-storage   # 存储管理
+$ pnpm add @jhqn/utils-faker     # 模拟数据
+$ pnpm add @jhqn/utils-msw       # Mock Service Worker
+```
+
+```sh [yarn]
+$ yarn add @jhqn/utils-core      # 核心工具函数
+$ yarn add @jhqn/utils-crypto    # 加密解密
+$ yarn add @jhqn/utils-storage   # 存储管理
+$ yarn add @jhqn/utils-faker     # 模拟数据
+$ yarn add @jhqn/utils-msw       # Mock Service Worker
+```
+
+:::
 
 ## 🚀 导入方式
 
@@ -48,113 +64,127 @@ npm add @jhqn/utils-msw
 
 ```ts
 // 从主包统一导入
-import { parseToJSON, isPhone, setLocal, aes } from '@jhqn/utils'
+import { parseJSON, isPhone, hidePhone, setLocal, aes } from '@jhqn/utils'
+
+// 或使用主包的子路径（框架集成）
+import { useLocal } from '@jhqn/utils/storage/vue'
+import { atomWithLocal } from '@jhqn/utils/storage/react'
 ```
 
 **优点**：
-- ✅ 简单方便，一个导入语句
-- ✅ 自动包含所有子包功能
-- ✅ 支持 tree-shaking，未使用的代码不会被打包
+
+- ✅ 统一入口，导入更简洁
+- ✅ 一次安装，按需使用
+- ✅ 自动 Tree-shaking
+- ✅ 完整的 TypeScript 支持
 
 ### 方式二：子包导入
 
 ```ts
-// 按需导入特定子包
-import { parseToJSON, isPhone } from '@jhqn/utils-core'
+// 从各个子包单独导入
+import { parseJSON, isPhone, hidePhone } from '@jhqn/utils-core'
 import { setLocal, getLocal } from '@jhqn/utils-storage'
 import { aes } from '@jhqn/utils-crypto'
+import { fakeName } from '@jhqn/utils-faker'
 ```
 
 **优点**：
-- ✅ 更明确的依赖关系
-- ✅ 更清晰的模块划分
 
-<llm-only>
-The library supports two import methods: main package import (recommended) and sub-package import.
-Main package import provides a unified entry point while sub-package import offers more explicit dependencies.
-</llm-only>
+- ✅ 更精确的依赖控制
+- ✅ 减小 node_modules 体积
+- ✅ 清晰的模块边界
+
+### 对比
+
+| 特性             | 主包导入    | 子包导入    |
+| ---------------- | ----------- | ----------- |
+| **简洁性**       | ✅ 更简洁   | ⚠️ 较繁琐   |
+| **依赖管理**     | ✅ 统一管理 | ⚠️ 手动管理 |
+| **Tree-shaking** | ✅ 支持     | ✅ 支持     |
+| **TypeScript**   | ✅ 完整     | ✅ 完整     |
+| **适合场景**     | 应用开发    | 库开发      |
+
+::: tip 如何选择？
+
+- **主包**：统一入口，导入更简洁，推荐大多数场景使用
+- **子包**：按需安装，依赖更清晰，适合库开发或对体积敏感的场景
+  :::
+
+## 📦 包结构
+
+```
+@jhqn/utils (主包)
+├── core      → @jhqn/utils-core
+├── crypto    → @jhqn/utils-crypto
+├── faker     → @jhqn/utils-faker
+├── msw       → @jhqn/utils-msw
+└── storage   → @jhqn/utils-storage
+    ├── vue
+    └── react
+```
 
 ## 🎯 核心功能
 
-### 1. 数据格式化 (`@jhqn/utils-core`)
-
-处理数据格式转换和解析：
+### 1. 数据格式化
 
 ```ts
-import { parseToJSON, formatNumber, formatBytes } from '@jhqn/utils'
+import { parseJSON, toThousands, currencyFmt } from '@jhqn/utils'
 
 // JSON 解析（带容错）
-const data = parseToJSON('{"name": "张三"}')
+const data = parseJSON('{"name": "张三"}')
 
 // 数字格式化
-const money = formatNumber(1234567.89, 2)  // '1,234,567.89'
+console.log(toThousands(123456789.88)) // 123,456,789.88
 
-// 字节格式化
-const size = formatBytes(1024 * 1024)  // '1 MB'
+// 货币格式化
+console.log(currencyFmt(1234.56)) // ¥1,234.56
 ```
 
-### 2. 数据验证 (`@jhqn/utils-core`)
-
-验证用户输入和数据格式：
+### 2. 数据验证
 
 ```ts
 import { isPhone, isEmail, isIdCard } from '@jhqn/utils'
 
-// 验证手机号
-isPhone('13800138000')  // true
-
-// 验证邮箱
-isEmail('test@example.com')  // true
-
-// 验证身份证号
-isIdCard('330723199001011234')  // true
+isPhone('13800138000') // true
+isEmail('test@example.com') // true
+isIdCard('330723199001011234') // true
 ```
 
-### 3. 数据脱敏 (`@jhqn/utils-core`)
-
-隐藏敏感信息：
+### 3. 数据脱敏
 
 ```ts
 import { hidePhone, hideCardNo, hideEmail } from '@jhqn/utils'
 
-// 手机号脱敏
-hidePhone('13800138000')  // '138****8000'
-
-// 身份证脱敏
-hideCardNo('330723199001011234')  // '3****************4'
-
-// 邮箱脱敏
-hideEmail('test@example.com')  // 'tes***@example.com'
+hidePhone('13800138000') // '138****8000'
+hideCardNo('330723199001011234') // '3****************4'
+hideEmail('test@example.com') // 'tes***@example.com'
 ```
 
-### 4. 数据加密 (`@jhqn/utils-crypto`)
-
-AES 加密解密：
+### 4. 数据加密
 
 ```ts
-import { aes } from '@jhqn/utils'
+import { aes, setCryptoKey } from '@jhqn/utils'
+
+// 设置加密密钥（推荐）
+setCryptoKey('your-secret-key')
 
 // 加密
 const encrypted = aes.encrypt('敏感数据')
-// 'U2FsdGVkX1+vupppZksvRf5pq5z5...'
 
 // 解密
 const decrypted = aes.decrypt(encrypted)
-// '敏感数据'
 ```
 
-### 5. 本地存储 (`@jhqn/utils-storage`)
+### 5. 本地存储
 
-增强的 localStorage/sessionStorage：
-
-#### Vue 3 Composition API
+#### Vue 3
 
 ```ts
 import { useLocal, useSession } from '@jhqn/utils/storage/vue'
 
 // 响应式 localStorage
 const token = useLocal('token', '')
-token.value = 'new-token'  // 自动同步到 localStorage
+token.value = 'new-token' // 自动同步
 
 // 带加密
 const userInfo = useLocal('user', null, true)
@@ -163,58 +193,38 @@ const userInfo = useLocal('user', null, true)
 #### React (Jotai)
 
 ```ts
-import { atomWithLocal, atomWithSession } from '@jhqn/utils/storage/react'
+import { atomWithLocal } from '@jhqn/utils/storage/react'
 import { useAtom } from 'jotai'
 
-// 创建 atom
 const tokenAtom = atomWithLocal('token', '')
-
-// 使用
 const [token, setToken] = useAtom(tokenAtom)
 ```
 
-<llm-only>
-Storage functions support both Vue 3 (Composition API with useStorage) and React (Jotai atoms).
-Both implementations support optional AES encryption and automatic synchronization.
-</llm-only>
-
-### 6. 模拟数据 (`@jhqn/utils-faker`)
-
-生成测试数据：
+### 6. 模拟数据
 
 ```ts
-import { fakeName, fakePhone, fakeEmail } from '@jhqn/utils'
+import { fakeName, fakePhone, fakeId } from '@jhqn/utils'
 
-// 生成姓名
-fakeName()  // '张三'
-
-// 生成手机号
-fakePhone()  // '13800138000'
-
-// 生成邮箱
-fakeEmail()  // 'test@example.com'
+fakeName() // '张三'
+fakePhone() // '13800138000'
+fakeId() // '1234567890123456'
 ```
 
 ## 📚 最佳实践
 
 ### 1. 统一导入
 
-推荐从主包统一导入：
-
 ```ts
 // ✅ 推荐
-import { isPhone, hidePhone, setLocal, aes } from '@jhqn/utils'
+import { isPhone, hidePhone, setLocal } from '@jhqn/utils'
 
 // ⚠️ 不推荐（除非有特殊需求）
 import { isPhone } from '@jhqn/utils-core'
 import { hidePhone } from '@jhqn/utils-core'
 import { setLocal } from '@jhqn/utils-storage'
-import { aes } from '@jhqn/utils-crypto'
 ```
 
 ### 2. 按需导入
-
-只导入需要的功能，利用 tree-shaking：
 
 ```ts
 // ✅ 好 - 只导入需要的函数
@@ -224,53 +234,32 @@ import { isPhone, hidePhone } from '@jhqn/utils'
 import * as utils from '@jhqn/utils'
 ```
 
-### 3. TypeScript 支持
-
-库完全使用 TypeScript 编写，提供完整的类型定义：
+### 3. 不要混用
 
 ```ts
-import type { StorageObj } from '@jhqn/utils'
-
-interface User {
-  id: number
-  name: string
-}
-
-const data: StorageObj<User> = {
-  data: { id: 1, name: '张三' },
-  timestamp: Date.now()
-}
+// ❌ 不要混用
+import { isPhone } from '@jhqn/utils'
+import { hidePhone } from '@jhqn/utils-core'
 ```
-
-### 4. 错误处理
-
-库中的函数都有完善的错误处理，无需额外 try-catch：
-
-```ts
-// 自动容错，返回 null
-const data = parseToJSON('invalid json')  // null
-
-// 自动处理无效输入
-const phone = hidePhone('')  // ''
-```
-
-## 🔗 相关链接
-
-- [快速上手](/getting-started) - 快速开始使用
-- [配置说明](/configs) - 详细的配置选项
-- [API 参考](/core/format) - 完整的 API 文档
 
 ## 💡 小贴士
 
 ::: tip Tree-shaking 支持
-使用现代打包工具（Vite、Webpack 5+、Rollup）时，未使用的代码会被自动移除，不会增加打包体积。
+使用现代打包工具（Vite、Webpack 5+、Rollup）时，未使用的代码会被自动移除，不会增加打包体积。`@jhqn/utils` 的 package.json 已配置 `"sideEffects": false`。
 :::
 
 ::: warning 浏览器兼容性
 库主要面向现代浏览器和 Node.js 环境。如需支持旧浏览器，请确保您的构建工具配置了正确的转译规则。
 :::
 
+## 🔗 相关链接
+
+- [快速上手](/getting-started) - 快速开始使用
+- [配置说明](/configs) - 详细的配置选项
+- [API 参考](/core/validate) - 完整的 API 文档
+
 <llm-only>
-Best practices include: unified imports from main package, on-demand imports for tree-shaking,
-TypeScript support, and built-in error handling. The library supports modern browsers and Node.js.
+The library supports two import methods: main package import (recommended) and sub-package import.
+Main package import provides a unified entry point while sub-package import offers more explicit dependencies.
+Best practices include unified imports, on-demand imports, and avoiding mixed usage.
 </llm-only>
