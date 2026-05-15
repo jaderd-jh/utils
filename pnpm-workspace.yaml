@@ -11,7 +11,7 @@ catalog:
   '@types/node': ^24.11.0
   '@vitest/coverage-v8': ^4.0.18
   '@vueuse/core': ^14.2.1
-  bumpp: ^10.4.1
+  bumpp: ^11.0.0
   crypto-js: ^4.2.0
   dayjs: ^1.11.19
   detect-browser-es: 0.1.1
