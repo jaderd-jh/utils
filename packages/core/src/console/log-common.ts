@@ -61,7 +61,7 @@ export const jGroup = console.group.bind(console, '%c[%s]', `${sharedStyle} back
 /**
  * jade console.groupCollapsed
  */
-export const jGroupC = console.groupCollapsed.bind(console, '%c[%s]', `${sharedStyle} background: slateblue;`)
+export const jGroupC = console?.groupCollapsed?.bind(console, '%c[%s]', `${sharedStyle} background: slateblue;`)
 
 /**
  * jade console.groupEnd
@@ -72,15 +72,15 @@ export const jGroupE = console.groupEnd.bind(console)
  * jade console.time
  * @param str
  */
-export const jTime = (str: string) => console.time(`[${str}]`)
+export const jTime = (str: string) => console?.time(`[${str}]`)
 
 /**
  * jade console.timeEnd
  * @param str
  */
-export const jTimeEnd = (str: string) => console.timeEnd(`[${str}]`)
+export const jTimeEnd = (str: string) => console?.timeEnd(`[${str}]`)
 
 /**
  * jade console.clear
  */
-export const jClear = console.clear.bind(console)
+export const jClear = console?.clear?.bind(console)
