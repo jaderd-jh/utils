@@ -15,8 +15,8 @@
     "coverage": "vitest run --coverage",
     "build": "pnpm -r build",
     "release": "bumpp -r",
-    "check:lint": "oxlint && eslint --cache .",
-    "fix:lint": "oxlint --quiet --fix && eslint --cache --fix .",
+    "check:lint": "oxlint --no-error-on-unmatched-pattern && eslint --cache .",
+    "fix:lint": "oxlint --no-error-on-unmatched-pattern --quiet --fix && eslint --cache --fix .",
     "check:fmt": "oxfmt --no-error-on-unmatched-pattern --check",
     "fix:fmt": "oxfmt --no-error-on-unmatched-pattern",
     "publint": "pnpm -r publint",
@@ -55,9 +55,9 @@
   "lint-staged": {
     "*": [
       "oxfmt --no-error-on-unmatched-pattern",
-      "oxlint --quiet --fix",
+      "oxlint --no-error-on-unmatched-pattern --quiet --fix",
       "eslint --cache --fix"
     ]
   },
-  "packageManager": "pnpm@10.30.3"
+  "packageManager": "pnpm@11.1.2"
 }
