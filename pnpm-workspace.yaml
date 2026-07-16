@@ -22,7 +22,7 @@ catalog:
   lint-staged: ^17.0.4
   msw: ^2.14.6
   nanoid: ^5.1.11
-  npm-run-all2: ^8.0.4
+  npm-run-all2: ^9.0.0
   oxfmt: ^0.49.0
   oxlint: ^1.64.0
   publint: ^0.3.21
