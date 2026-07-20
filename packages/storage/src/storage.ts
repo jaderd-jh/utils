@@ -65,8 +65,7 @@ export function storageParse<T>(data: string): Nullable<StorageObj<T>> {
  * @param key
  */
 export function hasStorage(storage: Storage, key: string): boolean {
-  // eslint-disable-next-line no-prototype-builtins
-  return Object.hasOwn(storage, key) || storage.hasOwnProperty(key)
+  return Object.hasOwn(storage, key) || Object.hasOwn(storage, key)
 }
 
 /**
@@ -188,7 +187,7 @@ export function getStorage<T = any>(
     content = storageParse<T>(
       config.crypto ? aes.decrypt(storage.getItem(key) as string) : (storage.getItem(key) as string)
     )
-    if (config.expires && content && new Date().getTime() - content.expires >= config.expires) {
+    if (config.expires && content && Date.now() - content.expires >= config.expires) {
       removeStorage(storage, key)
       content = null
     }
