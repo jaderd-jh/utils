@@ -41,7 +41,7 @@
     "nanoid": "catalog:"
   },
   "devDependencies": {
-    "@faker-js/faker": "catalog:"
+    "@faker-js/faker": "^10.5.0"
   },
   "peerDependencies": {
     "@faker-js/faker": "^10.0.0"
