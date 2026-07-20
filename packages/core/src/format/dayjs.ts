@@ -19,11 +19,16 @@ export type { Dayjs }
 
 /**
  * 格式化时间
+ * @example
+ * ```ts
+ * dateFmt(new Date(), 'date') // 2024-06-01
+ * dateFmt(dayjs(), 'datetime') // 2024-06-01 12:34:56
+ * ```
  * @param {import('dayjs').ConfigType} date 时间
- * @param {string} format 格式
+ * @param {string} [format = "datetime"] 格式化pattern
  * @returns {string} 格式化后的时间
  */
-export const dateFmt = (date: ConfigType, format: string | 'date' | 'datetime' = 'YYYY-MM-DD HH:mm:ss'): string => {
+export const dateFmt = (date: ConfigType, format: string | 'date' | 'datetime' = 'datetime'): string => {
   const dd = dayjs(date)
   let fmt = format
   if (!isDef(date) || !dd.isValid()) return ''

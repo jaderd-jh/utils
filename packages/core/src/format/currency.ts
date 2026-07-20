@@ -14,8 +14,12 @@ export const toThousands = (num: number) => {
 
 /**
  * 货币格式化
+ * @example
+ * ```ts
+ * currencyFmt(123456.789) // "￥123,456.79"
+ * ```
  * @param {number | string | bigint} currency - 金额
- * @param {number} [maximumFractionDigits] - 小数位数
+ * @param {number} [maximumFractionDigits] - 最多小数位数
  */
 export const currencyFmt = (currency: UnDef<Numeric | bigint>, maximumFractionDigits: number = 2) => {
   if (!isDef(currency)) return ''
