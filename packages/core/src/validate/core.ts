@@ -66,7 +66,22 @@ export const isArray = (val: any): val is Array<any> => Array.isArray(val)
  * @param {any} val 检测的目标
  */
 // eslint-disable-next-line ts/no-unsafe-function-type
-export const isFunction = (val: any): val is Function => getVariableType(val) === 'function'
+export const isFunction = (val: any): val is Function => typeof val === 'function'
+
+/**
+ * 是否是纯函数（不包含 Class，含原生构造函数如 Date、Array 等）
+ * @param {any} val 检测的目标
+ */
+// eslint-disable-next-line ts/no-unsafe-function-type
+export const isPureFunction = (val: any): val is Function => {
+  if (!isFunction(val)) return false
+  const source = Function.prototype.toString.call(val)
+  // ES6 class 语法定义的类
+  if (source.startsWith('class')) return false
+  // 原生构造函数（Date、Array、Map 等）带 prototype，普通原生函数（Math.max 等）没有
+  if (source.includes('[native code]') && val.prototype !== undefined) return false
+  return true
+}
 
 /**
  * 是否是日期

@@ -5,8 +5,10 @@ import {
   isArrStr,
   isDef,
   isEmpty,
+  isFunction,
   isJSONStr,
   isNumeric,
+  isPureFunction,
   isTel,
   isUSCI,
   isValidArrRes,
@@ -65,6 +67,46 @@ it('getType', () => {
   // expect(getType(new Proxy({}, {}))).toBe('proxy')
   expect(getVariableType(null)).toBe('null')
   expect(getVariableType(undefined)).toBe('undefined')
+})
+
+it('isFunction', () => {
+  expect(isFunction(() => {})).toBe(true)
+  expect(isFunction(async () => {})).toBe(true)
+  expect(isFunction(function* () {})).toBe(true)
+  expect(isFunction(async function* () {})).toBe(true)
+  expect(isFunction(class Foo {})).toBe(true)
+  expect(isFunction({})).toBe(false)
+  expect(isFunction([])).toBe(false)
+  expect(isFunction('')).toBe(false)
+  expect(isFunction(null)).toBe(false)
+  expect(isFunction(undefined)).toBe(false)
+})
+
+it('isPureFunction', () => {
+  expect(isPureFunction(() => {})).toBe(true)
+  expect(isPureFunction(async () => {})).toBe(true)
+  expect(isPureFunction(function* () {})).toBe(true)
+  expect(isPureFunction(async function* () {})).toBe(true)
+  expect(isPureFunction(Math.max)).toBe(true)
+  expect(isPureFunction(Number.parseInt)).toBe(true)
+  expect(isPureFunction(class Foo {})).toBe(false)
+  expect(
+    isPureFunction(
+      class Foo {
+        static bar() {}
+      }
+    )
+  ).toBe(false)
+  expect(isPureFunction(Array)).toBe(false)
+  expect(isPureFunction(Date)).toBe(false)
+  expect(isPureFunction(Promise)).toBe(false)
+  expect(isPureFunction(Map)).toBe(false)
+  expect(isPureFunction(Object)).toBe(false)
+  expect(isPureFunction({})).toBe(false)
+  expect(isPureFunction([])).toBe(false)
+  expect(isPureFunction('')).toBe(false)
+  expect(isPureFunction(null)).toBe(false)
+  expect(isPureFunction(undefined)).toBe(false)
 })
 
 it('isNumeric', () => {
