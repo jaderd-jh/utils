@@ -45,3 +45,6 @@ allowBuilds:
   msw: false
   simple-git-hooks: false
   unrs-resolver: false
+
+update:
+  githubActions: true
