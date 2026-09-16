@@ -13,7 +13,7 @@
   "author": "jade-gjz <jiangang.zhang@jaderd.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jaderd-jh/utils",
+    "url": "git+https://github.com/jaderd-jh/utils.git",
     "directory": "packages/utils"
   },
   "files": [

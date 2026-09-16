@@ -6,5 +6,7 @@ export default defineConfig({
   publint: true,
   platform: 'browser',
   clean: true,
-  external: ['@vueuse/core', 'vue', 'jotai'],
+  deps: {
+    neverBundle: ['@vueuse/core', 'vue', 'jotai'],
+  },
 })

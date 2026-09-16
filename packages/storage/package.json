@@ -13,7 +13,7 @@
   "author": "jade-gjz <jiangang.zhang@jaderd.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jaderd-jh/utils",
+    "url": "git+https://github.com/jaderd-jh/utils.git",
     "directory": "packages/storage"
   },
   "files": [
@@ -64,12 +64,12 @@
   },
   "devDependencies": {
     "@vueuse/core": "catalog:",
-    "jotai": "^2.20.2",
-    "vue": "^3.5.40"
+    "jotai": "^3.0.0",
+    "vue": "^3.5.42"
   },
   "peerDependencies": {
     "@vueuse/core": "^14.0.0",
-    "jotai": "^2.12.3",
+    "jotai": "^2.20.3 || ^3.0.0",
     "vue": "^3.5.22"
   },
   "peerDependenciesMeta": {
