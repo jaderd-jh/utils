@@ -9,7 +9,7 @@ catalog:
   '@types/crypto-js': ^4.2.2
   '@types/node': ^24.13.5
   '@vitest/coverage-v8': ^5.0.1
-  '@vueuse/core': ^14.4.0
+  '@vueuse/core': ^15.0.0
   bumpp: ^12.3.0
   crypto-js: ^4.2.0
   dayjs: ^1.11.23
