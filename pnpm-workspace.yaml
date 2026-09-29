@@ -20,7 +20,7 @@ catalog:
   lint-staged: ^17.5.1
   nanoid: ^6.0.1
   npm-run-all2: ^9.0.3
-  oxfmt: ^0.68.0
+  oxfmt: ^0.71.0
   oxlint: ^1.83.0
   publint: ^0.3.24
   simple-git-hooks: ^2.14.0
