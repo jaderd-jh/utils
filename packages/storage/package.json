@@ -64,12 +64,12 @@
   },
   "devDependencies": {
     "@vueuse/core": "catalog:",
-    "jotai": "^3.0.0",
+    "jotai": "catalog:",
     "vue": "^3.5.42"
   },
   "peerDependencies": {
     "@vueuse/core": "^15.0.0",
-    "jotai": "^2.20.3 || ^3.0.0",
+    "jotai": "^3.0.0",
     "vue": "^3.5.22"
   },
   "peerDependenciesMeta": {
