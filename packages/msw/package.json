@@ -42,10 +42,10 @@
     "@jhqn/utils-faker": "workspace:*"
   },
   "devDependencies": {
-    "msw": "^2.15.0"
+    "msw": "^3.0.0"
   },
   "peerDependencies": {
-    "msw": "^2.15.0"
+    "msw": "^3.0.0"
   },
   "peerDependenciesMeta": {
     "msw": {

@@ -3,7 +3,8 @@ import type { http } from 'msw'
 import type { MaybeFn } from '../types'
 import { getMockData, getMockDataList, isNumber } from '@jhqn/utils-core'
 import { fakeIntRange } from '@jhqn/utils-faker'
-import { delay, HttpResponse } from 'msw'
+import { HttpResponse } from 'msw'
+import { delay } from 'msw/utils/delay'
 
 const randomDelay = () => delay(fakeIntRange(100, 1000))
 
