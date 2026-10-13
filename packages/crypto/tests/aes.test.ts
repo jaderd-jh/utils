@@ -9,10 +9,10 @@ const WARNING = '请先使用 setCryptoKey 设置加密密钥'
 
 describe('aes', () => {
   it('throws when no key has been configured', () => {
-    expect(() => aes.encrypt('foo')).toThrowError(WARNING)
-    expect(() => aes.decrypt('foo')).toThrowError(WARNING)
-    expect(() => AESEncrypt('foo')).toThrowError(WARNING)
-    expect(() => AESDecrypt('foo')).toThrowError(WARNING)
+    expect(() => aes.encrypt('foo')).toThrow(WARNING)
+    expect(() => aes.decrypt('foo')).toThrow(WARNING)
+    expect(() => AESEncrypt('foo')).toThrow(WARNING)
+    expect(() => AESDecrypt('foo')).toThrow(WARNING)
   })
 
   describe('aes-256 (32 byte key)', () => {

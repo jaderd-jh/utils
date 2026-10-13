@@ -91,20 +91,20 @@ describe('storageStringify', () => {
   })
 
   it('throws for values JSON.stringify cannot represent', () => {
-    expect(() => storageStringify(undefined)).toThrowError(UNSERIALIZABLE)
-    expect(() => storageStringify(() => {})).toThrowError(UNSERIALIZABLE)
-    expect(() => storageStringify(Symbol('foo'))).toThrowError(UNSERIALIZABLE)
-    expect(() => storageStringify(BigInt(1))).toThrowError(UNSERIALIZABLE)
+    expect(() => storageStringify(undefined)).toThrow(UNSERIALIZABLE)
+    expect(() => storageStringify(() => {})).toThrow(UNSERIALIZABLE)
+    expect(() => storageStringify(Symbol('foo'))).toThrow(UNSERIALIZABLE)
+    expect(() => storageStringify(BigInt(1))).toThrow(UNSERIALIZABLE)
   })
 
   it('throws for nested values JSON.stringify cannot represent', () => {
     // 嵌套的 BigInt 会让 JSON.stringify 抛原生 TypeError，Symbol / Function 则被静默丢弃，
     // 静默丢数据比直接报错更危险，因此统一抛出与顶层一致的错误
-    expect(() => storageStringify({ nested: BigInt(1) })).toThrowError(UNSERIALIZABLE)
-    expect(() => storageStringify([Symbol('foo')])).toThrowError(UNSERIALIZABLE)
-    expect(() => storageStringify({ nested: () => {} })).toThrowError(UNSERIALIZABLE)
-    expect(() => storageStringify(new Map([['foo', BigInt(1)]]))).toThrowError(UNSERIALIZABLE)
-    expect(() => storageStringify(new Set([Symbol('foo')]))).toThrowError(UNSERIALIZABLE)
+    expect(() => storageStringify({ nested: BigInt(1) })).toThrow(UNSERIALIZABLE)
+    expect(() => storageStringify([Symbol('foo')])).toThrow(UNSERIALIZABLE)
+    expect(() => storageStringify({ nested: () => {} })).toThrow(UNSERIALIZABLE)
+    expect(() => storageStringify(new Map([['foo', BigInt(1)]]))).toThrow(UNSERIALIZABLE)
+    expect(() => storageStringify(new Set([Symbol('foo')]))).toThrow(UNSERIALIZABLE)
   })
 
   it('keeps nested undefined following the JSON semantics', () => {
@@ -338,7 +338,7 @@ describe('setStorage', () => {
     const values = [undefined, () => {}, Symbol('foo'), BigInt(1)]
 
     for (const value of values) {
-      expect(() => setStorage(localStorage, KEY, value)).toThrowError(UNSERIALIZABLE)
+      expect(() => setStorage(localStorage, KEY, value)).toThrow(UNSERIALIZABLE)
     }
 
     expect(localStorage.getItem(KEY)).toBeNull()

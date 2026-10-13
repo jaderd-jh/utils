@@ -20,7 +20,7 @@ describe('atomWithLocal', () => {
     const store = createStore()
     const atom = atomWithLocal<number | bigint>('atom:unserializable', 1)
 
-    expect(() => store.set(atom, BigInt(1))).toThrowError(UNSERIALIZABLE)
+    expect(() => store.set(atom, BigInt(1))).toThrow(UNSERIALIZABLE)
     expect(store.get(atom)).toBe(1)
     expect(localStorage.getItem('atom:unserializable')).toBeNull()
   })

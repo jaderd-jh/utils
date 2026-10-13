@@ -128,7 +128,7 @@ describe('format', () => {
 
   it('resUrl', () => {
     expect(resUrl(undefined)).toBe(undefined)
-    expect(() => resUrl('')).toThrowError('请先使用 setBaseAttachUrl 设置文件基本路径')
+    expect(() => resUrl('')).toThrow('请先使用 setBaseAttachUrl 设置文件基本路径')
     setBaseAttachUrl('http://localhost:3000')
     expect(resUrl('')).toBe('http://localhost:3000/')
     expect(resUrl('foo.png')).toBe('http://localhost:3000/foo.png')

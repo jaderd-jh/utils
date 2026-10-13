@@ -12,6 +12,6 @@ describe('md5', () => {
   })
 
   it('is not decryptable', () => {
-    expect(() => md5.decrypt('d41d8cd98f00b204e9800998ecf8427e')).toThrowError('MD5 is not a decryptable algorithm')
+    expect(() => md5.decrypt('d41d8cd98f00b204e9800998ecf8427e')).toThrow('MD5 is not a decryptable algorithm')
   })
 })
