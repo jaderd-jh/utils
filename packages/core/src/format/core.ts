@@ -43,10 +43,20 @@ export function stringifyJSON(value: any, replacerFn: (this: any, key: string, v
 
 /**
  * JSON.stringify() second param
- * @param _key
+ * @param key
  * @param value
  */
-export function replacer(_key: any, value: any) {
+export function replacer(this: any, key: any, value: any) {
+  // JSON.stringify 会先执行 `Date.prototype.toJSON`（把 Date 变成 ISO 字符串）再调用 replacer，
+  // 所以只能通过持有者上的原始值来判断 Date，否则这里的分支永远不会命中
+  const rawValue = this === undefined ? value : this[key]
+
+  if (isDate(rawValue)) {
+    return {
+      dataType: 'Date',
+      value: rawValue.toISOString(),
+    }
+  }
   if (isMap(value)) {
     return {
       dataType: 'Map',
@@ -57,12 +67,6 @@ export function replacer(_key: any, value: any) {
     return {
       dataType: 'Set',
       value: [...value],
-    }
-  }
-  if (isDate(value)) {
-    return {
-      dataType: 'Date',
-      value: value.toISOString(),
     }
   }
   return value

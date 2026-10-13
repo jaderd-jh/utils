@@ -11,7 +11,8 @@
   "author": "jade-gjz <jiangang.zhang@jaderd.com>",
   "type": "module",
   "scripts": {
-    "test": "vitest",
+    "test": "vitest run",
+    "test:e2e": "pnpm --filter \"./packages/**\" --if-present run test:e2e",
     "coverage": "vitest run --coverage",
     "build": "pnpm -r build",
     "release": "bumpp -r",
@@ -33,6 +34,8 @@
   "devDependencies": {
     "@jhqn/eslint-config": "catalog:",
     "@types/node": "catalog:",
+    "@vitest/browser": "catalog:",
+    "@vitest/browser-playwright": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "bumpp": "catalog:",
     "eslint": "catalog:",
@@ -42,6 +45,7 @@
     "npm-run-all2": "catalog:",
     "oxfmt": "catalog:",
     "oxlint": "catalog:",
+    "playwright": "catalog:",
     "publint": "catalog:",
     "simple-git-hooks": "catalog:",
     "tsdown": "catalog:",

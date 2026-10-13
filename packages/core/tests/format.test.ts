@@ -11,6 +11,7 @@ import {
   resUrl,
   reviver,
   setBaseAttachUrl,
+  stringifyJSON,
   toThousands,
 } from '../src'
 
@@ -29,6 +30,12 @@ describe('format', () => {
     expect(JSON.stringify({ foo: 'bar', map, set }, replacer)).toBe(
       '{"foo":"bar","map":{"dataType":"Map","value":[["foo","bar"]]},"set":{"dataType":"Set","value":[1,2,3]}}'
     )
+    const date = new Date('2020-01-01T00:00:00.000Z')
+    // Date.prototype.toJSON 会先于 replacer 执行，replacer 必须取持有者上的原始值才能识别 Date
+    expect(JSON.stringify({ foo: 'bar', date }, replacer)).toBe(
+      '{"foo":"bar","date":{"dataType":"Date","value":"2020-01-01T00:00:00.000Z"}}'
+    )
+    expect(JSON.stringify(date, replacer)).toBe('{"dataType":"Date","value":"2020-01-01T00:00:00.000Z"}')
   })
 
   it('reviver', () => {
@@ -47,6 +54,19 @@ describe('format', () => {
       map,
       set,
     })
+    expect(parseJSON('{"date":{"dataType":"Date","value":"2020-01-01T00:00:00.000Z"}}', reviver)).toStrictEqual({
+      date: new Date('2020-01-01T00:00:00.000Z'),
+    })
+  })
+
+  it('stringifyJSON round-trips Date, Map and Set', () => {
+    const value = {
+      date: new Date('2020-01-01T00:00:00.000Z'),
+      map: new Map([['foo', new Date('2021-02-03T04:05:06.000Z')]]),
+      set: new Set([1, 2]),
+    }
+
+    expect(parseJSON(stringifyJSON(value))).toStrictEqual(value)
   })
 
   it('filterObj', () => {

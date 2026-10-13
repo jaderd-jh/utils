@@ -54,7 +54,11 @@
     }
   },
   "scripts": {
-    "test": "vitest",
+    "test": "vitest run",
+    "test:e2e": "vitest run -p e2e",
+    "test:e2e:watch": "vitest -p e2e",
+    "test:unit": "vitest run -p unit",
+    "test:unit:watch": "vitest -p unit",
     "build": "tsdown",
     "publint": "publint"
   },
@@ -63,8 +67,16 @@
     "@jhqn/utils-crypto": "workspace:*"
   },
   "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@vitejs/plugin-vue": "^6.0.10",
     "@vueuse/core": "catalog:",
     "jotai": "catalog:",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "vitest-browser-react": "^2.3.0",
+    "vitest-browser-vue": "^3.1.0",
     "vue": "^3.5.43"
   },
   "peerDependencies": {
