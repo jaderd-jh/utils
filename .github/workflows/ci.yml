@@ -78,8 +78,10 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
 
+      # 浏览器本体走缓存，但 --with-deps 装的系统库不在缓存里：
+      # 一旦 cache 命中就跳过整个步骤，webkit 会因为缺 libevent-2.1.so.7 而启动失败
+      # （不带浏览器名 = 安装 chromium / firefox / webkit 全部，与 vitest.config.ts 的 instances 保持一致）
       - name: Install Playwright browsers
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm exec playwright install --only-shell --with-deps
 
       - name: Build
