@@ -1,5 +1,6 @@
 import type { CryptoMap } from '../types'
-import MD5 from 'crypto-js/md5.js'
+import { md5 as md5Hash } from '@noble/hashes/legacy.js'
+import { bytesToHex, utf8ToBytes } from '@noble/hashes/utils.js'
 
 /**
  * MD5加密
@@ -7,7 +8,7 @@ import MD5 from 'crypto-js/md5.js'
  * @class
  */
 export function MD5Encrypt(str: string) {
-  return MD5(str).toString()
+  return bytesToHex(md5Hash(utf8ToBytes(str)))
 }
 
 export const md5: CryptoMap = {

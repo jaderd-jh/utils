@@ -1,6 +1,6 @@
 import type { CryptoMap } from '../types'
-import Base64 from 'crypto-js/enc-base64url.js'
-import Utf8 from 'crypto-js/enc-utf8.js'
+import { bytesToUtf8, utf8ToBytes } from '@noble/ciphers/utils.js'
+import { base64urlnopad } from '@scure/base'
 
 /**
  * Base64加密
@@ -8,7 +8,7 @@ import Utf8 from 'crypto-js/enc-utf8.js'
  * @returns {string} string 加密后的字符串
  */
 export function base64urlEncrypt(str: string) {
-  return Base64.stringify(Utf8.parse(str))
+  return base64urlnopad.encode(utf8ToBytes(str))
 }
 
 /**
@@ -17,7 +17,7 @@ export function base64urlEncrypt(str: string) {
  * @returns {string} string 解密后的字符串
  */
 export function base64urlDecrypt(str: string) {
-  return Utf8.stringify(Base64.parse(str))
+  return bytesToUtf8(base64urlnopad.decode(str))
 }
 
 export const base64url: CryptoMap = {

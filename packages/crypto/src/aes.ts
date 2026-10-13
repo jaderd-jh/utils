@@ -1,8 +1,7 @@
 import type { CryptoMap } from '../types'
-import AES from 'crypto-js/aes.js'
-import encUTF8 from 'crypto-js/enc-utf8.js'
-import modeECB from 'crypto-js/mode-ecb.js'
-import padPkcs7 from 'crypto-js/pad-pkcs7.js'
+import { ecb } from '@noble/ciphers/aes.js'
+import { bytesToUtf8, utf8ToBytes } from '@noble/ciphers/utils.js'
+import { base64 } from '@scure/base'
 import { getCryptoKey } from './key'
 
 const WARNING_MESSAGE = '请先使用 setCryptoKey 设置加密密钥'
@@ -17,10 +16,7 @@ export function AESEncrypt(str: string) {
   if (key === undefined) {
     throw new Error(WARNING_MESSAGE)
   }
-  return AES.encrypt(encUTF8.parse(str), key, {
-    mode: modeECB,
-    padding: padPkcs7,
-  }).toString()
+  return base64.encode(ecb(key).encrypt(utf8ToBytes(str)))
 }
 
 /**
@@ -33,14 +29,7 @@ export function AESDecrypt(str: string) {
   if (key === undefined) {
     throw new Error(WARNING_MESSAGE)
   }
-  return encUTF8
-    .stringify(
-      AES.decrypt(str, key, {
-        mode: modeECB,
-        padding: padPkcs7,
-      })
-    )
-    .toString()
+  return bytesToUtf8(ecb(key).decrypt(base64.decode(str)))
 }
 
 /**

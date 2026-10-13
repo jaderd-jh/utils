@@ -73,16 +73,23 @@
     "publint": "publint"
   },
   "dependencies": {
-    "crypto-js": "catalog:"
-  },
-  "devDependencies": {
-    "@types/crypto-js": "catalog:"
+    "@noble/ciphers": "catalog:",
+    "@noble/hashes": "catalog:",
+    "@scure/base": "catalog:"
   },
   "peerDependencies": {
-    "crypto-js": "^4.2.0"
+    "@noble/ciphers": "^2.4.0",
+    "@noble/hashes": "^2.4.0",
+    "@scure/base": "^2.4.0"
   },
   "peerDependenciesMeta": {
-    "crypto-js": {
+    "@noble/ciphers": {
+      "optional": false
+    },
+    "@noble/hashes": {
+      "optional": false
+    },
+    "@scure/base": {
       "optional": false
     }
   }

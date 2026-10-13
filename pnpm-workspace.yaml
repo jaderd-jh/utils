@@ -6,12 +6,13 @@ overrides:
   safer-buffer: npm:@nolyfill/safer-buffer@^1
 catalog:
   '@jhqn/eslint-config': ^1.0.2
-  '@types/crypto-js': ^4.2.2
+  '@noble/ciphers': ^2.4.0
+  '@noble/hashes': ^2.4.0
+  '@scure/base': ^2.4.0
   '@types/node': ^24.19.0
   '@vitest/coverage-v8': ^5.0.2
   '@vueuse/core': ^15.0.0
   bumpp: ^12.3.0
-  crypto-js: ^4.2.0
   dayjs: ^1.11.23
   detect-browser-es: 0.1.1
   eslint: ^10.11.0
@@ -29,7 +30,6 @@ catalog:
   typescript: ^6.0.3
   vite: ^8.3.1
   vitest: ^5.0.2
-
 cleanupUnusedCatalogs: true
 
 dedupeDirectDeps: true
