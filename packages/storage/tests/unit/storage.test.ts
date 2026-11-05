@@ -17,6 +17,7 @@ import {
   removeSessionAll,
   removeStorage,
   removeStorageAll,
+  resolveExpiredAt,
   resolveStorageConfig,
   setLocal,
   setSession,
@@ -283,6 +284,53 @@ describe('resolveStorageConfig', () => {
   })
 })
 
+describe('resolveExpiredAt', () => {
+  it('accepts a TTL in milliseconds', () => {
+    expect(resolveExpiredAt({ expiresIn: 90_000 })).toBe(NOW + 90_000)
+  })
+
+  it('accepts human-readable durations', () => {
+    const cases: Array<[number | string, number]> = [
+      ['500ms', 500],
+      ['30s', 30_000],
+      ['15m', 15 * 60_000],
+      ['1h', 3_600_000],
+      ['1.5h', 5_400_000],
+      ['1day', 86_400_000],
+      ['2 days', 172_800_000],
+      ['1w', 604_800_000],
+      ['1H', 3_600_000],
+      [' 1 hour ', 3_600_000],
+    ]
+
+    for (const [expiresIn, ms] of cases) {
+      expect(resolveExpiredAt({ expiresIn })).toBe(NOW + ms)
+    }
+  })
+
+  it('rejects invalid durations instead of silently never expiring', () => {
+    const invalid: Array<number | string> = ['', '1', '1y', '1month', '-1h', 'h', NaN, Infinity, -Infinity, -1]
+
+    for (const expiresIn of invalid) {
+      expect(() => resolveExpiredAt({ expiresIn })).toThrow('expiresIn 必须是有限非负毫秒数')
+    }
+  })
+
+  it('rejects a config that sets both expiresIn and expiredAt', () => {
+    expect(() => resolveExpiredAt({ expiresIn: '1h', expiredAt: NOW })).toThrow('不能同时设置')
+  })
+
+  it('lets expiresIn win when expiredAt is explicitly null', () => {
+    expect(resolveExpiredAt({ expiresIn: '1h', expiredAt: null })).toBe(NOW + 3_600_000)
+  })
+
+  it('keeps honoring the absolute expiredAt', () => {
+    expect(resolveExpiredAt({ expiredAt: NOW })).toBe(NOW)
+    expect(resolveExpiredAt({ expiredAt: null })).toBeNull()
+    expect(resolveExpiredAt()).toBeNull()
+  })
+})
+
 describe('hasStorage', () => {
   it('detects keys of any Storage instance', () => {
     setLocal('local-key', 1)
@@ -332,6 +380,24 @@ describe('setStorage', () => {
     setStorage(localStorage, KEY, 'foo', { expiredAt: NOW + 1000 })
 
     expect(storageParse(localStorage.getItem(KEY) as string)?.expiredAt).toBe(NOW + 1000)
+  })
+
+  it('writes the expiry computed from expiresIn', () => {
+    setStorage(localStorage, KEY, 'foo', { expiresIn: '1h' })
+
+    expect(storageParse(localStorage.getItem(KEY) as string)?.expiredAt).toBe(NOW + 3_600_000)
+    expect(getStorage(localStorage, KEY)).toBe('foo')
+  })
+
+  it('recomputes the expiry for every write', () => {
+    setStorage(localStorage, KEY, 'foo', { expiresIn: '1h' })
+    vi.setSystemTime(NOW + 30_000)
+    setStorage(localStorage, KEY, 'bar', { expiresIn: '1h' })
+
+    expect(storageParse(localStorage.getItem(KEY) as string)).toMatchObject({
+      data: 'bar',
+      expiredAt: NOW + 30_000 + 3_600_000,
+    })
   })
 
   it('throws for values JSON.stringify cannot represent', () => {

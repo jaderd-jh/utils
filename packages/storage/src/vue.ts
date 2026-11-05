@@ -4,7 +4,7 @@ import type { SetStorageConfig } from './storage'
 import { defaultWindow, useStorage } from '@vueuse/core'
 import { toValue } from 'vue'
 import { StorageStatus } from './const'
-import { aes, readStorageRaw, resolveStorageConfig, storageStringify } from './storage'
+import { aes, readStorageRaw, resolveExpiredAt, resolveStorageConfig, storageStringify } from './storage'
 
 /**
  * storage存储联动
@@ -14,6 +14,7 @@ import { aes, readStorageRaw, resolveStorageConfig, storageStringify } from './s
  * @param config 布尔简写代表是否加解密，或传配置对象
  * @param config.crypto 是否使用加解密
  * @param config.expiredAt 数据过期的绝对时刻（ms），`null` 表示永不过期
+ * @param config.expiresIn 数据有效期长度（TTL），每次写入重新计算；支持毫秒数或 `1h` / `1day`
  * @param options
  */
 function useWindowStorage<T extends string | number | boolean | object | null>(
@@ -40,7 +41,7 @@ function useWindowStorage<T extends string | number | boolean | object | null>(
         return result.status === StorageStatus.Ok ? (result.data ?? fallback) : fallback
       },
       write: value => {
-        const serialized = storageStringify(value, storageConfig.expiredAt ?? null)
+        const serialized = storageStringify(value, resolveExpiredAt(storageConfig))
         return crypto ? aes.encrypt(serialized) : serialized
       },
     },
@@ -54,6 +55,7 @@ function useWindowStorage<T extends string | number | boolean | object | null>(
  * @param config 布尔简写代表是否加解密，或传配置对象
  * @param config.crypto 是否使用加解密
  * @param config.expiredAt 数据过期的绝对时刻（ms），`null` 表示永不过期
+ * @param config.expiresIn 数据有效期长度（TTL），每次写入重新计算；支持毫秒数或 `1h` / `1day`
  * @param options
  */
 export function useLocal<T extends string | number | boolean | object | null>(
@@ -72,6 +74,7 @@ export function useLocal<T extends string | number | boolean | object | null>(
  * @param config 布尔简写代表是否加解密，或传配置对象
  * @param config.crypto 是否使用加解密
  * @param config.expiredAt 数据过期的绝对时刻（ms），`null` 表示永不过期
+ * @param config.expiresIn 数据有效期长度（TTL），每次写入重新计算；支持毫秒数或 `1h` / `1day`
  * @param options 配置项
  */
 export function useSession<T extends string | number | boolean | object | null>(

@@ -24,8 +24,16 @@ export interface SetStorageConfig extends StorageConfig {
    * 数据过期的绝对时刻（ms 时间戳）
    * - 到达该时刻后数据即失效
    * - 不传或传 `null` 表示永不过期
+   * - 是固定时刻，不会随写入刷新；需要每次写入重新计时请用 `expiresIn`
    */
   expiredAt?: number | null
+  /**
+   * 数据有效期长度（TTL），从**每次写入**的时刻开始计算
+   * - 支持毫秒数，或 `1h` / `30m` / `1day` / `2w` 这类时长字符串
+   * - 每次写入都会重新计算绝对过期时刻，适合 atom / `useLocal` 这类会多次写盘的框架绑定
+   * - 与 `expiredAt` 互斥：同时传入有限数字的 `expiredAt` 会抛错
+   */
+  expiresIn?: number | string
 }
 
 /**
@@ -108,6 +116,82 @@ function storageReplacer(this: any, key: string, value: any) {
  */
 function normalizeExpiredAt(expiredAt: Nullable<number>): Nullable<number> {
   return typeof expiredAt === 'number' && Number.isFinite(expiredAt) ? expiredAt : null
+}
+
+/**
+ * 时长字符串中各单位对应的毫秒数
+ * - 只收录固定长度的单位；「月」「年」长度不固定，因此不参与解析
+ */
+const DURATION_UNIT_MS: Record<string, number> = {
+  ms: 1,
+  s: 1_000,
+  sec: 1_000,
+  second: 1_000,
+  seconds: 1_000,
+  m: 60_000,
+  min: 60_000,
+  minute: 60_000,
+  minutes: 60_000,
+  h: 3_600_000,
+  hour: 3_600_000,
+  hours: 3_600_000,
+  d: 86_400_000,
+  day: 86_400_000,
+  days: 86_400_000,
+  w: 604_800_000,
+  week: 604_800_000,
+  weeks: 604_800_000,
+}
+
+/**
+ * 时长字符串的解析规则：`数字 + 可选空格 + 单位`，例如 `1h`、`1.5h`、`2 days`
+ * - 单位大小写不敏感（解析前统一转小写）
+ */
+const DURATION_PATTERN =
+  /^(\d+(?:\.\d+)?)\s*(ms|seconds|second|sec|s|minutes|minute|min|m|hours|hour|h|days|day|d|weeks|week|w)$/
+
+const INVALID_EXPIRES_IN_MESSAGE = 'expiresIn 必须是有限非负毫秒数，或形如 "1h" / "1day" 的时长字符串'
+const CONFLICTING_EXPIRY_MESSAGE = 'expiresIn 与 expiredAt 不能同时设置，请按需求只传其中一个'
+
+/**
+ * 把 `expiresIn` 配置换算成毫秒数
+ * @param value 毫秒数，或 `1h` / `1day` 这类时长字符串
+ * @returns {number} 毫秒数
+ */
+function durationToMilliseconds(value: number | string): number {
+  if (typeof value === 'number') {
+    // 负数会得到「已经过期」的时刻，语义上等价于没写，容易掩盖配置错误
+    if (Number.isFinite(value) && value >= 0) return value
+  } else if (typeof value === 'string') {
+    const match = DURATION_PATTERN.exec(value.trim().toLowerCase())
+    if (match) return Number(match[1]) * DURATION_UNIT_MS[match[2]]
+  }
+
+  throw new Error(`${INVALID_EXPIRES_IN_MESSAGE}：${String(value)}`)
+}
+
+/**
+ * 计算本次写入使用的绝对过期时刻
+ * - `expiresIn` 每次调用都会基于 `Date.now()` 重新计算，因此绑定在每次写盘时都能得到新的有效期
+ * - `expiredAt` 是绝对时刻，不会随时间推移刷新
+ * - `expiredAt` 为 `null` 或未设置时以 `expiresIn` 为准
+ * @param config 写入配置
+ * @returns {Nullable<number>} 绝对过期时刻（ms），`null` 表示永不过期
+ */
+export function resolveExpiredAt(config: SetStorageConfig = {}): Nullable<number> {
+  const { expiresIn, expiredAt } = config
+  // 先判空再判有限数字：`expiredAt: null` 表示「永不过期」，不应与 expiresIn 冲突
+  const hasAbsoluteExpiredAt = typeof expiredAt === 'number' && Number.isFinite(expiredAt)
+
+  if (expiresIn !== undefined && hasAbsoluteExpiredAt) {
+    throw new Error(CONFLICTING_EXPIRY_MESSAGE)
+  }
+
+  if (expiresIn !== undefined) {
+    return Date.now() + durationToMilliseconds(expiresIn)
+  }
+
+  return normalizeExpiredAt(expiredAt ?? null)
 }
 
 /**
@@ -225,9 +309,10 @@ export const removeSessionAll = (regex?: RegExp) => removeStorageAll(sessionStor
  * @param config
  * @param config.crypto 是否使用加密算法
  * @param config.expiredAt 数据过期的绝对时刻（ms），`null` 表示永不过期
+ * @param config.expiresIn 数据有效期长度（TTL），每次写入重新计算；支持毫秒数或 `1h` / `1day`
  */
 export function setStorage<T>(storage: Storage, key: string, value: T, config: SetStorageConfig = {}) {
-  const rawData = storageStringify(value, config.expiredAt ?? null)
+  const rawData = storageStringify(value, resolveExpiredAt(config))
   storage.setItem(key, config.crypto ? aes.encrypt(rawData) : rawData)
 }
 
@@ -238,6 +323,7 @@ export function setStorage<T>(storage: Storage, key: string, value: T, config: S
  * @param config
  * @param config.crypto 是否使用加密算法
  * @param config.expiredAt 数据过期的绝对时刻（ms），`null` 表示永不过期
+ * @param config.expiresIn 数据有效期长度（TTL），每次写入重新计算；支持毫秒数或 `1h` / `1day`
  */
 export const setLocal = <T = any>(key: string, value: T, config?: SetStorageConfig) =>
   setStorage(localStorage, key, value, config)
@@ -249,6 +335,7 @@ export const setLocal = <T = any>(key: string, value: T, config?: SetStorageConf
  * @param config
  * @param config.crypto 是否使用加密算法
  * @param config.expiredAt 数据过期的绝对时刻（ms），`null` 表示永不过期
+ * @param config.expiresIn 数据有效期长度（TTL），每次写入重新计算；支持毫秒数或 `1h` / `1day`
  */
 export const setSession = <T = any>(key: string, value: T, config?: SetStorageConfig) =>
   setStorage(sessionStorage, key, value, config)

@@ -9,6 +9,7 @@ import { storageParse } from '../../src'
 import { atomWithLocal, atomWithSession } from '../../src/react'
 
 const UNSERIALIZABLE = '需要存储的 data 不支持 JSON.stringify 方法，请检查当前数据'
+const NOW = 1_900_000_000_000
 
 beforeEach(() => {
   localStorage.clear()
@@ -35,6 +36,27 @@ describe('atomWithLocal', () => {
     store.set(atom, null)
     expect(store.get(atom)).toBeNull()
     expect(localStorage.getItem('atom:null')).toBeNull()
+  })
+
+  it('refreshes the expiry on every write when expiresIn is used', () => {
+    // 绑定在创建时就把绝对时刻固定下来会导致后续写入沿用旧时刻，甚至写进「已经过期」的数据；
+    // 使用 TTL 时每次写入都必须基于当前时间重新计算
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(NOW)
+
+    try {
+      const store = createStore()
+      const atom = atomWithLocal<number>('atom:ttl', 1, { expiresIn: '1h' })
+
+      store.set(atom, 2)
+      expect(storageParse<number>(localStorage.getItem('atom:ttl') as string)?.expiredAt).toBe(NOW + 3_600_000)
+
+      vi.setSystemTime(NOW + 60_000)
+      store.set(atom, 3)
+      expect(storageParse<number>(localStorage.getItem('atom:ttl') as string)?.expiredAt).toBe(NOW + 60_000 + 3_600_000)
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   it('falls back to the initial value and keeps foreign data untouched', () => {

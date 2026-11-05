@@ -139,6 +139,33 @@ describe('useLocal', () => {
     expect(storageParse<number>(localStorage.getItem(storageKey) as string)?.expiredAt).toBe(expiredAt)
   })
 
+  it('refreshes the expiresAt on every write when expiresIn is used', async () => {
+    const storageKey = key('write-expires-in')
+    const start = 1_900_000_000_000
+
+    vi.useFakeTimers({ toFake: ['Date'] })
+    vi.setSystemTime(start)
+
+    try {
+      const screen = await render(counter(storageKey, { config: { expiresIn: '1h' } }))
+      const firstExpiredAt = storageParse<number>(localStorage.getItem(storageKey) as string)?.expiredAt ?? 0
+
+      expect(firstExpiredAt).toBeGreaterThanOrEqual(start + 3_600_000)
+
+      vi.setSystemTime(start + 60_000)
+      increment(screen.container)
+
+      await vi.waitFor(() => expect(readData<number>(localStorage, storageKey)).toBe(1))
+
+      const refreshedExpiredAt = storageParse<number>(localStorage.getItem(storageKey) as string)?.expiredAt ?? 0
+
+      expect(refreshedExpiredAt).toBeGreaterThanOrEqual(start + 60_000 + 3_600_000)
+      expect(refreshedExpiredAt).toBeGreaterThan(firstExpiredAt)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   it('falls back to the initial value once the stored data has expired', async () => {
     const storageKey = key('expired')
 

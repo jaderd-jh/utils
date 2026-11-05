@@ -25,6 +25,7 @@ const getSessionStorage = (): Storage | undefined =>
  * @param config
  * @param config.crypto 是否使用加解密
  * @param config.expiredAt 数据过期的绝对时刻（ms），`null` 表示永不过期
+ * @param config.expiresIn 数据有效期长度（TTL），每次写入重新计算；支持毫秒数或 `1h` / `1day`
  */
 const atomWithStorage = <T>(
   getStorageArea: () => Storage | undefined,
@@ -92,6 +93,7 @@ const atomWithStorage = <T>(
  * @param config 布尔简写代表是否加解密，或传配置对象
  * @param config.crypto 是否使用加解密
  * @param config.expiredAt 数据过期的绝对时刻（ms），`null` 表示永不过期
+ * @param config.expiresIn 数据有效期长度（TTL），每次写入重新计算；支持毫秒数或 `1h` / `1day`
  */
 export function atomWithLocal<Value>(key: string, initialValue: Value, config?: boolean | SetStorageConfig) {
   return atomWithStorage(getLocalStorage, key, initialValue, config)
@@ -105,6 +107,7 @@ export function atomWithLocal<Value>(key: string, initialValue: Value, config?: 
  * @param config 布尔简写代表是否加解密，或传配置对象
  * @param config.crypto 是否使用加解密
  * @param config.expiredAt 数据过期的绝对时刻（ms），`null` 表示永不过期
+ * @param config.expiresIn 数据有效期长度（TTL），每次写入重新计算；支持毫秒数或 `1h` / `1day`
  */
 export function atomWithSession<Value>(key: string, initialValue: Value, config?: boolean | SetStorageConfig) {
   return atomWithStorage(getSessionStorage, key, initialValue, config)
